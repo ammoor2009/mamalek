@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رحلة الفارس اللغوي</title>
-    <!-- خطوط عربية -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        /* تخصيصات إضافية */
         :root {
             --gold: #fbbf24;
             --royal: #4f46e5;
@@ -50,13 +46,11 @@
             background: linear-gradient(90deg, #fbbf24, #f59e0b);
             transition: width 0.5s ease;
         }
-        /* تأثيرات */
         @keyframes pulse-gold {
             0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); }
             50% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
         }
         .pulse-gold { animation: pulse-gold 1.5s infinite; }
-        /* شاشة تحميل */
         #loadingScreen {
             position: fixed;
             inset: 0;
@@ -75,10 +69,11 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .option-btn { transition: all 0.2s ease; }
+        .option-btn:hover:not(:disabled) { transform: translateY(-2px); }
     </style>
 </head>
 <body>
-    <!-- شاشة التحميل -->
     <div id="loadingScreen">
         <div class="text-center">
             <div class="spinner mx-auto mb-4"></div>
@@ -86,7 +81,6 @@
         </div>
     </div>
 
-    <!-- شريط علوي دائم -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -98,7 +92,6 @@
                     <p class="text-xs text-slate-400">لطلاب الجامعات</p>
                 </div>
             </div>
-            <!-- معلومات اللاعب -->
             <div class="flex items-center gap-4 text-sm">
                 <div class="flex items-center gap-1 text-amber-300">
                     <i class="fa-solid fa-star"></i>
@@ -117,39 +110,30 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <main class="pt-16 min-h-screen pb-10">
-        <!-- ========== شاشة الخريطة ========== -->
         <section id="screenMap" class="screen active">
             <div class="max-w-7xl mx-auto px-4 py-8">
-                <!-- عنوان -->
                 <div class="text-center mb-12">
                     <h2 class="text-4xl md:text-5xl font-black mb-4 font-amiri">🗺️ ممالك اللغة العربية</h2>
                     <p class="text-slate-400 text-lg">اختر مملكة لبدء المغامرة أو متابعة التقدم</p>
                 </div>
-                <!-- شبكة الممالك -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="kingdomGrid">
-                    <!-- ستُملأ بالجافاسكريبت -->
-                </div>
-                <!-- أزرار إضافية -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="kingdomGrid"></div>
                 <div class="flex flex-wrap justify-center gap-4 mt-12">
-                    <button onclick="showScreen('screenLibrary')" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                    <button onclick="showScreen('screenLibrary')" class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                         <i class="fa-solid fa-book-open ml-2"></i> مكتبة القواعد
                     </button>
-                    <button onclick="startExam()" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                    <button onclick="startExam()" class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                         <i class="fa-solid fa-file-pen ml-2"></i> وضع الاختبار
                     </button>
-                    <button onclick="showScreen('screenAchievements')" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                    <button onclick="showScreen('screenAchievements')" class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                         <i class="fa-solid fa-trophy ml-2"></i> الإنجازات
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- ========== شاشة المرحلة ========== -->
         <section id="screenLevel" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
-                <!-- رأس المرحلة -->
                 <div class="flex items-center justify-between mb-6">
                     <button onclick="goBackToMap()" class="text-slate-400 hover:text-white transition">
                         <i class="fa-solid fa-arrow-right ml-1"></i> رجوع
@@ -160,25 +144,19 @@
                     </div>
                     <div class="w-10"></div>
                 </div>
-                <!-- شريط التقدم -->
                 <div class="flex items-center gap-3 mb-6">
                     <span class="text-sm text-slate-400">السؤال <span id="currentQuestionNum">1</span> / 5</span>
                     <div class="flex-1 progress-bar h-3">
                         <div id="levelProgress" class="progress-fill h-full" style="width: 0%;"></div>
                     </div>
                 </div>
-                <!-- بطاقة السؤال -->
                 <div class="bg-slate-800/80 border border-white/10 rounded-3xl p-6 md:p-8 shadow-xl">
-                    <!-- نوع السؤال ووقت -->
                     <div class="flex items-center justify-between mb-4">
                         <span id="questionType" class="text-xs px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300"></span>
                         <span class="text-slate-400 text-sm"><i class="fa-regular fa-clock ml-1"></i> <span id="timerDisplay">20</span> ث</span>
                     </div>
-                    <!-- نص السؤال -->
                     <h4 id="questionText" class="text-xl md:text-2xl font-bold leading-relaxed mb-6 font-amiri"></h4>
-                    <!-- الخيارات -->
                     <div id="optionsContainer" class="space-y-3"></div>
-                    <!-- تلميح -->
                     <div class="mt-6">
                         <button id="hintBtn" class="text-amber-400 hover:text-amber-300 text-sm transition">
                             <i class="fa-solid fa-lightbulb ml-1"></i> استخدم تلميحًا (10 قطع ذهبية)
@@ -186,12 +164,10 @@
                         <p id="hintText" class="hidden mt-2 text-amber-200 bg-amber-500/10 p-3 rounded-xl text-sm"></p>
                     </div>
                 </div>
-                <!-- ملاحظات -->
                 <div id="feedbackBox" class="hidden mt-4 p-4 rounded-2xl text-center font-bold"></div>
             </div>
         </section>
 
-        <!-- ========== شاشة نهاية المرحلة ========== -->
         <section id="screenLevelComplete" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6" id="completeIcon">🎉</div>
@@ -217,7 +193,6 @@
             </div>
         </section>
 
-        <!-- ========== شاشة المكتبة ========== -->
         <section id="screenLibrary" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -226,13 +201,10 @@
                         <i class="fa-solid fa-arrow-right ml-1"></i> رجوع
                     </button>
                 </div>
-                <div class="space-y-4" id="libraryContent">
-                    <!-- ستُملأ بالجافاسكريبت -->
-                </div>
+                <div class="space-y-4" id="libraryContent"></div>
             </div>
         </section>
 
-        <!-- ========== شاشة الإنجازات ========== -->
         <section id="screenAchievements" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -241,34 +213,28 @@
                         <i class="fa-solid fa-arrow-right ml-1"></i> رجوع
                     </button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="achievementsList">
-                    <!-- ستُملأ بالجافاسكريبت -->
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="achievementsList"></div>
             </div>
         </section>
 
-        <!-- ========== شاشة الاختبار ========== -->
         <section id="screenExam" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="text-center mb-6">
                     <h2 class="text-3xl font-black mb-2">📝 وضع الاختبار</h2>
                     <p class="text-slate-400">اختبار شامل من 20 سؤالاً بدون تلميحات</p>
                 </div>
-                <div id="examContent">
-                    <!-- أسئلة الاختبار ستظهر هنا -->
-                </div>
+                <div id="examContent"></div>
                 <div class="text-center mt-6">
                     <button id="examStartBtn" onclick="startExamQuestions()" class="btn-primary px-8 py-4 rounded-2xl font-black text-lg">
                         بدء الاختبار
                     </button>
-                    <button onclick="goBackToMap()" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition mt-4 block mx-auto">
+                    <button onclick="goBackToMap()" class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition mt-4 block mx-auto">
                         رجوع للخريطة
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- ========== شاشة نتيجة الاختبار ========== -->
         <section id="screenExamResult" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6">📊</div>
@@ -293,219 +259,161 @@
     </main>
 
     <script>
-        // ==================== بيانات اللعبة ====================
+        // ==================== بيانات الممالك ====================
         const KINGDOMS = [
-            {
-                id: 'nahw',
-                name: 'مملكة النحو',
-                icon: 'fa-solid fa-language',
-                color: 'from-blue-500 to-indigo-600',
-                description: 'الإعراب، الجمل، الأفعال',
-                levels: 10,
-                questions: [] // سيتم ملؤها من بنك الأسئلة
-            },
-            {
-                id: 'sarf',
-                name: 'مملكة الصرف',
-                icon: 'fa-solid fa-sitemap',
-                color: 'from-emerald-500 to-green-600',
-                description: 'الأوزان، المشتقات، التصريف',
-                levels: 10,
-                questions: []
-            },
-            {
-                id: 'imlaa',
-                name: 'مملكة الإملاء',
-                icon: 'fa-solid fa-pen-to-square',
-                color: 'from-orange-500 to-red-500',
-                description: 'الهمزات، التاء، علامات الترقيم',
-                levels: 10,
-                questions: []
-            },
-            {
-                id: 'balagha',
-                name: 'مملكة البلاغة',
-                icon: 'fa-solid fa-feather',
-                color: 'from-purple-500 to-fuchsia-600',
-                description: 'التشبيه، الاستعارة، الكناية',
-                levels: 10,
-                questions: []
-            },
-            {
-                id: 'akhtaa',
-                name: 'مملكة الأخطاء الشائعة',
-                icon: 'fa-solid fa-triangle-exclamation',
-                color: 'from-yellow-500 to-amber-600',
-                description: 'تصحيح الأخطاء اللغوية',
-                levels: 10,
-                questions: []
-            }
+            { id: 'nahw', name: 'مملكة النحو', icon: 'fa-solid fa-language', color: 'from-blue-500 to-indigo-600', description: 'الإعراب، الجمل، الأفعال', levels: 10 },
+            { id: 'sarf', name: 'مملكة الصرف', icon: 'fa-solid fa-sitemap', color: 'from-emerald-500 to-green-600', description: 'الأوزان، المشتقات، التصريف', levels: 10 },
+            { id: 'imlaa', name: 'مملكة الإملاء', icon: 'fa-solid fa-pen-to-square', color: 'from-orange-500 to-red-500', description: 'الهمزات، التاء، علامات الترقيم', levels: 10 },
+            { id: 'balagha', name: 'مملكة البلاغة', icon: 'fa-solid fa-feather', color: 'from-purple-500 to-fuchsia-600', description: 'التشبيه، الاستعارة، الكناية', levels: 10 },
+            { id: 'akhtaa', name: 'مملكة الأخطاء الشائعة', icon: 'fa-solid fa-triangle-exclamation', color: 'from-yellow-500 to-amber-600', description: 'تصحيح الأخطاء اللغوية', levels: 10 }
         ];
 
-        // ==================== بنك الأسئلة ====================
-        // سنقوم بإنشاء أسئلة لكل مملكة. سنقسمها إلى مستويات (1-10) تقريبياً.
-        // نستخدم الأنواع: mcq (اختيار متعدد)، true_false (صح/خطأ)، fill (أكمل)، correct_error (تصحيح)
+        // ==================== بنك الأسئلة (المعدل) ====================
         const QUESTION_BANK = [
-            // ===== مملكة النحو (50 سؤال) =====
-            // المستوى 1: المبتدأ والخبر
-            { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "العلمُ" في: العلمُ نورٌ؟', options: ['خبر مرفوع', 'مبتدأ مرفوع', 'فاعل مرفوع', 'مفعول به منصوب'], answer: 1, explanation: 'العلمُ مبتدأ مرفوع وعلامة رفعه الضمة.' },
-            { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "نورٌ" في: العلمُ نورٌ؟', options: ['مبتدأ مرفوع', 'خبر مرفوع', 'فاعل مرفوع', 'نعت مرفوع'], answer: 1, explanation: 'نورٌ خبر مرفوع وعلامة رفعه الضمة.' },
-            { kingdom: 'nahw', level: 1, type: 'true_false', text: 'المبتدأ والخبر مرفوعان دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'الأصل في المبتدأ والخبر الرفع.' },
-            { kingdom: 'nahw', level: 1, type: 'mcq', text: 'أي الجمل التالية جملة اسمية؟', options: ['نجح الطالبُ', 'يقرأ محمدٌ', 'السماءُ صافيةٌ', 'اكتب الدرسَ'], answer: 2, explanation: 'الجملة الاسمية تبدأ باسم، مثل "السماءُ صافيةٌ".' },
-            { kingdom: 'nahw', level: 1, type: 'fill', text: 'أكمل: "الطالبُ ____"', options: ['مجتهدٌ', 'مجتهدًا', 'مجتهدٍ', 'مجتهدون'], answer: 0, explanation: 'الخبر مرفوع بالضمة، فالصحيح: مجتهدٌ.' },
-            // المستوى 2: الفاعل
-            { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب "الطالبُ" في: نجح الطالبُ؟', options: ['فاعل مرفوع', 'مفعول به منصوب', 'مبتدأ مرفوع', 'خبر مرفوع'], answer: 0, explanation: 'الطالبُ فاعل مرفوع وعلامة رفعه الضمة.' },
-            { kingdom: 'nahw', level: 2, type: 'true_false', text: 'الفاعل يكون مرفوعًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'الفاعل مرفوع دائمًا.' },
-            { kingdom: 'nahw', level: 2, type: 'fill', text: 'أكمل: "ذهب ____ إلى المدرسة"', options: ['الطالبُ', 'الطالبَ', 'الطالبِ', 'الطالبْ'], answer: 0, explanation: 'الفاعل مرفوع بالضمة.' },
-            // المستوى 3: المفعول به
-            { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "الكتابَ" في: قرأ الطالبُ الكتابَ؟', options: ['فاعل', 'مفعول به منصوب', 'مبتدأ', 'خبر'], answer: 1, explanation: 'الكتابَ مفعول به منصوب بالفتحة.' },
-            { kingdom: 'nahw', level: 3, type: 'true_false', text: 'المفعول به يكون منصوبًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المفعول به من المنصوبات.' },
-            // المستوى 4: الحال والتمييز
-            { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "سريعًا" في: عاد اللاعب سريعًا؟', options: ['حال', 'مفعول به', 'خبر', 'فاعل'], answer: 0, explanation: 'سريعًا حال منصوب.' },
-            { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "علمًا" في: ازداد الطالب علمًا؟', options: ['حال', 'تمييز', 'مفعول به', 'فاعل'], answer: 1, explanation: 'علمًا تمييز منصوب.' },
-            // المستوى 5: المفعول المطلق
-            { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما إعراب "اجتهادًا" في: اجتهد الطالب اجتهادًا؟', options: ['مفعول مطلق', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'اجتهادًا مفعول مطلق.' },
-            // المستوى 6: الجار والمجرور والظرف
-            { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "في المدرسة" في: يدرس الطالب في المدرسة؟', options: ['جار ومجرور', 'مفعول به', 'حال', 'مفعول مطلق'], answer: 0, explanation: 'في حرف جر والمدرسة اسم مجرور.' },
-            { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "صباحًا" في: سافرت صباحًا؟', options: ['ظرف زمان', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'صباحًا ظرف زمان منصوب.' },
-            // المستوى 7: إن وأخواتها
-            { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "الطالبَ" في: إن الطالبَ مجتهدٌ؟', options: ['اسم إن منصوب', 'خبر إن مرفوع', 'فاعل', 'مفعول به'], answer: 0, explanation: 'الطالب اسم إن منصوب.' },
-            { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "مجتهدٌ" في: إن الطالبَ مجتهدٌ؟', options: ['اسم إن', 'خبر إن مرفوع', 'فاعل', 'حال'], answer: 1, explanation: 'مجتهدٌ خبر إن مرفوع.' },
-            // المستوى 8: كان وأخواتها
-            { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "الجوُّ" في: كان الجوُّ جميلًا؟', options: ['اسم كان مرفوع', 'خبر كان منصوب', 'فاعل', 'مبتدأ'], answer: 0, explanation: 'الجو اسم كان مرفوع.' },
-            { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "جميلًا" في: كان الجوُّ جميلًا؟', options: ['اسم كان', 'خبر كان منصوب', 'فاعل', 'حال'], answer: 1, explanation: 'جميلًا خبر كان منصوب.' },
-            // المستوى 9: المثنى والجموع
-            { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة رفع المثنى؟', options: ['الضمة', 'الألف', 'الواو', 'الياء'], answer: 1, explanation: 'المثنى يرفع بالألف.' },
-            { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة نصب جمع المذكر السالم؟', options: ['الفتحة', 'الياء', 'الواو', 'الألف'], answer: 1, explanation: 'جمع المذكر السالم ينصب بالياء.' },
-            { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة رفع جمع المؤنث السالم؟', options: ['الضمة', 'الواو', 'الألف', 'الياء'], answer: 0, explanation: 'جمع المؤنث السالم يرفع بالضمة.' },
-            // المستوى 10: الأسماء الخمسة
-            { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة رفع الأسماء الخمسة؟', options: ['الواو', 'الألف', 'الياء', 'الضمة'], answer: 0, explanation: 'الأسماء الخمسة ترفع بالواو.' },
-            { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة نصب الأسماء الخمسة؟', options: ['الألف', 'الواو', 'الياء', 'الفتحة'], answer: 0, explanation: 'الأسماء الخمسة تنصب بالألف.' },
-            // أسئلة إضافية متنوعة للنحو
-            { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "المعلمَ" في: كرّم المديرُ المعلمَ؟', options: ['فاعل', 'مفعول به', 'مبتدأ', 'خبر'], answer: 1, explanation: 'المعلمَ مفعول به منصوب.' },
-            { kingdom: 'nahw', level: 5, type: 'fill', text: 'أكمل: "اجتهد الطالبُ ____"', options: ['اجتهادًا', 'اجتهادٌ', 'اجتهادٍ', 'اجتهادُ'], answer: 0, explanation: 'مفعول مطلق منصوب.' },
-            { kingdom: 'nahw', level: 7, type: 'true_false', text: 'إنَّ ترفع المبتدأ وتنصب الخبر.', options: ['صح', 'خطأ'], answer: 1, explanation: 'إنَّ تنصب الاسم وترفع الخبر.' },
-            { kingdom: 'nahw', level: 8, type: 'fill', text: 'أكمل: "أصبح الطالبُ ____"', options: ['مجتهدًا', 'مجتهدٌ', 'مجتهدٍ', 'مجتهدُ'], answer: 0, explanation: 'خبر أصبح منصوب بالفتحة.' },
-            { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما إعراب "أخوك" في: جاء أخوك؟', options: ['فاعل مرفوع بالواو', 'فاعل مرفوع بالضمة', 'مفعول به', 'مبتدأ'], answer: 0, explanation: 'أخوك فاعل مرفوع بالواو لأنه من الأسماء الخمسة.' },
+    // ===== مملكة النحو =====
+    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "العلمُ" في: العلمُ نورٌ؟', options: ['خبر مرفوع', 'مبتدأ مرفوع', 'فاعل مرفوع', 'مفعول به منصوب'], answer: 1, explanation: 'العلمُ: مبتدأ مرفوع وعلامة رفعه الضمة الظاهرة.' },
+    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "نورٌ" في: العلمُ نورٌ؟', options: ['مبتدأ مرفوع', 'خبر مرفوع', 'فاعل مرفوع', 'نعت مرفوع'], answer: 1, explanation: 'نورٌ: خبر المبتدأ مرفوع وعلامة رفعه الضمة الظاهرة.' },
+    { kingdom: 'nahw', level: 1, type: 'true_false', text: 'المبتدأ والخبر مرفوعان دائمًا في الأصل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المبتدأ والخبر من المرفوعات الأساسية في الجملة الاسمية.' },
+    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'أي الجمل التالية جملة اسمية؟', options: ['نجح الطالبُ', 'يقرأ محمدٌ', 'السماءُ صافيةٌ', 'اكتب الدرسَ'], answer: 2, explanation: 'الجملة الاسمية هي التي تبدأ باسم، مثل: السماء صافية.' },
+    { kingdom: 'nahw', level: 1, type: 'fill', text: 'أكمل الجملة الاسمية: "الطالبُ ____"', options: ['مجتهدٌ', 'مجتهدًا', 'مجتهدٍ', 'مجتهدين'], answer: 0, explanation: 'الخبر يكون مرفوعاً، فيقال: مجتهدٌ.' },
+    { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب "الطالبُ" في: نجح الطالبُ؟', options: ['فاعل مرفوع', 'مفعول به منصوب', 'مبتدأ مرفوع', 'خبر مرفوع'], answer: 0, explanation: 'الطالبُ: فاعل مرفوع وعلامة رفعه الضمة.' },
+    { kingdom: 'nahw', level: 2, type: 'true_false', text: 'الفاعل يكون مرفوعًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'الفاعل من عمدة المرفوعات في الجملة الفعلية.' },
+    { kingdom: 'nahw', level: 2, type: 'fill', text: 'أكمل بالتشكيل الصحيح: "ذهب ____ إلى الجامعة"', options: ['الطالبُ', 'الطالبَ', 'الطالبِ', 'الطالبْ'], answer: 0, explanation: 'الفاعل يرفع بالضمة الظاهرة.' },
+    { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "الكتابَ" في: قرأ الطالبُ الكتابَ؟', options: ['فاعل', 'مفعول به منصوب', 'مبتدأ', 'خبر'], answer: 1, explanation: 'الكتابَ: مفعول به منصوب وعلامة نصبه الفتحة.' },
+    { kingdom: 'nahw', level: 3, type: 'true_false', text: 'المفعول به يكون منصوبًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المفعول به من المنصوبات.' },
+    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "مسرعًا" في: عاد القطارُ مسرعًا؟', options: ['حال منصوبة', 'مفعول به', 'خبر', 'فاعل'], answer: 0, explanation: 'مسرعًا: حال منصوبة تبيّن هيئة الفاعل عند حدوث الفعل.' },
+    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "علمًا" في: ازداد الطالبُ علمًا؟', options: ['حال', 'تمييز منصوب', 'مفعول به', 'فاعل'], answer: 1, explanation: 'علمًا: تمييز منصوب يزيل الإبهام عن الجملة.' },
+    { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما إعراب "اجتهادًا" في: اجتهد الطالبُ اجتهادًا؟', options: ['مفعول مطلق منصوب', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'اجتهادًا: مفعول مطلق مصدر منصوب لتأكيد الفعل.' },
+    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "في القاعة" في: يدرس الطالبُ في القاعةِ؟', options: ['جار ومجرور', 'مفعول به', 'حال', 'مفعول مطلق'], answer: 0, explanation: 'في: حرف جر، القاعة: اسم مجرور.' },
+    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "صباحًا" في: سافرتُ صباحًا؟', options: ['ظرف زمان منصوب', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'صباحًا: مفعول فيه (ظرف زمان) منصوب.' },
+    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "الطالبَ" في: إنّ الطالبَ مجتهدٌ؟', options: ['اسم إنّ منصوب', 'خبر إنّ مرفوع', 'فاعل', 'مفعول به'], answer: 0, explanation: 'إنّ تنصب المبتدأ ويسمى اسمها.' },
+    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "مجتهدٌ" في: إنّ الطالبَ مجتهدٌ؟', options: ['اسم إنّ', 'خبر إنّ مرفوع', 'فاعل', 'حال'], answer: 1, explanation: 'إنّ ترفع الخبر ويسمى خبرها.' },
+    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "الجوُّ" في: كان الجوُّ جميلًا؟', options: ['اسم كان مرفوع', 'خبر كان منصوب', 'فاعل', 'مبتدأ'], answer: 0, explanation: 'كان ترفع المبتدأ ويسمى اسمها.' },
+    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "جميلًا" في: كان الجوُّ جميلًا؟', options: ['اسم كان', 'خبر كان منصوب', 'فاعل', 'حال'], answer: 1, explanation: 'كان تنصب الخبر ويسمى خبرها.' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة رفع المثنى؟', options: ['الضمة', 'الألف', 'الواو', 'الياء'], answer: 1, explanation: 'يرفع المثنى بالألف وينصب ويجر بالياء.' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة نصب جمع المذكر السالم؟', options: ['الفتحة', 'الياء', 'الواو', 'الألف'], answer: 1, explanation: 'ينصب جمع المذكر السالم بالياء.' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة نصب جمع المؤنث السالم؟', options: ['الكسرة نيابة عن الفتحة', 'الفتحة', 'الضمة', 'الياء'], answer: 0, explanation: 'ينصب جمع المؤنث السالم بالكسرة نيابة عن الفتحة.' },
+    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة رفع الأسماء الخمسة؟', options: ['الواو', 'الألف', 'الياء', 'الضمة'], answer: 0, explanation: 'ترفع الأسماء الخمسة بالواو (أبوك، أخوك...).' },
+    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة نصب الأسماء الخمسة؟', options: ['الألف', 'الواو', 'الياء', 'الفتحة'], answer: 0, explanation: 'تنصب الأسماء الخمسة بالألف (أباك، أخاك...).' },
 
-            // ===== مملكة الصرف (30 سؤال) =====
-            { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما وزن الفعل "كاتب"؟', options: ['فاعل', 'فعيل', 'مفعال', 'فعل'], answer: 0, explanation: 'كاتب اسم فاعل من فعل كتب على وزن فاعل.' },
-            { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما اسم الفاعل من الفعل "نصر"؟', options: ['ناصر', 'منصور', 'نصير', 'نصر'], answer: 0, explanation: 'اسم الفاعل من نصر هو ناصر.' },
-            { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "كتب"؟', options: ['كاتب', 'مكتوب', 'كتاب', 'كتابة'], answer: 1, explanation: 'اسم المفعول من كتب هو مكتوب.' },
-            { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "نصر"؟', options: ['ناصر', 'منصور', 'نصير', 'نصر'], answer: 1, explanation: 'اسم المفعول من نصر هو منصور.' },
-            { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما مصدر الفعل "كتب"؟', options: ['كاتب', 'كتابة', 'مكتوب', 'كتاب'], answer: 1, explanation: 'مصدر كتب هو كتابة.' },
-            { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما مصدر الفعل "علِم"؟', options: ['عالم', 'علم', 'عليم', 'تعليم'], answer: 1, explanation: 'مصدر علِم هو علم.' },
-            { kingdom: 'sarf', level: 4, type: 'true_false', text: 'الفعل "استخرج" على وزن استفعل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'استخرج على وزن استفعل.' },
-            { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما وزن الفعل "انكسر"؟', options: ['انفعل', 'افتعل', 'تفاعل', 'استفعل'], answer: 0, explanation: 'انكسر على وزن انفعل.' },
-            { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما نوع "مدرسة"؟', options: ['اسم مكان', 'اسم آلة', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مدرسة اسم مكان على وزن مفعلة.' },
-            { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما نوع "مفتاح"؟', options: ['اسم آلة', 'اسم مكان', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مفتاح اسم آلة على وزن مفعال.' },
-            { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما جمع "كتاب"؟', options: ['كتب', 'كتابون', 'كتابات', 'مكتبة'], answer: 0, explanation: 'جمع كتاب هو كتب (جمع تكسير).' },
-            { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما جمع "قاضٍ"؟', options: ['قاضون', 'قضاة', 'قاضيات', 'قُضّاء'], answer: 1, explanation: 'جمع قاضٍ هو قضاة.' },
-            { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن "مُكرَم"؟', options: ['مُفعَل', 'مُفعِل', 'مُفعَّل', 'مُفعول'], answer: 0, explanation: 'مُكرَم اسم مفعول من أكرم على وزن مُفعَل.' },
-            { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن "مُحسِن"؟', options: ['مُفعِل', 'مُفعَل', 'مُفعِّل', 'مُفعول'], answer: 0, explanation: 'مُحسِن اسم فاعل من أحسن على وزن مُفعِل.' },
-            { kingdom: 'sarf', level: 8, type: 'true_false', text: 'الفعل "تعلّم" على وزن تفعّل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تعلّم على وزن تفعّل.' },
-            { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما وزن الفعل "انطلق"؟', options: ['انفعل', 'افتعل', 'تفاعل', 'افعل'], answer: 0, explanation: 'انطلق على وزن انفعل.' },
-            { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما نوع "أحمر"؟', options: ['صفة مشبهة', 'اسم تفضيل', 'اسم فاعل', 'اسم مفعول'], answer: 0, explanation: 'أحمر صفة مشبهة على وزن أفعل.' },
-            { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما اسم التفضيل من "كبير"؟', options: ['أكبر', 'كبير جدًا', 'تكبير', 'مُكبِر'], answer: 0, explanation: 'اسم التفضيل من كبير هو أكبر.' },
-            { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما وزن "استغفر"؟', options: ['استفعل', 'انفعل', 'افتعل', 'تفاعل'], answer: 0, explanation: 'استغفر على وزن استفعل.' },
-            { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما مصدر "استخرج"؟', options: ['استخراج', 'إخراج', 'خروج', 'استخراجة'], answer: 0, explanation: 'مصدر استخرج هو استخراج.' },
-            // أسئلة إضافية للصرف
-            { kingdom: 'sarf', level: 2, type: 'fill', text: 'أكمل: "اسم المفعول من الفعل (فهم) هو ____"', options: ['مفهوم', 'فاهم', 'فهم', 'مُفهم'], answer: 0, explanation: 'اسم المفعول من فهم هو مفهوم.' },
-            { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما وزن "تدحرج"؟', options: ['تفعلل', 'تفاعل', 'تفعّل', 'تفعلل'], answer: 0, explanation: 'تدحرج على وزن تفعلل.' },
-            { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما جمع "عالم"؟', options: ['علماء', 'عالمون', 'عوالم', 'علوم'], answer: 0, explanation: 'جمع عالم هو علماء.' },
-            { kingdom: 'sarf', level: 8, type: 'true_false', text: 'الفعل "استقام" على وزن استفعل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'استقام على وزن استفعل.' },
+    // ===== مملكة الصرف =====
+    { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما الميزان الصرفي لاسم الفاعل "كاتِب"؟', options: ['فاعِل', 'فَعيل', 'مِفعال', 'فَعَل'], answer: 0, explanation: 'كاتب على وزن فاعِل.' },
+    { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما اسم الفاعل من الفعل الثلاثي "نَصَرَ"؟', options: ['ناصِر', 'مَنصور', 'نَصير', 'نَصْر'], answer: 0, explanation: 'يصاغ اسم الفاعل من الثلاثي على وزن فاعل (ناصر).' },
+    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "كَتَبَ"؟', options: ['كاتِب', 'مَكتوب', 'كِتاب', 'كِتابة'], answer: 1, explanation: 'يصاغ اسم المفعول من الثلاثي على وزن مفعول (مكتوب).' },
+    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "فَهِمَ"؟', options: ['فاهم', 'مَفهوم', 'فَهْم', 'مُفهِم'], answer: 1, explanation: 'اسم المفعول من فهم هو مَفهوم.' },
+    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما المصدر الصريح للفعل "كَتَبَ"؟', options: ['كاتِب', 'كِتابة', 'مَكتوب', 'كُتُب'], answer: 1, explanation: 'المصدر الصريح لـ كَتَبَ هو كِتابة.' },
+    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما المصدر الصريح للفعل "عَلِمَ"؟', options: ['عالِم', 'عِلْم', 'عَليم', 'تَعليم'], answer: 1, explanation: 'مصدر علِم هو عِلْم.' },
+    { kingdom: 'sarf', level: 4, type: 'true_false', text: 'الفعل "استَخرَجَ" على وزن "استَفعَلَ".', options: ['صح', 'خطأ'], answer: 0, explanation: 'استخرج سداسي على وزن استفعل.' },
+    { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما وزن الفعل "انْكَسَرَ"؟', options: ['انْفَعَلَ', 'افْتَعَلَ', 'تَفاعَلَ', 'اسْتَفْعَلَ'], answer: 0, explanation: 'انكسر مطاوع كسر على وزن انفعل.' },
+    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما المشتق الصرفي لكلمة "مَدرَسَة"؟', options: ['اسم مكان', 'اسم آلة', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مدرسة اسم مكان على وزن مَفعَلَة.' },
+    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما المشتق الصرفي لكلمة "مِفتاح"؟', options: ['اسم آلة', 'اسم مكان', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مفتاح اسم آلة قياسي على وزن مِفعال.' },
+    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما نوع الجمع في كلمة "كُتُب"؟', options: ['جمع تكسير', 'جمع مذكر سالم', 'جمع مؤنث سالم', 'اسم جنس'], answer: 0, explanation: 'كتب جمع تكسير لتغير صورة المفرد (كتاب).' },
+    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما الجمع الصحيح لاسم الفاعل "قاضٍ"؟', options: ['قاضون', 'قُضاة', 'قاضيات', 'مَقاضي'], answer: 1, explanation: 'يجمع قاضٍ على قُضاة (فُعاة).' },
+    { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن اسم المفعول من غير الثلاثي "مُكْرَم"؟', options: ['مُفْعَل', 'مُفْعِل', 'مُفَعَّل', 'مُفْعول'], answer: 0, explanation: 'من غير الثلاثي بإبدال حرف المضارعة ميماً مضمومة وفتح ما قبل الآخر (مُفعَل).' },
+    { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما وزن الفعل الرباعي المجرد "دَحْرَجَ"؟', options: ['فَعْلَلَ', 'تَفَعْلَلَ', 'فَعَّلَ', 'فَاعَلَ'], answer: 0, explanation: 'دحرج رباعي مجرد على وزن فَعْلَلَ.' },
+    { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما نوع المشتق "أحْمَر" الذي مؤنثه "حَمْراء"؟', options: ['صفة مشبهة', 'اسم تفضيل', 'اسم فاعل', 'اسم مفعول'], answer: 0, explanation: 'أفعل الذي مؤنثه فعلاء في الألوان والعيوب هو صفة مشبهة باسم الفاعل.' },
+    { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما المصدر الصريح للفعل "اسْتَخْرَجَ"؟', options: ['اسْتِخْراج', 'إخْراج', 'خُروج', 'اسْتِخْراجَة'], answer: 0, explanation: 'مصدر استفعل الصحيح العين هو استفعال (استخراج).' },
 
-            // ===== مملكة الإملاء (30 سؤال) =====
-            { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي كلمة تكتب بهمزة قطع؟', options: ['إسلام', 'ابْن', 'امرأة', 'الكتاب'], answer: 0, explanation: 'إسلام همزة قطع لأنها في أول الكلمة وتلفظ.' },
-            { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي كلمة تكتب بهمزة وصل؟', options: ['أحمد', 'إبراهيم', 'اكتب', 'إيمان'], answer: 2, explanation: 'اكتب همزة وصل لأنها أمر من فعل ثلاثي.' },
-            { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'ما الكلمة الصحيحة إملائياً؟', options: ['مَسألة', 'مَسائلة', 'مَساءلة', 'مَسأَلة'], answer: 0, explanation: 'الصحيح: مَسألة بهمزة على ألف.' },
-            { kingdom: 'imlaa', level: 2, type: 'true_false', text: 'كلمة "شاطئ" تكتب بهمزة على ياء.', options: ['صح', 'خطأ'], answer: 0, explanation: 'شاطئ همزتها على ياء لأن ما قبلها مكسور.' },
-            { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'أي جملة صحيحة إملائياً؟', options: ['قرأت الكتاب', 'قرأت الكتاب', 'قرأتُ الكتاب', 'قرئت الكتاب'], answer: 0, explanation: 'الصحيح: قرأت بتاء مفتوحة بعد الهمزة.' },
-            { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'ما الكلمة الصحيحة؟', options: ['التاء المربوطة', 'التاء المفتوحة', 'التاء المربوطة', 'التاء المربوطة'], answer: 0, explanation: 'الصحيح: التاء المربوطة.' },
-            { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'أي كلمة تكتب بألف لينة (ى)؟', options: ['مستشفى', 'عصا', 'فتى', 'كل ما سبق'], answer: 3, explanation: 'كل هذه الكلمات تكتب بألف لينة.' },
-            { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'ما الكلمة الصحيحة؟', options: ['دعا', 'دعى', 'دعاء', 'دعاء'], answer: 0, explanation: 'الصحيح: دعا بألف قائمة لأنها فعل ثلاثي أصله واو.' },
-            { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي جملة صحيحة في علامات الترقيم؟', options: ['قال المعلم: "ادرسوا جيدًا"', 'قال المعلم "ادرسوا جيدًا"', 'قال المعلم: ادرسوا جيدًا', 'قال المعلم، ادرسوا جيدًا'], answer: 0, explanation: 'الصحيح استخدام النقطتين وعلامات التنصيص.' },
-            { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي جملة صحيحة الترقيم؟', options: ['هل أنت جاهز؟', 'هل أنت جاهز.', 'هل أنت جاهز!', 'هل أنت جاهز،'], answer: 0, explanation: 'الاستفهام ينتهي بعلامة استفهام.' },
-            { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'ما الكلمة الصحيحة إملائياً؟', options: ['اللغة العربية', 'اللغه العربيه', 'اللغة العربيه', 'اللغه العربية'], answer: 0, explanation: 'الصحيح: اللغة العربية بتاء مربوطة في اللغة وياء في العربية.' },
-            { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة همزتها متوسطة على واو؟', options: ['مؤمن', 'رأس', 'بئر', 'سؤال'], answer: 0, explanation: 'مؤمن الهمزة على واو لأنها مضمومة.' },
-            { kingdom: 'imlaa', level: 7, type: 'true_false', text: 'كلمة "سماء" همزتها متطرفة على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'سماء همزتها متطرفة على السطر لأن ما قبلها حرف ساكن.' },
-            { kingdom: 'imlaa', level: 7, type: 'mcq', text: 'أي كلمة صحيحة إملائياً؟', options: ['جزء', 'جزأ', 'جزءٌ', 'جزء'], answer: 0, explanation: 'الصحيح: جزء.' },
-            { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الصحيح في كتابة الأعداد؟', options: ['ثلاثة طلاب', 'ثلاث طلاب', 'ثلاثة طلاب', 'ثلاث طلاب'], answer: 0, explanation: 'الصحيح: ثلاثة طلاب.' },
-            { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'أي جملة صحيحة؟', options: ['إن شاء الله', 'إنشاء الله', 'ان شاء الله', 'إنشاء الله'], answer: 0, explanation: 'الصحيح: إن شاء الله بمعنى أراد.' },
-            { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'ما الكلمة الصحيحة؟', options: ['القرآن الكريم', 'القرأن الكريم', 'القران الكريم', 'القرآن الكريم'], answer: 0, explanation: 'الصحيح: القرآن الكريم.' },
-            { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'أي كلمة همزتها متوسطة على ياء؟', options: ['بئر', 'سؤال', 'مؤمن', 'رأس'], answer: 0, explanation: 'بئر الهمزة على ياء لأنها مكسورة.' },
-            { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'ما الصحيح في كتابة التنوين؟', options: ['رجلٌ', 'رجلً', 'رجلٍ', 'رجلٌ'], answer: 0, explanation: 'الصحيح: رجلٌ بتنوين الضم.' },
-            { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'أي كلمة صحيحة؟', options: ['مدرسة', 'مدرسه', 'مدرسه', 'مدرسة'], answer: 0, explanation: 'الصحيح: مدرسة بتاء مربوطة.' },
-            // أسئلة إضافية للإملاء
-            { kingdom: 'imlaa', level: 2, type: 'fill', text: 'أكمل: "اشترى الطالبُ ____"', options: ['قلمًا', 'قلمً', 'قلم', 'قلمًا'], answer: 0, explanation: 'الصحيح: قلمًا بتنوين الفتح.' },
-            { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة صحيحة إملائياً؟', options: ['مسؤول', 'مسئول', 'مسؤل', 'مسؤول'], answer: 0, explanation: 'الصحيح: مسؤول.' },
-            { kingdom: 'imlaa', level: 8, type: 'true_false', text: 'كلمة "شيء" تكتب بهمزة متطرفة على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'شيء همزتها متطرفة على السطر.' },
+    // ===== مملكة الإملاء =====
+    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي الكلمات التالية همزتها همزة قطع؟', options: ['إسلام', 'ابْن', 'امرأة', 'الكتاب'], answer: 0, explanation: 'إسلام مصدر رباعي همزته قطع (إفعال).' },
+    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي الكلمات التالية همزتها همزة وصل؟', options: ['أحمد', 'إبراهيم', 'اكْتُبْ', 'إيمان'], answer: 2, explanation: 'اكْتُبْ أمر الفعل الثلاثي (كتب) همزته وصل.' },
+    { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'ما الكتابة الإملائية الصحيحة لكلمة (م س أ ل ة)؟', options: ['مَسْأَلَة', 'مَسْئَلَة', 'مَسْآلَة', 'مَسْؤَلَة'], answer: 0, explanation: 'الهمزة مفتوحة وما قبلها ساكن، والألف أقوى الحركات المناسبة هنا.' },
+    { kingdom: 'imlaa', level: 2, type: 'true_false', text: 'تُكتب الهمزة المتطرفة في كلمة "شاطِئ" على نبرة (ياء غير منقوطة).', options: ['صح', 'خطأ'], answer: 0, explanation: 'تكتب الهمزة المتطرفة على ياء إذا سبقت بالحرف المكسور (شاطِئ).' },
+    { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'ما الرسم الصحيح للتاء في نهاية الفعل (ق ر أ ت) لتتاء الفاعل؟', options: ['قرأتُ', 'قرأتَه', 'قرأه', 'قرأة'], answer: 0, explanation: 'تكتب التاء المفتوحة/المبسوطة في أواخر الأفعال مع الضمائر.' },
+    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'أي الكلمات التالية كتبت بألف مقصورة على صورة ياء (ى) بشكل صحيح؟', options: ['فتى', 'عصا', 'دعا', 'سما'], answer: 0, explanation: 'فتى اسم ثلاثي أصل ألفه ياء (فتيان)، فتكتب (ى).' },
+    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'لماذا كتبت الألف قائمة في الفعل "دَعا"؟', options: ['لأن أصل الألف واو (يدعو)', 'لأن أصل الألف ياء', 'لأن الفعل غير ثلاثي', 'لأنها همزة'], answer: 0, explanation: 'تكتب الألف قائمة في الثلاثي إذا كان أصلها واواً.' },
+    { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي الجمل التالية ضُبطت بعلامات الترقيم الصحيحة؟', options: ['قال المعلمُ: "ادرسوا بجدٍّ."', 'قال المعلمُ؛ ادرسوا بجدٍّ', 'قال المعلمُ "ادرسوا بجدٍّ"', 'قال المعلمُ، ادرسوا بجدٍّ.'], answer: 0, explanation: 'توضع النقطتان بعد القول وتوضع مقولة القول بين علامتي تنصيص.' },
+    { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة من الكلمات التالية همزتها المتوسطة على واو فقط؟', options: ['مُؤْمِن', 'رَأْس', 'بِئْر', 'سائِل'], answer: 0, explanation: 'مُؤمِن: الهمزة ساكنة بعد ضم فتكتب على واو.' },
+    { kingdom: 'imlaa', level: 7, type: 'true_false', text: 'تكتب الهمزة المتطرفة في كلمة "سَماء" على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تكتب الهمزة المتطرفة على السطر إذا سُبقت بحرف مد/ساكن.' },
+    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الكتابة الصحيحة للعدد 3 مع المعدود المذكر (طلاب)؟', options: ['ثلاثةُ طلابٍ', 'ثلاثُ طلابٍ', 'ثلاثاتُ طلابٍ', 'ثلاثةٌ طلابًا'], answer: 0, explanation: 'الأعداد من 3 إلى 9 تخالف المعدود في التذكير والتأنيث.' },
+    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الكتابة الإملائية الصحيحة للتركيب الدال على المشيئة؟', options: ['إنْ شاءَ اللهُ', 'إنشاءَ اللهُ', 'أنشاء الله', 'إن شاءاللهُ'], answer: 0, explanation: 'فصل (إن) الشرطية عن الفعل (شاء) واجب.' },
+    { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'ما الرسم الصحيح للكلمة المشتملة على مدة (أ + ا)؟', options: ['القُرْآن', 'القُرْأن', 'القُرْان', 'القُرْءان'], answer: 0, explanation: 'تدمج الهمزة المفتوحة مع الألف بعدها لتصبح الف مد (آ).' },
+    { kingdom: 'imlaa', level: 10, type: 'true_false', text: 'كلمة "شَيْء" تُكتب همزتها على الياء (شيئ).', options: ['صح', 'خطأ'], answer: 1, explanation: 'خطأ؛ الياء ساكنة فالهمزة متطرفة تُكتب منفردة على السطر (شَيْء).' },
 
-            // ===== مملكة البلاغة (25 سؤال) =====
-            { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما نوع التشبيه في: "العلم كالنور"؟', options: ['تشبيه مجمل', 'تشبيه مفصل', 'تشبيه بليغ', 'استعارة'], answer: 0, explanation: 'تشبيه مجمل حذفت منه الأداة.' },
-            { kingdom: 'balagha', level: 1, type: 'true_false', text: 'التشبيه البليغ هو ما حذف منه وجه الشبه وأداة التشبيه.', options: ['صح', 'خطأ'], answer: 1, explanation: 'البليغ ما حذف منه الأداة ووجه الشبه.' },
-            { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع "الابتسامة مطر"؟', options: ['استعارة مكنية', 'تشبيه بليغ', 'كناية', 'مجاز'], answer: 1, explanation: 'تشبيه بليغ حذفت منه الأداة ووجه الشبه.' },
-            { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع "الحرية شمس"؟', options: ['استعارة', 'تشبيه بليغ', 'كناية', 'تشبيه مجمل'], answer: 1, explanation: 'تشبيه بليغ.' },
-            { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في: "ناداني الواجب"؟', options: ['استعارة مكنية', 'استعارة تصريحية', 'كناية', 'مجاز مرسل'], answer: 0, explanation: 'استعارة مكنية حيث شبهنا الواجب بإنسان.' },
-            { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في: "رأيت بحرًا في المدرسة"؟', options: ['استعارة تصريحية', 'استعارة مكنية', 'كناية', 'تشبيه'], answer: 0, explanation: 'استعارة تصريحية حذفنا المشبه وأبقينا المشبه به.' },
-            { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما نوع الكناية في: "فلان طويل اليد"؟', options: ['كناية عن الكرم', 'كناية عن الطول', 'كناية عن القوة', 'استعارة'], answer: 0, explanation: 'كناية عن الكرم.' },
-            { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما نوع "أبو لهب"؟', options: ['كناية', 'لقب', 'استعارة', 'تشبيه'], answer: 0, explanation: 'كناية عن التهلكة.' },
-            { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع "أكلت من يدها"؟', options: ['كناية', 'مجاز مرسل', 'استعارة', 'تشبيه'], answer: 0, explanation: 'كناية عن التواضع.' },
-            { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع "شربت النيل"؟', options: ['مجاز مرسل', 'كناية', 'استعارة', 'تشبيه'], answer: 0, explanation: 'مجاز مرسل علاقته المكانية.' },
-            { kingdom: 'balagha', level: 6, type: 'mcq', text: 'ما نوع "وقف الحائط"؟', options: ['مجاز عقلي', 'استعارة', 'كناية', 'تشبيه'], answer: 0, explanation: 'مجاز عقلي أسند الفعل لغير فاعله الحقيقي.' },
-            { kingdom: 'balagha', level: 6, type: 'true_false', text: 'الجناس هو تشابه كلمتين في اللفظ واختلافهما في المعنى.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تعريف الجناس.' },
-            { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما نوع "الصوم صيام"؟', options: ['جناس', 'سجع', 'طباق', 'مقابلة'], answer: 0, explanation: 'جناس ناقص.' },
-            { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما نوع "الليل والنهار"؟', options: ['طباق', 'مقابلة', 'جناس', 'سجع'], answer: 0, explanation: 'طباق إيجاب.' },
-            { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع "يحب ويكره"؟', options: ['طباق', 'مقابلة', 'جناس', 'سجع'], answer: 0, explanation: 'طباق.' },
-            { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع "الجو معتدل والسماء صافية"؟', options: ['سجع', 'جناس', 'مقابلة', 'طباق'], answer: 0, explanation: 'سجع في النثر.' },
-            { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما نوع "أضحك وأبكى"؟', options: ['طباق', 'مقابلة', 'جناس', 'سجع'], answer: 0, explanation: 'طباق.' },
-            { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما نوع "العلم نور والجهل ظلام"؟', options: ['مقابلة', 'طباق', 'جناس', 'سجع'], answer: 0, explanation: 'مقابلة بين جملتين متقابلتين.' },
-            { kingdom: 'balagha', level: 10, type: 'mcq', text: 'ما نوع "رأيت أسدًا في المعركة"؟', options: ['استعارة تصريحية', 'استعارة مكنية', 'تشبيه', 'كناية'], answer: 0, explanation: 'استعارة تصريحية حيث شبه الرجل الشجاع بالأسد.' },
-            { kingdom: 'balagha', level: 10, type: 'mcq', text: 'ما نوع "يد الله فوق أيديهم"؟', options: ['كناية', 'استعارة', 'مجاز', 'تشبيه'], answer: 0, explanation: 'كناية عن القدرة والعزة.' },
-            // أسئلة إضافية للبلاغة
-            { kingdom: 'balagha', level: 2, type: 'fill', text: 'أكمل: "التشبيه البليغ هو ما حذف منه ____ وأداة التشبيه"', options: ['وجه الشبه', 'المشبه', 'المشبه به', 'كلاهما'], answer: 0, explanation: 'البليغ يحذف منه الأداة ووجه الشبه.' },
-            { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع "كثير الرماد"؟', options: ['كناية عن الكرم', 'كناية عن البخل', 'استعارة', 'تشبيه'], answer: 0, explanation: 'كناية عن الكرم.' },
-            { kingdom: 'balagha', level: 7, type: 'true_false', text: 'السجع هو توافق الفواصل في النثر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'السجع توافق أواخر الجمل في النثر.' },
+    // ===== مملكة البلاغة =====
+    { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما نوع التشبيه في قولنا: "العلمُ كالنورِ"؟', options: ['تشبيه مجمل', 'تشبيه مفصل', 'تشبيه بليغ', 'استعارة تصريحية'], answer: 0, explanation: 'تشبيه مجمل حُذف منه وجه الشبه وذكرت فيه الأداة والمشبه والمشبه به.' },
+    { kingdom: 'balagha', level: 1, type: 'true_false', text: 'التشبيه البليغ هو ما حُذِف منه وجه الشبه وأداة التشبيه معًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'صح؛ التشبيه البليغ يقتصر على المشبه والمشبه به فقط (مثل: العلم نور).' },
+    { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع التشبيه في جملة: "الجهلُ الموتُ"؟', options: ['تشبيه بليغ', 'تشبيه مجمل', 'تشبيه مفصل', 'استعارة مكنية'], answer: 0, explanation: 'تشبيه بليغ لحذف الأداة ووجه الشبه.' },
+    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في قولنا: "نَطَقَتْ العَيْنُ بِمَا فِي القَلْبِ"؟', options: ['استعارة مكنية', 'استعارة تصريحية', 'كناية عن نسبة', 'مجاز مرسل'], answer: 0, explanation: 'استعارة مكنية؛ شُبّهت العين بإنسان ينطق وحُذف المشبه به ودُلّ عليه بشيء من لوازمه (نطقت).' },
+    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في: "رَأَيْتُ بَحْرًا يُلْقِي الخُطْبَةَ فِي الحَفْلِ"؟', options: ['استعارة تصريحية', 'استعارة مكنية', 'تشبيه بليغ', 'مجاز عقلي'], answer: 0, explanation: 'استعارة تصريحية؛ صُرّح بالمشبه به (البحر) وحُذف المشبه (العالم/الخطيب).' },
+    { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما المعنى الكنائي في قول العرب: "فُلانٌ طَويلُ النِّجادِ"؟', options: ['كناية عن شجاعته وطول قامته', 'كناية عن الكرم والضيافة', 'كناية عن الفقر', 'استعارة مكنية'], answer: 0, explanation: 'طول نجاد السيف يلزمه طول القامة والهيبة والشجاعة.' },
+    { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما علاقة المجاز المرسل في قولنا: "شَرِبْتُ مَاءَ النِّيلِ"؟', options: ['الكلّيّة', 'الجزئيّة', 'المكانيّة', 'السببيّة'], answer: 0, explanation: 'مجاز مرسل علاقته الكليّة؛ حيث أطلق الكل (ماء النيل) وأراد الجزء (عضعة أكواب).' },
+    { kingdom: 'balagha', level: 6, type: 'true_false', text: 'الجناس المحسن البديعي اللفظي هو توافق كلمتين في اللفظ واختلافهما في المعنى.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تعريف الجناس الصحيح (مثل: وسلا مصر هل سلا القلب عنها).' },
+    { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما نوع المحسن البديعي بين (الليل) و(النهار)؟', options: ['طباق إيجاب', 'طباق سلب', 'مقابلة', 'جناس ناقص'], answer: 0, explanation: 'طباق إيجاب بين كلمتين متضادتين.' },
+    { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع المحسن في: "يَعْلَمُونَ وَلا يَعْلَمُونَ"؟', options: ['طباق سلب', 'طباق إيجاب', 'مقابلة', 'سجع'], answer: 0, explanation: 'طباق سلب لاختلاف الكلمتين بالإيجاب والنفي.' },
+    { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما المحسن البديعي في: "العِلْمُ نُورٌ، وَالْجَهْلُ ظَلامٌ"؟', options: ['مقابلة', 'طباق إيجاب', 'جناس تام', 'سجع'], answer: 0, explanation: 'مقابلة بين التراكيب (معنيان أو أكثر مقابل معنيين أو أكثر على الترتيب).' },
 
-            // ===== مملكة الأخطاء الشائعة (25 سؤال) =====
-            { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'صحح الخطأ: "إن الطالبُ مجتهدٌ"', options: ['إن الطالبَ مجتهدٌ', 'إن الطالبِ مجتهدٌ', 'إن الطالبُ مجتهدًا', 'إن الطالبَ مجتهدًا'], answer: 0, explanation: 'اسم إن منصوب.' },
-            { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'صحح: "لن يهملْ الطالبُ درسه"', options: ['لن يهملَ الطالبُ درسه', 'لن يهملْ الطالبَ درسه', 'لن يهملِ الطالبُ درسه', 'لن يهملُ الطالبُ درسه'], answer: 0, explanation: 'الفعل بعد لن منصوب.' },
-            { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'صحح: "مررتُ بأخوك"', options: ['مررتُ بأخيك', 'مررتُ بأخاك', 'مررتُ بأخوك', 'مررتُ بأخي'], answer: 0, explanation: 'أخيك مجرور بالياء.' },
-            { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'صحح: "رأيتُ الطالبانِ"', options: ['رأيتُ الطالبينِ', 'رأيتُ الطالبانِ', 'رأيتُ الطالبون', 'رأيتُ الطالبِ'], answer: 0, explanation: 'المثنى ينصب بالياء.' },
-            { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'صحح: "جاء المعلمين"', options: ['جاء المعلمون', 'جاء المعلمين', 'جاء المعلمان', 'جاء المعلمات'], answer: 0, explanation: 'جمع المذكر السالم يرفع بالواو.' },
-            { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'صحح: "إن المعلمون مخلصون"', options: ['إن المعلمين مخلصون', 'إن المعلمون مخلصين', 'إن المعلمين مخلصين', 'إن المعلمَ مخلصون'], answer: 0, explanation: 'اسم إن منصوب بالياء.' },
-            { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'صحح: "لم يكتبُ الطالبُ"', options: ['لم يكتبْ الطالبُ', 'لم يكتبَ الطالبُ', 'لم يكتبِ الطالبُ', 'لم كتبْ الطالبُ'], answer: 0, explanation: 'لم تجزم المضارع.' },
-            { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'صحح: "لا تهملَ دروسك"', options: ['لا تهملْ دروسك', 'لا تهملَ دروسك', 'لا تهملُ دروسك', 'لا تهملِ دروسك'], answer: 0, explanation: 'الفعل بعد لا الناهية مجزوم.' },
-            { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'صحح: "هذا رجلٌ كريمٌ"', options: ['هذا رجلٌ كريمٌ', 'هذا رجلًا كريمًا', 'هذا رجلٍ كريمٍ', 'هذا رجلَ كريمَ'], answer: 0, explanation: 'الجملة صحيحة أصلاً.' },
-            { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'صحح: "اللهم صلي على محمد"', options: ['اللهم صلِّ على محمد', 'اللهم صلي على محمد', 'اللهم صلَ على محمد', 'اللهم صلى على محمد'], answer: 0, explanation: 'الفعل أمر مبني على حذف حرف العلة.' },
-            { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'صحح: "أنا ذهبتُ إلى المدرسة"', options: ['ذهبتُ إلى المدرسة', 'أنا ذهبتُ إلى المدرسة', 'أنا ذهبتَ إلى المدرسة', 'أنا ذهب إلى المدرسة'], answer: 0, explanation: 'لا حاجة لتكرار الضمير.' },
-            { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'صحح: "الطلاب الذي نجحوا"', options: ['الطلاب الذين نجحوا', 'الطلاب الذي نجحوا', 'الطلاب الذين نجح', 'الطلاب الذين نجحون'], answer: 0, explanation: 'الاسم الموصول يجب أن يطابق.' },
-            { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'صحح: "اشتريت كتاباً مفيداً"', options: ['اشتريت كتاباً مفيداً', 'اشتريت كتاب مفيد', 'اشتريت كتاباً مفيد', 'اشتريت كتابً مفيدًا'], answer: 0, explanation: 'الجملة صحيحة.' },
-            { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'صحح: "إن شاء الله"', options: ['إن شاء الله', 'إنشاء الله', 'ان شاء الله', 'إنشاء الله'], answer: 0, explanation: 'الصحيح: إن شاء الله.' },
-            { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'صحح: "مبارك عليك الشهر"', options: ['مبارك عليك الشهر', 'مبارك عليك الشهر', 'مبارك عليك الشهر', 'مبارك عليك الشهر'], answer: 0, explanation: 'التعبير صحيح.' },
-            { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'صحح: "لا تنسى واجبك"', options: ['لا تنسَ واجبك', 'لا تنسى واجبك', 'لا تنسِ واجبك', 'لا تنسُ واجبك'], answer: 0, explanation: 'الفعل معتل الآخر يجزم بحذف حرف العلة.' },
-            { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'صحح: "أنا متأكد من النجاح"', options: ['أنا متأكد من النجاح', 'أنا متأكد من النجاح', 'أنا متأكد من النجاح', 'أنا متأكد من النجاح'], answer: 0, explanation: 'الجملة صحيحة.' },
-            { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'صحح: "هذا أفضل من ذاك"', options: ['هذا أفضل من ذاك', 'هذا أفضل من ذاك', 'هذا أفضل من ذاك', 'هذا أفضل من ذاك'], answer: 0, explanation: 'صحيح.' },
-            { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'صحح: "لا تنهى عن خلق وتأتي مثله"', options: ['لا تنهَ عن خلق وتأتي مثله', 'لا تنهى عن خلق وتأتي مثله', 'لا تنهي عن خلق وتأتي مثله', 'لا تنهُ عن خلق وتأتي مثله'], answer: 0, explanation: 'فعل مضارع مجزوم بحذف حرف العلة.' },
-            { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'صحح: "استأجرت شقةً"', options: ['استأجرت شقةً', 'استأجرت شقة', 'استأجرت شقه', 'استأجرت شقة'], answer: 0, explanation: 'صحيح.' },
-            // أسئلة إضافية
-            { kingdom: 'akhtaa', level: 2, type: 'mcq', text: 'أي جملة صحيحة؟', options: ['تفوق الطلابُ', 'تفوق الطلابَ', 'تفوق الطلابِ', 'تفوق الطلابْ'], answer: 0, explanation: 'الفاعل مرفوع.' },
-            { kingdom: 'akhtaa', level: 5, type: 'mcq', text: 'أي جملة صحيحة؟', options: ['أكرمتُ الضيفَ', 'أكرمتُ الضيفُ', 'أكرمتُ الضيفِ', 'أكرمت الضيفَ'], answer: 0, explanation: 'المفعول به منصوب.' },
-            { kingdom: 'akhtaa', level: 8, type: 'true_false', text: 'جملة "الطلاب المجتهدون ناجحون" صحيحة نحوياً.', options: ['صح', 'خطأ'], answer: 0, explanation: 'النعت مرفوع بالواو.' },
-        ];
+    // ===== مملكة الأخطاء الشائعة =====
+    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'اختر التصحيح اللغوي الصحيح للجملة الخطأ: "إنّ الطالبُ مجتهدٌ"', options: ['إنّ الطالبَ مجتهدٌ', 'إنّ الطالبِ مجتهدٌ', 'إنّ الطالبُ مجتهدًا', 'إنّ الطالبَ مجتهدًا'], answer: 0, explanation: 'اسم إنّ منصوب وعلامة نصبه الفتحة.' },
+    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'اختر التصحيح الصحيح للجملة: "لَنْ يَهْمِلْ الطالبُ دَرْسَهُ"', options: ['لَنْ يَهْمِلَ الطالبُ دَرْسَهُ', 'لَنْ يَهْمِلُ الطالبُ دَرْسَهُ', 'لَنْ يَهْمِلِ الطالبَ دَرْسَهُ', 'لَنْ يَهْمَلْ الطالبُ دَرْسَهُ'], answer: 0, explanation: 'الفعل المضارع بعد أداة النصب (لن) يكون منصوباً بالفتحة.' },
+    { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'صوّب الخطأ الإعرابي في: "مَرَرْتُ بِأَخُوكَ"', options: ['مَرَرْتُ بِأَخِيكَ', 'مَرَرْتُ بِأَخَاكَ', 'مَرَرْتُ بِأَخُوكَ', 'مَرَرْتُ بِأَخِيكْ'], answer: 0, explanation: 'الأسماء الخمسة تُجر بالياء، فيقال: بأخيك.' },
+    { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'ما الصواب اللغوي للعبارة الشائعة: "هَذا حَادِثٌ مَفْقُودٌ"؟', options: ['هَذا حَادِثٌ المَؤْسِفٌ / أليمٌ', 'هَذا حَادِثٌ مَفْقُودٌ', 'هَذا حَادِثٌ مَفْقُودَةٌ', 'لا يوجد خطأ'], answer: 0, explanation: 'كلمة مفقود تؤدي معنى الضياع، والأصل وصف الحادث بالأليم أو المؤسف.' },
+    { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'اختر الصواب في الدعاء لجزم فعل الأمر معتل الآخر: "اللّهُمَّ صَلِّي عَلَى مُحَمَّدٍ"', options: ['اللّهُمَّ صَلِّ عَلَى مُحَمَّدٍ', 'اللّهُمَّ صَلَّى عَلَى مُحَمَّدٍ', 'اللّهُمَّ صَالِي عَلَى مُحَمَّدٍ', 'اللّهُمَّ صَلِّي عَلَى مُحَمَّدٍ'], answer: 0, explanation: 'فعل أمر مبني على حذف حرف العلة (الياء).' },
+    { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'ما الصواب في العبارة التهنئة الشائعة: "مَبْرُوكٌ عَلَيْكَ النجاحُ"؟', options: ['مُبَارَكٌ عَلَيْكَ النجاحُ', 'مَبْرُوكٌ عَلَيْكَ النجاحُ', 'بَارَكَ عَلَيْكَ النجاحُ', 'مُبْرِكٌ عَلَيْكَ النجاحُ'], answer: 0, explanation: 'اسم المفعول من بارك هو مُبارَك، أما مبروك فمن بَرَكَ الجمل.' },
+    { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'ما الصواب عند إضافة التعريف للمركب الإضافي: "الغيرُ مَقْبُولٍ"؟', options: ['غَيْرُ المَقْبُولِ', 'الغيرُ المقبولِ', 'الغيرُ مقبولٍ', 'غيرُ مقبولٍ'], answer: 0, explanation: '(غير) اسم موغل في الإبهام لا يدخله التعريف، بل تُعرّف الكلمة المضافة إليها (غير المقبول).' },
+    { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'اختر الصواب لنسبة الشخص إلى التخصص: "هُوَ أَخِصَّائِيُّ عِلْمِ النَّفْسِ"', options: ['هُوَ مُتَخَصِّصُ عِلْمِ النَّفْسِ / مُتَخَصِّصٌ', 'هُوَ أَخِصَّائِيُّ عِلْمِ النَّفْسِ', 'هُوَ خَصَّائِيُّ عِلْمِ النَّفْسِ', 'لا يوجد تصحيح'], answer: 0, explanation: 'النسبة القياسية من الفعل تخصص هي (متخصص)، وأخصائي لفظ دخيل.' },
+    { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'صوّب جزم الفعل معتل الآخر بنهي: "لا تَنْسَى ذِكْرَ اللهِ"', options: ['لا تَنْسَ ذِكْرَ اللهِ', 'لا تَنْسَى ذِكْرَ اللهِ', 'لا تَنْسِي ذِكْرَ اللهِ', 'لا تَنْسُ ذِكْرَ اللهِ'], answer: 0, explanation: 'يجزم الفعل المضارع معتل الآخر بعد لا الناهية بحذف حرف العلة.' },
+    { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'صوّب العبارة مع الأسماء الموصولة: "حَضَرَ الطلابُ الَّذِي نَجَحُوا"', options: ['حَضَرَ الطلابُ الَّذِينَ نَجَحُوا', 'حَضَرَ الطلابُ الَّذِي نَجَحوا', 'حَضَرَ الطلابُ الَّذَانِ نَجَحُوا', 'حَضَرَ الطلابُ مَنْ نَجَحُوا'], answer: 0, explanation: 'يجب مطابقة الاسم الموصول لجمع المذكر العاقل (الذين).' },
+    { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'صوّب النهي في البيت الشهير: "لا تَنْهَى عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ"', options: ['لا تَنْهَ عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ', 'لا تَنْهَى عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ', 'لا تَنْهِي عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ', 'لا تَنْهُ عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ'], answer: 0, explanation: 'تنهَ: فعل مضارع مجزوم بلا الناهية وعلامة جزمه حذف حرف العلة.' }
+];
+
+        // ==================== نظام الصوت ====================
+        let audioCtx = null;
+        function ensureAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+        function playTone(frequency, duration, type = 'sine', volume = 0.3) {
+            try {
+                const ctx = ensureAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+                gain.gain.setValueAtTime(volume, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) { console.error('Audio error:', e); }
+        }
+        function soundStart() {
+            playTone(523.25, 0.15, 'sine', 0.3); // C5
+            setTimeout(() => playTone(659.25, 0.15, 'sine', 0.3), 150); // E5
+            setTimeout(() => playTone(783.99, 0.2, 'sine', 0.3), 300); // G5
+        }
+        function soundCorrect() {
+            playTone(659.25, 0.12, 'sine', 0.3); // E5
+            setTimeout(() => playTone(783.99, 0.12, 'sine', 0.3), 120); // G5
+            setTimeout(() => playTone(1046.5, 0.25, 'sine', 0.35), 240); // C6
+        }
+        function soundWrong() {
+            playTone(300, 0.2, 'sawtooth', 0.2);
+            setTimeout(() => playTone(200, 0.3, 'sawtooth', 0.2), 200);
+        }
+        function soundFinish() {
+            const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5];
+            notes.forEach((freq, i) => {
+                setTimeout(() => playTone(freq, 0.2, 'sine', 0.25), i * 150);
+            });
+        }
 
         // ==================== حالة اللعبة ====================
         let gameState = {
             playerName: 'فارس اللغة',
             xp: 0,
             gold: 100,
-            completedLevels: {}, // { kingdomId: [completedLevel1, level2...] }
-            achievements: [], // معرفات الإنجازات المحققة
-            levelScores: {}, // { kingdomId_levelNumber: { correct, total, xp, gold } }
-            examHistory: [] // نتائج الاختبارات
+            completedLevels: {},
+            achievements: [],
+            examHistory: []
         };
 
-        // إنجازات معرفة مسبقاً
         const ACHIEVEMENTS = [
             { id: 'first_level', name: 'أول خطوة', desc: 'أكمل أي مرحلة', icon: 'fa-solid fa-shoe-prints', check: () => Object.values(gameState.completedLevels).some(arr => arr.length > 0) },
             { id: 'nahw_master', name: 'سيد النحو', desc: 'أكمل 5 مراحل في مملكة النحو', icon: 'fa-solid fa-language', check: () => (gameState.completedLevels['nahw']?.length || 0) >= 5 },
@@ -518,49 +426,27 @@
             { id: 'exam_90', name: 'متفوق', desc: 'احصل على 90% أو أكثر في الاختبار', icon: 'fa-solid fa-file-pen', check: () => gameState.examHistory.some(score => score >= 90) },
         ];
 
-        // ==================== دوال مساعدة ====================
         function $(id) { return document.getElementById(id); }
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             $(id).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-        function shuffleArray(arr) {
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
+        function escapeHtml(str) { const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
+        function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 
-        // حفظ واسترجاع التقدم
-        function saveState() {
-            localStorage.setItem('fursan_linguistic_state', JSON.stringify(gameState));
-        }
+        function saveState() { localStorage.setItem('fursan_linguistic_state', JSON.stringify(gameState)); }
         function loadState() {
             const saved = localStorage.getItem('fursan_linguistic_state');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    // دمج مع الحالة الافتراضية
-                    gameState = { ...gameState, ...parsed };
-                } catch (e) { console.error('Failed to load state', e); }
-            }
+            if (saved) { try { gameState = { ...gameState, ...JSON.parse(saved) }; } catch(e){} }
         }
-
-        // تحديث واجهة الشريط العلوي
         function updateTopBar() {
             $('topXp').textContent = gameState.xp;
             $('topGold').textContent = gameState.gold;
             $('topName').textContent = gameState.playerName;
         }
 
-        // بناء شبكة الممالك
+        // ==================== الخريطة ====================
         function renderKingdomGrid() {
             const grid = $('kingdomGrid');
             grid.innerHTML = '';
@@ -589,54 +475,37 @@
             });
         }
 
-        // فتح مملكة
         function openKingdom(kingdomId) {
             const kingdom = KINGDOMS.find(k => k.id === kingdomId);
-            // عرض شاشة اختيار المرحلة للمملكة (سنتجاوزها الآن ونبدأ مباشرة بأول مرحلة غير مكتملة)
-            // لكن سننشئ نافذة صغيرة لاختيار المرحلة
             const completed = gameState.completedLevels[kingdom.id] || [];
             let nextLevel = 1;
-            // نجد أول مرحلة غير مكتملة
             for (let i = 1; i <= kingdom.levels; i++) {
-                if (!completed.includes(i)) {
-                    nextLevel = i;
-                    break;
-                }
+                if (!completed.includes(i)) { nextLevel = i; break; }
                 nextLevel = i + 1;
             }
-            if (nextLevel > kingdom.levels) {
-                alert('أكملت جميع المراحل في هذه المملكة!');
-                return;
-            }
+            if (nextLevel > kingdom.levels) { alert('أكملت جميع المراحل في هذه المملكة!'); return; }
             startLevel(kingdom.id, nextLevel);
         }
 
-        // بدء مرحلة
-        let currentLevelInfo = null; // { kingdomId, levelNumber, questions, currentIndex, correct, hintsUsed, timer }
+        // ==================== المرحلة ====================
+        let currentLevelInfo = null;
         let levelTimerInterval = null;
         let levelTimeLeft = 0;
         let answerLocked = false;
 
         function startLevel(kingdomId, levelNumber) {
             const kingdom = KINGDOMS.find(k => k.id === kingdomId);
-            // جمع أسئلة هذه المرحلة
             const levelQuestions = QUESTION_BANK.filter(q => q.kingdom === kingdomId && q.level === levelNumber);
             if (levelQuestions.length < 5) {
-                // استكمال من مستويات مجاورة إذا لم تكن كافية
                 const additional = QUESTION_BANK.filter(q => q.kingdom === kingdomId && q.level !== levelNumber);
                 const needed = 5 - levelQuestions.length;
                 const extra = shuffleArray(additional).slice(0, needed);
                 levelQuestions.push(...extra);
             }
-            // اختيار 5 أسئلة عشوائياً
             const selectedQuestions = shuffleArray(levelQuestions).slice(0, 5);
-            if (selectedQuestions.length === 0) {
-                alert('لا توجد أسئلة متاحة لهذه المرحلة.');
-                return;
-            }
+            if (selectedQuestions.length === 0) { alert('لا توجد أسئلة متاحة لهذه المرحلة.'); return; }
             currentLevelInfo = {
-                kingdomId,
-                levelNumber,
+                kingdomId, levelNumber,
                 questions: selectedQuestions,
                 currentIndex: 0,
                 correct: 0,
@@ -644,11 +513,11 @@
                 goldEarned: 0,
                 xpEarned: 0,
             };
-            // عرض شاشة المرحلة
             showScreen('screenLevel');
             $('levelTitle').textContent = `${kingdom.name} - المرحلة ${levelNumber}`;
             $('levelSubtitle').textContent = kingdom.description;
             answerLocked = false;
+            soundStart();
             renderQuestion();
         }
 
@@ -659,15 +528,8 @@
             $('currentQuestionNum').textContent = info.currentIndex + 1;
             $('levelProgress').style.width = `${(info.currentIndex / info.questions.length) * 100}%`;
             $('questionText').textContent = q.text;
-            // نوع السؤال
-            const typeMap = {
-                mcq: 'اختيار من متعدد',
-                true_false: 'صح أم خطأ',
-                fill: 'أكمل الفراغ',
-                correct_error: 'صحح الخطأ'
-            };
+            const typeMap = { mcq: 'اختيار من متعدد', true_false: 'صح أم خطأ', fill: 'أكمل الفراغ', correct_error: 'صحح الخطأ' };
             $('questionType').textContent = typeMap[q.type] || q.type;
-            // خيارات
             const container = $('optionsContainer');
             container.innerHTML = '';
             q.options.forEach((opt, idx) => {
@@ -680,10 +542,8 @@
                 btn.addEventListener('click', () => selectAnswer(idx));
                 container.appendChild(btn);
             });
-            // إخفاء التلميح
             $('hintText').classList.add('hidden');
             $('hintBtn').classList.remove('hidden');
-            // إعادة تعيين المؤقت
             resetTimer();
             answerLocked = false;
         }
@@ -695,33 +555,27 @@
             const info = currentLevelInfo;
             const q = info.questions[info.currentIndex];
             const isCorrect = selectedIndex === q.answer;
-            // تمييز الإجابات
             const optionButtons = document.querySelectorAll('.option-btn');
             optionButtons.forEach((btn, idx) => {
                 btn.disabled = true;
-                if (idx === q.answer) {
-                    btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
-                }
-                if (idx === selectedIndex && !isCorrect) {
-                    btn.classList.add('bg-red-500/20', 'border-red-500');
-                }
+                if (idx === q.answer) btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
+                if (idx === selectedIndex && !isCorrect) btn.classList.add('bg-red-500/20', 'border-red-500');
             });
-            // عرض التغذية الراجعة
             const feedbackBox = $('feedbackBox');
             feedbackBox.classList.remove('hidden');
             if (isCorrect) {
                 info.correct++;
                 feedbackBox.className = 'mt-4 p-4 rounded-2xl text-center font-bold bg-emerald-500/20 text-emerald-300';
                 feedbackBox.innerHTML = `<i class="fa-solid fa-check-circle ml-2"></i> إجابة صحيحة! ${q.explanation}`;
-                // نقاط
                 info.xpEarned += 20;
                 info.goldEarned += 5;
+                soundCorrect();
             } else {
                 feedbackBox.className = 'mt-4 p-4 rounded-2xl text-center font-bold bg-red-500/20 text-red-300';
                 feedbackBox.innerHTML = `<i class="fa-solid fa-xmark-circle ml-2"></i> إجابة خاطئة. الإجابة الصحيحة: ${q.options[q.answer]}. ${q.explanation}`;
+                soundWrong();
             }
             updateTopBar();
-            // زر التالي
             setTimeout(() => {
                 if (info.currentIndex < info.questions.length - 1) {
                     info.currentIndex++;
@@ -741,26 +595,19 @@
                 $('timerDisplay').textContent = levelTimeLeft;
                 if (levelTimeLeft <= 0) {
                     clearInterval(levelTimerInterval);
-                    if (!answerLocked) {
-                        // انتهى الوقت، نعتبر الإجابة خاطئة
-                        selectAnswer(-1);
-                    }
+                    if (!answerLocked) selectAnswer(-1);
                 }
             }, 1000);
         }
 
         function useHint() {
             if (answerLocked) return;
-            if (gameState.gold < 10) {
-                alert('لا تملك قطعاً ذهبية كافية!');
-                return;
-            }
+            if (gameState.gold < 10) { alert('لا تملك قطعاً ذهبية كافية!'); return; }
             gameState.gold -= 10;
             saveState();
             updateTopBar();
             const info = currentLevelInfo;
             const q = info.questions[info.currentIndex];
-            // إظهار تلميح بسيط: حذف إجابتين خاطئتين
             const wrongOptions = q.options.map((_, idx) => idx).filter(idx => idx !== q.answer);
             const toRemove = shuffleArray(wrongOptions).slice(0, Math.min(2, wrongOptions.length));
             const optionButtons = document.querySelectorAll('.option-btn');
@@ -778,29 +625,20 @@
         function finishLevel() {
             clearInterval(levelTimerInterval);
             const info = currentLevelInfo;
-            // تسجيل الإكمال
-            if (!gameState.completedLevels[info.kingdomId]) {
-                gameState.completedLevels[info.kingdomId] = [];
-            }
-            if (!gameState.completedLevels[info.kingdomId].includes(info.levelNumber)) {
-                gameState.completedLevels[info.kingdomId].push(info.levelNumber);
-            }
-            // إضافة نقاط
+            if (!gameState.completedLevels[info.kingdomId]) gameState.completedLevels[info.kingdomId] = [];
+            if (!gameState.completedLevels[info.kingdomId].includes(info.levelNumber)) gameState.completedLevels[info.kingdomId].push(info.levelNumber);
             gameState.xp += info.xpEarned;
             gameState.gold += info.goldEarned;
-            // حفظ
             saveState();
             updateTopBar();
-            // عرض شاشة الإكمال
             $('completeCorrect').textContent = info.correct;
             $('completeXp').textContent = info.xpEarned;
             $('completeGold').textContent = info.goldEarned;
             $('completeTitle').textContent = info.correct >= 4 ? 'أداء رائع!' : info.correct >= 3 ? 'جيد جداً' : 'حاول مرة أخرى';
             $('completeIcon').textContent = info.correct >= 4 ? '🏆' : info.correct >= 3 ? '🌟' : '💪';
             $('completeMessage').textContent = `أجبت على ${info.correct} من أصل ${info.questions.length} أسئلة صحيحة.`;
+            soundFinish();
             showScreen('screenLevelComplete');
-            // تحديث الخريطة عند العودة
-            // لا نعيد رسم الخريطة الآن، بل عند العودة
         }
 
         function goBackToMap() {
@@ -824,17 +662,13 @@
             { title: 'التشبيه البليغ', content: 'ما حذف منه وجه الشبه وأداة التشبيه. مثال: "العلم نور".' },
             { title: 'الاستعارة', content: 'تشبيه حذف أحد طرفيه. الاستعارة التصريحية حذف فيها المشبه، والمكنية حذف فيها المشبه به.' },
         ];
-
         function renderLibrary() {
             const container = $('libraryContent');
             container.innerHTML = '';
             LIBRARY_CONTENT.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'bg-slate-800/80 border border-white/10 rounded-2xl p-6';
-                div.innerHTML = `
-                    <h3 class="text-xl font-bold mb-2 text-amber-400">${item.title}</h3>
-                    <p class="text-slate-300 leading-relaxed">${item.content}</p>
-                `;
+                div.innerHTML = `<h3 class="text-xl font-bold mb-2 text-amber-400">${item.title}</h3><p class="text-slate-300 leading-relaxed">${item.content}</p>`;
                 container.appendChild(div);
             });
         }
@@ -848,13 +682,8 @@
                 const div = document.createElement('div');
                 div.className = `bg-slate-800/80 border ${unlocked ? 'border-amber-500/50' : 'border-white/10'} rounded-2xl p-6 flex items-center gap-4`;
                 div.innerHTML = `
-                    <div class="w-14 h-14 rounded-2xl ${unlocked ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-slate-500'} flex items-center justify-center text-2xl">
-                        <i class="${ach.icon}"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold ${unlocked ? 'text-white' : 'text-slate-400'}">${ach.name}</h3>
-                        <p class="text-sm text-slate-400">${ach.desc}</p>
-                    </div>
+                    <div class="w-14 h-14 rounded-2xl ${unlocked ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-slate-500'} flex items-center justify-center text-2xl"><i class="${ach.icon}"></i></div>
+                    <div class="flex-1"><h3 class="font-bold ${unlocked ? 'text-white' : 'text-slate-400'}">${ach.name}</h3><p class="text-sm text-slate-400">${ach.desc}</p></div>
                     <div class="text-2xl">${unlocked ? '✅' : '🔒'}</div>
                 `;
                 list.appendChild(div);
@@ -874,23 +703,17 @@
             $('examContent').innerHTML = '';
             $('examStartBtn').classList.remove('hidden');
         }
-
         function startExamQuestions() {
-            // اختيار 20 سؤال عشوائي من كل البنك
-            const allQuestions = shuffleArray(QUESTION_BANK);
-            examQuestions = allQuestions.slice(0, 20);
+            examQuestions = shuffleArray(QUESTION_BANK).slice(0, 20);
             examIndex = 0;
             examCorrect = 0;
             examInProgress = true;
             $('examStartBtn').classList.add('hidden');
+            soundStart();
             renderExamQuestion();
         }
-
         function renderExamQuestion() {
-            if (examIndex >= examQuestions.length) {
-                finishExam();
-                return;
-            }
+            if (examIndex >= examQuestions.length) { finishExam(); return; }
             const q = examQuestions[examIndex];
             const container = $('examContent');
             container.innerHTML = `
@@ -910,63 +733,41 @@
                     </div>
                 </div>
             `;
-            // ربط الأزرار
-            document.querySelectorAll('.exam-option').forEach(btn => {
-                btn.addEventListener('click', () => selectExamAnswer(parseInt(btn.dataset.index)));
-            });
-            // بدء المؤقت
+            document.querySelectorAll('.exam-option').forEach(btn => btn.addEventListener('click', () => selectExamAnswer(parseInt(btn.dataset.index))));
             clearInterval(examTimerInterval);
             examTimeLeft = 20;
             $('examTimer').textContent = examTimeLeft;
             examTimerInterval = setInterval(() => {
                 examTimeLeft--;
                 $('examTimer').textContent = examTimeLeft;
-                if (examTimeLeft <= 0) {
-                    clearInterval(examTimerInterval);
-                    selectExamAnswer(-1);
-                }
+                if (examTimeLeft <= 0) { clearInterval(examTimerInterval); selectExamAnswer(-1); }
             }, 1000);
         }
-
         function selectExamAnswer(idx) {
             if (!examInProgress) return;
             clearInterval(examTimerInterval);
             const q = examQuestions[examIndex];
             const isCorrect = idx === q.answer;
-            if (isCorrect) examCorrect++;
-            // تمييز
+            if (isCorrect) { examCorrect++; soundCorrect(); } else { soundWrong(); }
             document.querySelectorAll('.exam-option').forEach((btn, i) => {
                 btn.disabled = true;
                 if (i === q.answer) btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
                 if (i === idx && !isCorrect) btn.classList.add('bg-red-500/20', 'border-red-500');
             });
-            // الانتقال بعد فترة
             setTimeout(() => {
                 examIndex++;
-                if (examIndex < examQuestions.length) {
-                    renderExamQuestion();
-                } else {
-                    finishExam();
-                }
+                if (examIndex < examQuestions.length) renderExamQuestion();
+                else finishExam();
             }, 1500);
         }
-
         function finishExam() {
             examInProgress = false;
             clearInterval(examTimerInterval);
             const scorePercent = Math.round((examCorrect / examQuestions.length) * 100);
             gameState.examHistory.push(scorePercent);
-            // منح مكافأة حسب الأداء
-            if (scorePercent >= 90) {
-                gameState.gold += 50;
-                gameState.xp += 100;
-            } else if (scorePercent >= 70) {
-                gameState.gold += 25;
-                gameState.xp += 50;
-            } else if (scorePercent >= 50) {
-                gameState.gold += 10;
-                gameState.xp += 20;
-            }
+            if (scorePercent >= 90) { gameState.gold += 50; gameState.xp += 100; }
+            else if (scorePercent >= 70) { gameState.gold += 25; gameState.xp += 50; }
+            else if (scorePercent >= 50) { gameState.gold += 10; gameState.xp += 20; }
             saveState();
             updateTopBar();
             showScreen('screenExamResult');
@@ -979,29 +780,21 @@
             else if (scorePercent >= 50) msg = 'لا بأس، تحتاج إلى مزيد من المراجعة.';
             else msg = 'تحتاج إلى مراجعة القواعد الأساسية.';
             $('examMessage').textContent = msg;
+            soundFinish();
         }
 
-        // ==================== التهيئة ====================
+        // ==================== تهيئة ====================
         function init() {
             loadState();
             updateTopBar();
             renderKingdomGrid();
             renderLibrary();
-            // إخفاء شاشة التحميل
-            setTimeout(() => {
-                $('loadingScreen').style.display = 'none';
-            }, 500);
-            // ربط الأزرار العامة
+            setTimeout(() => { $('loadingScreen').style.display = 'none'; }, 500);
             document.querySelectorAll('[onclick="showScreen(\'screenLibrary\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenLibrary'); renderLibrary(); }));
             document.querySelectorAll('[onclick="showScreen(\'screenAchievements\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenAchievements'); renderAchievements(); }));
-            // زر العودة من المكتبة والإنجازات
             document.querySelectorAll('[onclick="goBackToMap()"]').forEach(el => el.addEventListener('click', goBackToMap));
-            // زر بدء الاختبار
             $('examStartBtn').addEventListener('click', startExamQuestions);
-            // إغلاق التحميل
         }
-
-        // بدء التطبيق
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
