@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رحلة الفارس اللغوي</title>
+    <!-- خطوط عربية -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         :root {
@@ -71,9 +74,16 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .option-btn { transition: all 0.2s ease; }
         .option-btn:hover:not(:disabled) { transform: translateY(-2px); }
+        /* شاشة البداية */
+        #screenStart .input-name {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
+    <!-- شاشة التحميل -->
     <div id="loadingScreen">
         <div class="text-center">
             <div class="spinner mx-auto mb-4"></div>
@@ -81,6 +91,7 @@
         </div>
     </div>
 
+    <!-- الشريط العلوي -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -111,7 +122,23 @@
     </header>
 
     <main class="pt-16 min-h-screen pb-10">
-        <section id="screenMap" class="screen active">
+        <!-- شاشة البداية (اسم اللاعب وزر ابدأ) -->
+        <section id="screenStart" class="screen active">
+            <div class="max-w-md mx-auto px-4 py-16 text-center">
+                <div class="mb-8">
+                    <i class="fa-solid fa-scroll text-7xl text-amber-400"></i>
+                </div>
+                <h1 class="text-4xl font-black mb-6 font-amiri">رحلة الفارس اللغوي</h1>
+                <p class="text-slate-400 mb-8">أدخل اسمك لبدء المغامرة في ممالك اللغة العربية</p>
+                <input type="text" id="playerNameInput" maxlength="20" placeholder="اكتب اسمك هنا" class="input-name w-full px-5 py-4 rounded-2xl text-lg mb-4 outline-none" autocomplete="off">
+                <button id="startGameBtn" class="btn-primary w-full py-4 rounded-2xl font-black text-lg">
+                    <i class="fa-solid fa-play ml-2"></i> ابدأ اللعبة
+                </button>
+            </div>
+        </section>
+
+        <!-- شاشة الخريطة -->
+        <section id="screenMap" class="screen">
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <div class="text-center mb-12">
                     <h2 class="text-4xl md:text-5xl font-black mb-4 font-amiri">🗺️ ممالك اللغة العربية</h2>
@@ -132,6 +159,7 @@
             </div>
         </section>
 
+        <!-- شاشة المرحلة -->
         <section id="screenLevel" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -142,7 +170,9 @@
                         <h3 id="levelTitle" class="text-2xl font-black"></h3>
                         <p id="levelSubtitle" class="text-sm text-slate-400"></p>
                     </div>
-                    <div class="w-10"></div>
+                    <button onclick="endLevelEarly()" class="text-red-400 hover:text-red-300 transition text-sm">
+                        <i class="fa-solid fa-stop ml-1"></i> إنهاء اللعب
+                    </button>
                 </div>
                 <div class="flex items-center gap-3 mb-6">
                     <span class="text-sm text-slate-400">السؤال <span id="currentQuestionNum">1</span> / 5</span>
@@ -164,10 +194,16 @@
                         <p id="hintText" class="hidden mt-2 text-amber-200 bg-amber-500/10 p-3 rounded-xl text-sm"></p>
                     </div>
                 </div>
+                <!-- زر التالي / إنهاء المرحلة -->
+                <div class="mt-4 text-center">
+                    <button id="nextBtn" class="btn-primary px-8 py-3 rounded-2xl font-bold hidden">السؤال التالي</button>
+                    <button id="finishLevelBtn" class="btn-primary px-8 py-3 rounded-2xl font-bold hidden">إنهاء المرحلة</button>
+                </div>
                 <div id="feedbackBox" class="hidden mt-4 p-4 rounded-2xl text-center font-bold"></div>
             </div>
         </section>
 
+        <!-- شاشة نهاية المرحلة -->
         <section id="screenLevelComplete" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6" id="completeIcon">🎉</div>
@@ -193,6 +229,7 @@
             </div>
         </section>
 
+        <!-- شاشة المكتبة -->
         <section id="screenLibrary" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -205,6 +242,7 @@
             </div>
         </section>
 
+        <!-- شاشة الإنجازات -->
         <section id="screenAchievements" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -217,6 +255,7 @@
             </div>
         </section>
 
+        <!-- شاشة الاختبار -->
         <section id="screenExam" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="text-center mb-6">
@@ -235,6 +274,7 @@
             </div>
         </section>
 
+        <!-- شاشة نتيجة الاختبار -->
         <section id="screenExamResult" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6">📊</div>
@@ -258,6 +298,10 @@
         </section>
     </main>
 
+    <footer class="text-center text-slate-500 text-sm py-4">
+        <p>جميع الحقوق محفوظة © <span id="year"></span> د. عمر الرواجفة</p>
+    </footer>
+
     <script>
         // ==================== بيانات الممالك ====================
         const KINGDOMS = [
@@ -268,93 +312,227 @@
             { id: 'akhtaa', name: 'مملكة الأخطاء الشائعة', icon: 'fa-solid fa-triangle-exclamation', color: 'from-yellow-500 to-amber-600', description: 'تصحيح الأخطاء اللغوية', levels: 10 }
         ];
 
-        // ==================== بنك الأسئلة (المعدل) ====================
+        // ==================== بنك الأسئلة (الجديد المقدم) ====================
         const QUESTION_BANK = [
-    // ===== مملكة النحو =====
+    // ==========================================
+    // 1. مملكة النحو (40 سؤالاً)
+    // ==========================================
     { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "العلمُ" في: العلمُ نورٌ؟', options: ['خبر مرفوع', 'مبتدأ مرفوع', 'فاعل مرفوع', 'مفعول به منصوب'], answer: 1, explanation: 'العلمُ: مبتدأ مرفوع وعلامة رفعه الضمة الظاهرة.' },
-    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "نورٌ" في: العلمُ نورٌ؟', options: ['مبتدأ مرفوع', 'خبر مرفوع', 'فاعل مرفوع', 'نعت مرفوع'], answer: 1, explanation: 'نورٌ: خبر المبتدأ مرفوع وعلامة رفعه الضمة الظاهرة.' },
-    { kingdom: 'nahw', level: 1, type: 'true_false', text: 'المبتدأ والخبر مرفوعان دائمًا في الأصل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المبتدأ والخبر من المرفوعات الأساسية في الجملة الاسمية.' },
-    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'أي الجمل التالية جملة اسمية؟', options: ['نجح الطالبُ', 'يقرأ محمدٌ', 'السماءُ صافيةٌ', 'اكتب الدرسَ'], answer: 2, explanation: 'الجملة الاسمية هي التي تبدأ باسم، مثل: السماء صافية.' },
-    { kingdom: 'nahw', level: 1, type: 'fill', text: 'أكمل الجملة الاسمية: "الطالبُ ____"', options: ['مجتهدٌ', 'مجتهدًا', 'مجتهدٍ', 'مجتهدين'], answer: 0, explanation: 'الخبر يكون مرفوعاً، فيقال: مجتهدٌ.' },
-    { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب "الطالبُ" في: نجح الطالبُ؟', options: ['فاعل مرفوع', 'مفعول به منصوب', 'مبتدأ مرفوع', 'خبر مرفوع'], answer: 0, explanation: 'الطالبُ: فاعل مرفوع وعلامة رفعه الضمة.' },
-    { kingdom: 'nahw', level: 2, type: 'true_false', text: 'الفاعل يكون مرفوعًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'الفاعل من عمدة المرفوعات في الجملة الفعلية.' },
-    { kingdom: 'nahw', level: 2, type: 'fill', text: 'أكمل بالتشكيل الصحيح: "ذهب ____ إلى الجامعة"', options: ['الطالبُ', 'الطالبَ', 'الطالبِ', 'الطالبْ'], answer: 0, explanation: 'الفاعل يرفع بالضمة الظاهرة.' },
-    { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "الكتابَ" في: قرأ الطالبُ الكتابَ؟', options: ['فاعل', 'مفعول به منصوب', 'مبتدأ', 'خبر'], answer: 1, explanation: 'الكتابَ: مفعول به منصوب وعلامة نصبه الفتحة.' },
-    { kingdom: 'nahw', level: 3, type: 'true_false', text: 'المفعول به يكون منصوبًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المفعول به من المنصوبات.' },
-    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "مسرعًا" في: عاد القطارُ مسرعًا؟', options: ['حال منصوبة', 'مفعول به', 'خبر', 'فاعل'], answer: 0, explanation: 'مسرعًا: حال منصوبة تبيّن هيئة الفاعل عند حدوث الفعل.' },
-    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "علمًا" في: ازداد الطالبُ علمًا؟', options: ['حال', 'تمييز منصوب', 'مفعول به', 'فاعل'], answer: 1, explanation: 'علمًا: تمييز منصوب يزيل الإبهام عن الجملة.' },
-    { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما إعراب "اجتهادًا" في: اجتهد الطالبُ اجتهادًا؟', options: ['مفعول مطلق منصوب', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'اجتهادًا: مفعول مطلق مصدر منصوب لتأكيد الفعل.' },
-    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "في القاعة" في: يدرس الطالبُ في القاعةِ؟', options: ['جار ومجرور', 'مفعول به', 'حال', 'مفعول مطلق'], answer: 0, explanation: 'في: حرف جر، القاعة: اسم مجرور.' },
-    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "صباحًا" في: سافرتُ صباحًا؟', options: ['ظرف زمان منصوب', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'صباحًا: مفعول فيه (ظرف زمان) منصوب.' },
-    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "الطالبَ" في: إنّ الطالبَ مجتهدٌ؟', options: ['اسم إنّ منصوب', 'خبر إنّ مرفوع', 'فاعل', 'مفعول به'], answer: 0, explanation: 'إنّ تنصب المبتدأ ويسمى اسمها.' },
-    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "مجتهدٌ" في: إنّ الطالبَ مجتهدٌ؟', options: ['اسم إنّ', 'خبر إنّ مرفوع', 'فاعل', 'حال'], answer: 1, explanation: 'إنّ ترفع الخبر ويسمى خبرها.' },
-    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "الجوُّ" في: كان الجوُّ جميلًا؟', options: ['اسم كان مرفوع', 'خبر كان منصوب', 'فاعل', 'مبتدأ'], answer: 0, explanation: 'كان ترفع المبتدأ ويسمى اسمها.' },
-    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "جميلًا" في: كان الجوُّ جميلًا؟', options: ['اسم كان', 'خبر كان منصوب', 'فاعل', 'حال'], answer: 1, explanation: 'كان تنصب الخبر ويسمى خبرها.' },
-    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة رفع المثنى؟', options: ['الضمة', 'الألف', 'الواو', 'الياء'], answer: 1, explanation: 'يرفع المثنى بالألف وينصب ويجر بالياء.' },
-    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة نصب جمع المذكر السالم؟', options: ['الفتحة', 'الياء', 'الواو', 'الألف'], answer: 1, explanation: 'ينصب جمع المذكر السالم بالياء.' },
-    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة نصب جمع المؤنث السالم؟', options: ['الكسرة نيابة عن الفتحة', 'الفتحة', 'الضمة', 'الياء'], answer: 0, explanation: 'ينصب جمع المؤنث السالم بالكسرة نيابة عن الفتحة.' },
-    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة رفع الأسماء الخمسة؟', options: ['الواو', 'الألف', 'الياء', 'الضمة'], answer: 0, explanation: 'ترفع الأسماء الخمسة بالواو (أبوك، أخوك...).' },
-    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة نصب الأسماء الخمسة؟', options: ['الألف', 'الواو', 'الياء', 'الفتحة'], answer: 0, explanation: 'تنصب الأسماء الخمسة بالألف (أباك، أخاك...).' },
+    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "نورٌ" في: العلمُ نورٌ؟', options: ['مبتدأ مرفوع', 'خبر مرفوع', 'فاعل مرفوع', 'نعت مرفوع'], answer: 1, explanation: 'نورٌ: خبر المبتدأ مرفوع وعلامة رفعه الضمة.' },
+    { kingdom: 'nahw', level: 1, type: 'true_false', text: 'المبتدأ والخبر مرفوعان دائمًا في الأصل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المبتدأ والخبر من المرفوعات الأساسية.' },
+    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما نوع الخبر في جملة: "الجامعةُ طلابُها نجباءُ"؟', options: ['مفرد', 'جملة اسمية', 'جملة فعلية', 'شبه جملة'], answer: 1, explanation: 'طلابها نجباء: مبتدأ ثانٍ وخبره، والجملة خبر المبتدأ الأول.' },
+    { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب "الأستاذُ" في: نظّمَ الأستاذُ المهرجانَ؟', options: ['فاعل مرفوع', 'مفعول به', 'مبتدأ', 'خبر'], answer: 0, explanation: 'الأستاذ: فاعل مرفوع وعلامة رفعه الضمة.' },
+    { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب "الكتابُ" في جملة: "قُرِئَ الكتابُ"؟', options: ['فاعل', 'نائب فاعل', 'مفعول به', 'مبتدأ'], answer: 1, explanation: 'الاسم بعد الفعل المبني للمجهول يعرب نائب فاعل.' },
+    { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب كلمة "هيهاتَ" في جملة: هيهاتَ النجاحُ بلا عمل؟', options: ['فعل ماضٍ', 'اسم فعل ماضٍ', 'مبتدأ', 'خبر مقدم'], answer: 1, explanation: 'هيهات: اسم فعل ماضٍ مبني على الفتح بمعنى بَعُدَ.' },
+    { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما علامة رفع الأفعال الخمسة في: "الطلابُ يكتبونَ"؟', options: ['الضمة', 'ثبوت النون', 'الواو', 'حذف النون'], answer: 1, explanation: 'ترفع الأفعال الخمسة بثبوت النون.' },
+    { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "القصيدةَ" في: أنشدَ الشاعرُ القصيدةَ؟', options: ['فاعل', 'مفعول به', 'تمييز', 'حال'], answer: 1, explanation: 'القصيدة: مفعول به منصوب.' },
+    { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما حكم تقديم الخبر في: "في القاعةِ طلابٌ"؟', options: ['جائز', 'واجب', 'ممتنع', 'شاذ'], answer: 1, explanation: 'واجب؛ لأن المبتدأ نكرة (طلاب) والخبر شبه جملة.' },
+    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "رغبةً" في: "ذاكرتُ رغبةً في التفوق"؟', options: ['حال', 'مفعول لأجله', 'مفعول مطلق', 'تمييز'], answer: 1, explanation: 'مصدر قلبي منصوب يبيّن سبب وقوع الفعل (مفعول لأجله).' },
+    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "مسرعًا" في: عاد القطارُ مسرعًا؟', options: ['حال', 'مفعول به', 'خبر', 'فاعل'], answer: 0, explanation: 'مسرعًا: حال منصوبة تبيّن هيئة الفاعل.' },
+    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب الاسم بعد (إلا) في: "ما حضرَ إلا زيدٌ"؟', options: ['مستثنى منصوب', 'فاعل مرفوع', 'بدل مرفوع', 'مفعول به'], answer: 1, explanation: 'الاستثناء ناقص مفرغ، يعرب حسب موقعه (فاعل).' },
+    { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما إعراب "إصلاحاً" في: "أصلحتُ المحركَ إصلاحاً دقيقاً"؟', options: ['مفعول مطلق', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'مفعول مطلق منصوب يؤكد الفعل ويبين نوعه.' },
+    { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما حكم المنادى في: "يا طالبَ العلمِ اجتهدْ"؟', options: ['مبني على الضم', 'معرب منصوب', 'مبني على الفتح', 'مجرور'], answer: 1, explanation: 'المنادى المضاف حكمه النصب.' },
+    { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما إعراب "المحاضرةَ" في: "سافرتُ والمحاضرةَ"؟', options: ['مفعول به', 'مفعول معه', 'معطوف منصوب', 'حال'], answer: 1, explanation: 'المحاضرة: مفعول معه منصوب وعلامة نصبه الفتحة، والواو للمعية.' },
+    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "صباحًا" في: سافرتُ صباحًا؟', options: ['ظرف زمان', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'ظرف زمان (مفعول فيه) منصوب.' },
+    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما العمل النحوي لـ "أخذَ" في: "أخذَ المعلمُ يشرحُ"؟', options: ['ترفع المبتدأ وتنصب الخبر', 'تنصب المبتدأ', 'تجزم المضارع', 'تجر الاسم'], answer: 0, explanation: 'من أفعال الشروع، تعمل عمل كان بشرط خبرها الجملة الفعلية.' },
+    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما علامة نصب الأسماء الخمسة (أبوك، أخوك...)؟', options: ['الألف', 'الواو', 'الياء', 'الفتحة'], answer: 0, explanation: 'تنصب الأسماء الخمسة بالألف (رأيتُ أباك).' },
+    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما نوع التمييز في: "اشتريتُ رطلاً زيتًا"؟', options: ['تمييز ملحوظ', 'تمييز ملفوظ', 'حال', 'مفعول به'], answer: 1, explanation: 'تمييز ملفوظ (ذات) يزيل إبهام مقدار قبله.' },
+    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "الجوُّ" في: كان الجوُّ جميلًا؟', options: ['اسم كان', 'خبر كان', 'فاعل', 'مبتدأ'], answer: 0, explanation: 'كان ترفع المبتدأ ويسمى اسمها.' },
+    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "عمر" في: "تولّى الخليفةُ عمرُ الخلافةَ"؟', options: ['بدل مطابق مرفوع', 'نعت مرفوع', 'عطف بيان', 'فاعل'], answer: 0, explanation: 'عمر: بدل مطابق (كل من كل) من الخليفة، وهو مرفوع.' },
+    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'لماذا مُنعت كلمة "مساجد" من الصرف؟', options: ['علم مؤنث', 'صيغة منتهى الجموع', 'وصف على أفعل', 'مختوم بألف مقصورة'], answer: 1, explanation: 'على وزن مفاعل، تمنع لسبب واحد.' },
+    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما علامة رفع المثنى؟', options: ['الضمة', 'الألف', 'الواو', 'الياء'], answer: 1, explanation: 'يرفع المثنى بالألف.' },
+    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "كلاهما" في: "نجحَ الطالبانِ كلاهما"؟', options: ['توكيد معنوي مرفوع بالألف', 'مبتدأ ثانٍ', 'بدل مرفوع', 'فاعل ثانٍ'], answer: 0, explanation: 'كلا وكلتا المضافتان لضمير تعربان إعراب المثنى وتكونان توكيداً معنوياً.' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما محل الجملة القوسية في: "جاء رجلٌ (يحملُ كتابًا)"؟', options: ['في محل رفع خبر', 'في محل نصب حال', 'في محل رفع نعت', 'لا محل لها'], answer: 2, explanation: 'الجمل بعد النكرات صفات، و(رجل) مرفوع فالجملة النعتية مرفوعة.' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما إعراب الاسم بعد (لولا) في: "لولا المطرُ لهلك الزرعُ"؟', options: ['مبتدأ خبره محذوف وجوباً', 'فاعل', 'اسم لولا', 'خبر مقدم'], answer: 0, explanation: 'الاسم المرفوع بعد لولا يعرب مبتدأ خبره محذوف وجوباً تقديره (موجود).' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما إعراب كلمة "اللوزِ" في: "غرسنا شجرَ اللوزِ"؟', options: ['مفعول به', 'مضاف إليه مجرور', 'نعت مجرور', 'بدل مجرور'], answer: 1, explanation: 'اللوز: مضاف إليه مجرور وعلامة جره الكسرة.' },
+    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'في باب التنازع، أي الفعلين يُعمل في الكوفيين في نحو: "قام وقعد أخواك"؟', options: ['الفعل الأول', 'الفعل الثاني', 'كلاهما', 'لا يُعمل أي منهما'], answer: 0, explanation: 'الكوفيون يختارون إعمال الفعل الأول لسبقه.' },
+    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'في باب الاشتغال، ما إعراب "زيداً" في: "زيداً ضربتُهُ"؟', options: ['مبتدأ', 'مفعول به لفعل محذوف يفسره المذكور', 'مفعول به مقدم', 'حال'], answer: 1, explanation: 'اشتغل الفعل بضمير الاسم عن الاسم نفسه، فينصب بفعل مقدر.' },
+    { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما نوع (ما) في قوله تعالى: "فبما رحمةٍ من الله لنت لهم"؟', options: ['استفهامية', 'موصولة', 'زائدة للتوكيد', 'نافية'], answer: 2, explanation: 'ما زائدة بعد حرف الجر (الباء) للتوكيد، ورحمة مجرورة بالباء.' },
+    { kingdom: 'nahw', level: 1, type: 'mcq', text: 'أي الحروف الآتية ينصب المضارع؟', options: ['لَمْ', 'لَنْ', 'لا الناهية', 'لام الأمر'], answer: 1, explanation: 'لن أداة نصب تفيد النفي للمستقبل.' },
+    { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب الجملة الموصولة في: "جاء الذي (نجحَ)"؟', options: ['في محل رفع نعت', 'في محل نصب حال', 'لا محل لها من الإعراب', 'في محل رفع فاعل'], answer: 2, explanation: 'جملة صلة الموصول لا محل لها من الإعراب دائماً.' },
+    { kingdom: 'nahw', level: 3, type: 'mcq', text: 'كيف يُكسر همزة (إنّ) وجوباً؟', options: ['في أول الكلام', 'بعد القول', 'في أول جملة الصلة', 'كل ما سبق'], answer: 3, explanation: 'تكسر همزة إن في جميع هذه المواضع وجوباً.' },
+    { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب المستثنى بـ (سوى) في: "ما جاء سوى زيدٍ"؟', options: ['مستثنى منصوب', 'مضاف إليه مجرور', 'فاعل مرفوع', 'بدل مرفوع'], answer: 1, explanation: 'ما بعد غير وسوى يعرب دائماً مضافاً إليه مجروراً.' },
+    { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما نوع الحال في: "جاء الطالبُ (وهو يبتسم)"؟', options: ['حال مفردة', 'حال جملة اسمية', 'حال جملة فعلية', 'حال شبه جملة'], answer: 1, explanation: 'الواو للحال، و(هو يبتسم) مبتدأ وخبر في محل نصب حال جملة اسمية.' },
+    { kingdom: 'nahw', level: 6, type: 'mcq', text: 'هل يجوز تعدد الحال لصاحب واحد في النحو؟', options: ['نعم يجوز مطلقاً', 'لا يجوز', 'يجوز بشروط', 'شاذ'], answer: 0, explanation: 'يجوز تعدد الحال، كقوله تعالى: "فارجع البصر هل ترى من فطور".' },
+    { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما الحرف الزائد في: "لستُ بعلامٍ الغيوب"؟', options: ['اللام', 'السين', 'الباء', 'التاء'], answer: 2, explanation: 'الباء تزاد في خبر ليس لتوكيد النفي.' },
+    { kingdom: 'nahw', level: 8, type: 'mcq', text: 'أي الجمل الآتية جملة مقول القول؟', options: ['قال زيدٌ (الجو جميل)', 'جاء الذي (أحبه)', 'إذا درست (نجحت)', 'أنت (تدرس)'], answer: 0, explanation: 'الجملة الواقعة بعد فعل القول في محل نصب مفعول به.' },
+    { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما إعراب كلمة "كم" في: "كم كتاباً قرأتَ؟"؟', options: ['مبتدأ', 'مفعول به مقدم', 'خبر', 'مضاف إليه'], answer: 1, explanation: 'كم الاستفهامية هنا تلاها فعل متعدٍ لم يستوف مفعوله فتعرب مفعولاً به مقدم.' },
 
-    // ===== مملكة الصرف =====
+    // ==========================================
+    // 2. مملكة الصرف (40 سؤالاً)
+    // ==========================================
     { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما الميزان الصرفي لاسم الفاعل "كاتِب"؟', options: ['فاعِل', 'فَعيل', 'مِفعال', 'فَعَل'], answer: 0, explanation: 'كاتب على وزن فاعِل.' },
-    { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما اسم الفاعل من الفعل الثلاثي "نَصَرَ"؟', options: ['ناصِر', 'مَنصور', 'نَصير', 'نَصْر'], answer: 0, explanation: 'يصاغ اسم الفاعل من الثلاثي على وزن فاعل (ناصر).' },
-    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "كَتَبَ"؟', options: ['كاتِب', 'مَكتوب', 'كِتاب', 'كِتابة'], answer: 1, explanation: 'يصاغ اسم المفعول من الثلاثي على وزن مفعول (مكتوب).' },
-    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "فَهِمَ"؟', options: ['فاهم', 'مَفهوم', 'فَهْم', 'مُفهِم'], answer: 1, explanation: 'اسم المفعول من فهم هو مَفهوم.' },
-    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما المصدر الصريح للفعل "كَتَبَ"؟', options: ['كاتِب', 'كِتابة', 'مَكتوب', 'كُتُب'], answer: 1, explanation: 'المصدر الصريح لـ كَتَبَ هو كِتابة.' },
-    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما المصدر الصريح للفعل "عَلِمَ"؟', options: ['عالِم', 'عِلْم', 'عَليم', 'تَعليم'], answer: 1, explanation: 'مصدر علِم هو عِلْم.' },
+    { kingdom: 'sarf', level: 1, type: 'mcq', text: 'كيف يصاغ اسم الفاعل من "أَكْرَمَ"؟', options: ['كاريِم', 'مُكْرِم', 'مُكْرَم', 'إكرام'], answer: 1, explanation: 'بإبدال حرف المضارعة ميماً مضمومة وكسر ما قبل الآخر.' },
+    { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما اسم الهيئة من الفعل الثلاثي "جَلَسَ"؟', options: ['جَلْسَة', 'جِلْسَة', 'مَجْلِس', 'جُلُوس'], answer: 1, explanation: 'يصاغ اسم الهيئة من الثلاثي على وزن (فِعْلَة) بكسر الفاء.' },
+    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل الثلاثي معتل العين "قَالَ"؟', options: ['مَقْوُول', 'مَقَال', 'مَقُول', 'قائِل'], answer: 2, explanation: 'أصلها مَقْوُول ثم حذفت واو مفعول لتصير مَقُول.' },
+    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من "كَتَبَ"؟', options: ['كاتِب', 'مَكتوب', 'كِتاب', 'كِتابة'], answer: 1, explanation: 'يصاغ على وزن مفعول.' },
+    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما أصل التاء في الفعل "اتَّسَعَ" صرفياً؟', options: ['تاء أصلية', 'واو (أوتسع)', 'ياء (أيتسع)', 'سين'], answer: 1, explanation: 'الفعل من (وسع) فوزن افتعل منه (اوتسع) فأبدلت الواو تاء وأدغمت.' },
+    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'أي الكلمات تمثّل صيغة مبالغة على وزن "فَعَّال"؟', options: ['عليم', 'عَلاّم', 'مِقْدام', 'غَفُور'], answer: 1, explanation: 'علاّم على وزن فَعَّال.' },
+    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما المصدر الصريح للفعل "كَتَبَ"؟', options: ['كاتِب', 'كِتابة', 'مَكتوب', 'كُتُب'], answer: 1, explanation: 'المصدر هو كِتابة.' },
+    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما الإبدال الحاصل في الفعل "ازْدَهَرَ"؟', options: ['أبدلت تاء الافتعال دالاً', 'أبدلت الزاي دالاً', 'أبدلت الواو تاء', 'أبدلت الهاء تاء'], answer: 0, explanation: 'أصلها (ازتهر)، ولأن فاء الافتعال زاي، أبدلت التاء دالاً.' },
+    { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما دلالة "مَشْرِق" في: "طلعت الشمس من المَشْرِقِ"؟', options: ['اسم زمان', 'اسم مكان', 'اسم آلة', 'مصدر ميمي'], answer: 1, explanation: 'اسم مكان على وزن مَفْعِل.' },
     { kingdom: 'sarf', level: 4, type: 'true_false', text: 'الفعل "استَخرَجَ" على وزن "استَفعَلَ".', options: ['صح', 'خطأ'], answer: 0, explanation: 'استخرج سداسي على وزن استفعل.' },
-    { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما وزن الفعل "انْكَسَرَ"؟', options: ['انْفَعَلَ', 'افْتَعَلَ', 'تَفاعَلَ', 'اسْتَفْعَلَ'], answer: 0, explanation: 'انكسر مطاوع كسر على وزن انفعل.' },
-    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما المشتق الصرفي لكلمة "مَدرَسَة"؟', options: ['اسم مكان', 'اسم آلة', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مدرسة اسم مكان على وزن مَفعَلَة.' },
-    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما المشتق الصرفي لكلمة "مِفتاح"؟', options: ['اسم آلة', 'اسم مكان', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مفتاح اسم آلة قياسي على وزن مِفعال.' },
-    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما نوع الجمع في كلمة "كُتُب"؟', options: ['جمع تكسير', 'جمع مذكر سالم', 'جمع مؤنث سالم', 'اسم جنس'], answer: 0, explanation: 'كتب جمع تكسير لتغير صورة المفرد (كتاب).' },
-    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما الجمع الصحيح لاسم الفاعل "قاضٍ"؟', options: ['قاضون', 'قُضاة', 'قاضيات', 'مَقاضي'], answer: 1, explanation: 'يجمع قاضٍ على قُضاة (فُعاة).' },
-    { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن اسم المفعول من غير الثلاثي "مُكْرَم"؟', options: ['مُفْعَل', 'مُفْعِل', 'مُفَعَّل', 'مُفْعول'], answer: 0, explanation: 'من غير الثلاثي بإبدال حرف المضارعة ميماً مضمومة وفتح ما قبل الآخر (مُفعَل).' },
-    { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما وزن الفعل الرباعي المجرد "دَحْرَجَ"؟', options: ['فَعْلَلَ', 'تَفَعْلَلَ', 'فَعَّلَ', 'فَاعَلَ'], answer: 0, explanation: 'دحرج رباعي مجرد على وزن فَعْلَلَ.' },
-    { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما نوع المشتق "أحْمَر" الذي مؤنثه "حَمْراء"؟', options: ['صفة مشبهة', 'اسم تفضيل', 'اسم فاعل', 'اسم مفعول'], answer: 0, explanation: 'أفعل الذي مؤنثه فعلاء في الألوان والعيوب هو صفة مشبهة باسم الفاعل.' },
-    { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما المصدر الصريح للفعل "اسْتَخْرَجَ"؟', options: ['اسْتِخْراج', 'إخْراج', 'خُروج', 'اسْتِخْراجَة'], answer: 0, explanation: 'مصدر استفعل الصحيح العين هو استفعال (استخراج).' },
+    { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما نوع الإعلال في كلمة "بَاعَ"؟', options: ['إعلال بالحذف', 'إعلال بالتسكين', 'إعلال بالقلب', 'إبدال'], answer: 2, explanation: 'أصلها (بَيَعَ)، تحركت الياء وانفتح ما قبلها فقلبت ألفاً.' },
+    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما اسم التفضيل من "فَضُلَ"؟', options: ['فاضِل', 'أَفْضَل', 'مَفْضُول', 'فضيلة'], answer: 1, explanation: 'اسم التفضيل على وزن أَفْعَل.' },
+    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما المشتق الصرفي لكلمة "مِفتاح"؟', options: ['اسم آلة', 'اسم مكان', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مفتاح اسم آلة قياسي (مِفعال).' },
+    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما نوع الإعلال في كلمة "قاضٍ" في حالة الرفع؟', options: ['إعلال بالقلب', 'إعلال بالحذف', 'إبدال', 'لا إعلال فيها'], answer: 1, explanation: 'حذفت ياؤه لالتقاء الساكنين (الياء والتنوين)، فهو إعلال بالحذف.' },
+    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما تصغير كلمة "جَبَل"؟', options: ['جُبَيْل', 'جُبَيِّل', 'أَجْبَال', 'جُبَيْلَة'], answer: 0, explanation: 'تصغير الثلاثي على فُعَيْل.' },
+    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما الجمع الصحيح لاسم الفاعل "قاضٍ"؟', options: ['قاضون', 'قُضاة', 'قاضيات', 'مَقاضي'], answer: 1, explanation: 'يجمع على قُضاة (فُعاة).' },
+    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما تصغير كلمة "دِرْهَم"؟', options: ['دُرَيْهِم', 'دُوَيْرِهِم', 'دَرَاهِم', 'دُرْهُم'], answer: 0, explanation: 'الرباعي يصغر على وزن (فُعَيْعِل).' },
+    { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما الاسم المنسوب لـ "مَكَّة"؟', options: ['مَكِّيّ', 'مَكَّاوِيّ', 'مَكَّانِيّ', 'مَكِّيَة'], answer: 0, explanation: 'تُحذف التاء وتضاف ياء مشددة.' },
+    { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن اسم المفعول من "مُكْرَم"؟', options: ['مُفْعَل', 'مُفْعِل', 'مُفَعَّل', 'مُفْعول'], answer: 0, explanation: 'من غير الثلاثي (مُفعَل).' },
+    { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما الاسم المنسوب الصحيح لكلمة "صَحْرَاء"؟', options: ['صَحْرَائِيّ', 'صَحْرَاوِيّ', 'صَحْرِيّ', 'صُحَيْرِيّ'], answer: 1, explanation: 'الهمزة للتأنيث، فتقلب واواً عند النسب.' },
+    { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما أصل الواو في "مِيزان" صرفيًا؟', options: ['مِوْزان', 'مُوزان', 'مَيَزان', 'مَوَزان'], answer: 0, explanation: 'أصلها مِوْزان من وزن، قُلبت ياءً لسكونها بعد كسر.' },
+    { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما وزن الرباعي المجرد "دَحْرَجَ"؟', options: ['فَعْلَلَ', 'تَفَعْلَلَ', 'فَعَّلَ', 'فَاعَلَ'], answer: 0, explanation: 'دحرج على وزن فَعْلَلَ.' },
+    { kingdom: 'sarf', level: 8, type: 'mcq', text: 'من جموع القلة في العربية:', options: ['مساجد', 'أفْعُلة (كأرغفة)', 'مصابيح', 'أشجار'], answer: 1, explanation: 'جموع القلة أربعة أوزان منها أفْعُل وأفْعِلَة وأفْعَال وفِعْلَة.' },
+    { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما مصدَرُ الخماسي "تَقَدَّمَ"؟', options: ['تَقْدِيم', 'تَقَدُّم', 'إِقْدام', 'قُدُوم'], answer: 1, explanation: 'وزن تفعَّل مصدره التفعُّل.' },
+    { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما نوع المشتق "أحْمَر"؟', options: ['صفة مشبهة', 'اسم تفضيل', 'اسم فاعل', 'اسم مفعول'], answer: 0, explanation: 'أفعل فعلاء للألوان صفة مشبهة.' },
+    { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما المصدر الميمي من الفعل "وَعَدَ"؟', options: ['وَعْد', 'مَوْعِد', 'مِيعَاد', 'تَوَعُّد'], answer: 1, explanation: 'المثال الواوي مكسور العين في المضارع مصدره الميمي على مَفْعِل.' },
+    { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما اسم المَرَّةِ من "جَلَسَ"؟', options: ['جِلْسَة', 'جَلْسَة', 'مَجْلِس', 'جُلُوس'], answer: 1, explanation: 'اسم المرة على (فَعْلَة).' },
+    { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما المصدر الصريح لـ "اسْتَخْرَجَ"؟', options: ['اسْتِخْراج', 'إخْراج', 'خُروج', 'اسْتِخْراجَة'], answer: 0, explanation: 'استفعال.' },
+    { kingdom: 'sarf', level: 10, type: 'mcq', text: 'أين نكشف عن كلمة "تَارِيخ" في المعجم المحيط؟', options: ['ت ر خ', 'أ ر خ', 'ر و خ', 'و ر خ'], answer: 1, explanation: 'أصلها (أَرَّخَ)، نكشف في باب الخاء فصل الهمزة مع الراء (في القاموس المحيط باب الأخير).' },
+    { kingdom: 'sarf', level: 1, type: 'mcq', text: 'أي من أوزان الصفة المشبهة الآتية يدل على خلو أو امتلاء؟', options: ['فَعِيل', 'فَعْلان', 'أَفْعَل', 'فُعَال'], answer: 1, explanation: 'فَعْلان الذي مؤنثه فَعْلَى مثل عطشان وغضبان.' },
+    { kingdom: 'sarf', level: 2, type: 'mcq', text: 'المصدر الصناعي من كلمة "وَطَن" هو:', options: ['وَطَنِيّ', 'مُوَاطِن', 'وَطَنِيَّة', 'اسْتِيطَان'], answer: 2, explanation: 'بزيادة ياء مشددة وتاء تأنيث مربوطة لا تقع صفة.' },
+    { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما نوع اسم الآلة في كلمة "مِشْرَط"؟', options: ['جامد غير مشتق', 'مشتق قياسي على مِفْعَل', 'مشتق قياسي على مِفْعَال', 'اسم هيئة'], answer: 1, explanation: 'مشرط من شَرَطَ على وزن مِفْعَل وهو قياسي مشتق.' },
+    { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما المعنى الصرفي المستفاد من الزيادة في فعل "استغفر"؟', options: ['المطاوعة', 'الطلب', 'التعدية', 'المشاركة'], answer: 1, explanation: 'السين والتاء تفيد الطلب (طلب المغفرة).' },
+    { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما المعنى المستفاد من الزيادة في "تَشَارَكَ"؟', options: ['المشاركة بين اثنين فأكثر', 'الصيرورة', 'الطلب', 'النفي'], answer: 0, explanation: 'وزن تَفَاعَلَ يفيد المشاركة.' },
+    { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما وزن الفعل "اعْشَوْشَبَ"؟', options: ['افْعَلَلَّ', 'افْعَوْعَلَ', 'افْتَعَلَ', 'تَفَاعَلَ'], answer: 1, explanation: 'مزيد للمبالغة على وزن افْعَوْعَلَ.' },
+    { kingdom: 'sarf', level: 7, type: 'mcq', text: 'أين نكشف عن كلمة "اسْتَطَاعَ" في المعجم؟', options: ['ط ي ع', 'ط و ع', 'ص ن ع', 'س ط ع'], answer: 1, explanation: 'من طاع يطوع، الجذر (ط و ع).' },
+    { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما وزن الفعل المأمر "قُلْ" صرفياً؟', options: ['فُلْ', 'عِلْ', 'فَعْ', 'أَفْعِلْ'], answer: 0, explanation: 'أصله قَوَلَ (فَعَلَ)، حذفت العين (الواو) فصار الوزن (فُلْ).' },
+    { kingdom: 'sarf', level: 9, type: 'mcq', text: 'كيف يُنسب إلى كلمة "قَبِيلَة"؟', options: ['قَبِيلِيّ', 'قَبَلِيّ', 'قِبْلِيّ', 'قَبِيلَتِيّ'], answer: 1, explanation: 'الاسم على وزن فَعِيلَة تحذف ياؤه وتاؤه في النسب فيصبح قَبَلِيّ.' },
+    { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما سبب قلب الواو ياءً في "صِيَام"؟', options: ['تطرفها بعد كسر', 'وقوعها عيناً لمصدر أُعلّت في فعله قبلها كسرة', 'وقوعها ساكنة بعد فتح', 'لا يوجد قلب'], answer: 1, explanation: 'صيام من صام يصوم (ص و م)، وقعت الواو عيناً لمصدر مكسور ما قبلها فقلبت ياء.' },
 
-    // ===== مملكة الإملاء =====
-    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي الكلمات التالية همزتها همزة قطع؟', options: ['إسلام', 'ابْن', 'امرأة', 'الكتاب'], answer: 0, explanation: 'إسلام مصدر رباعي همزته قطع (إفعال).' },
-    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي الكلمات التالية همزتها همزة وصل؟', options: ['أحمد', 'إبراهيم', 'اكْتُبْ', 'إيمان'], answer: 2, explanation: 'اكْتُبْ أمر الفعل الثلاثي (كتب) همزته وصل.' },
-    { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'ما الكتابة الإملائية الصحيحة لكلمة (م س أ ل ة)؟', options: ['مَسْأَلَة', 'مَسْئَلَة', 'مَسْآلَة', 'مَسْؤَلَة'], answer: 0, explanation: 'الهمزة مفتوحة وما قبلها ساكن، والألف أقوى الحركات المناسبة هنا.' },
-    { kingdom: 'imlaa', level: 2, type: 'true_false', text: 'تُكتب الهمزة المتطرفة في كلمة "شاطِئ" على نبرة (ياء غير منقوطة).', options: ['صح', 'خطأ'], answer: 0, explanation: 'تكتب الهمزة المتطرفة على ياء إذا سبقت بالحرف المكسور (شاطِئ).' },
-    { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'ما الرسم الصحيح للتاء في نهاية الفعل (ق ر أ ت) لتتاء الفاعل؟', options: ['قرأتُ', 'قرأتَه', 'قرأه', 'قرأة'], answer: 0, explanation: 'تكتب التاء المفتوحة/المبسوطة في أواخر الأفعال مع الضمائر.' },
-    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'أي الكلمات التالية كتبت بألف مقصورة على صورة ياء (ى) بشكل صحيح؟', options: ['فتى', 'عصا', 'دعا', 'سما'], answer: 0, explanation: 'فتى اسم ثلاثي أصل ألفه ياء (فتيان)، فتكتب (ى).' },
-    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'لماذا كتبت الألف قائمة في الفعل "دَعا"؟', options: ['لأن أصل الألف واو (يدعو)', 'لأن أصل الألف ياء', 'لأن الفعل غير ثلاثي', 'لأنها همزة'], answer: 0, explanation: 'تكتب الألف قائمة في الثلاثي إذا كان أصلها واواً.' },
-    { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي الجمل التالية ضُبطت بعلامات الترقيم الصحيحة؟', options: ['قال المعلمُ: "ادرسوا بجدٍّ."', 'قال المعلمُ؛ ادرسوا بجدٍّ', 'قال المعلمُ "ادرسوا بجدٍّ"', 'قال المعلمُ، ادرسوا بجدٍّ.'], answer: 0, explanation: 'توضع النقطتان بعد القول وتوضع مقولة القول بين علامتي تنصيص.' },
-    { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة من الكلمات التالية همزتها المتوسطة على واو فقط؟', options: ['مُؤْمِن', 'رَأْس', 'بِئْر', 'سائِل'], answer: 0, explanation: 'مُؤمِن: الهمزة ساكنة بعد ضم فتكتب على واو.' },
-    { kingdom: 'imlaa', level: 7, type: 'true_false', text: 'تكتب الهمزة المتطرفة في كلمة "سَماء" على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تكتب الهمزة المتطرفة على السطر إذا سُبقت بحرف مد/ساكن.' },
-    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الكتابة الصحيحة للعدد 3 مع المعدود المذكر (طلاب)؟', options: ['ثلاثةُ طلابٍ', 'ثلاثُ طلابٍ', 'ثلاثاتُ طلابٍ', 'ثلاثةٌ طلابًا'], answer: 0, explanation: 'الأعداد من 3 إلى 9 تخالف المعدود في التذكير والتأنيث.' },
-    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الكتابة الإملائية الصحيحة للتركيب الدال على المشيئة؟', options: ['إنْ شاءَ اللهُ', 'إنشاءَ اللهُ', 'أنشاء الله', 'إن شاءاللهُ'], answer: 0, explanation: 'فصل (إن) الشرطية عن الفعل (شاء) واجب.' },
-    { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'ما الرسم الصحيح للكلمة المشتملة على مدة (أ + ا)؟', options: ['القُرْآن', 'القُرْأن', 'القُرْان', 'القُرْءان'], answer: 0, explanation: 'تدمج الهمزة المفتوحة مع الألف بعدها لتصبح الف مد (آ).' },
-    { kingdom: 'imlaa', level: 10, type: 'true_false', text: 'كلمة "شَيْء" تُكتب همزتها على الياء (شيئ).', options: ['صح', 'خطأ'], answer: 1, explanation: 'خطأ؛ الياء ساكنة فالهمزة متطرفة تُكتب منفردة على السطر (شَيْء).' },
+    // ==========================================
+    // 3. مملكة الإملاء (40 سؤالاً)
+    // ==========================================
+    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي الكلمات همزتها قطع؟', options: ['إسلام', 'ابْن', 'امرأة', 'الكتاب'], answer: 0, explanation: 'إسلام مصدر رباعي.' },
+    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي الأسماء همزته وصل؟', options: ['إبراهيم', 'اسْم', 'أحمد', 'إسماعيل'], answer: 1, explanation: 'اسم من الأسماء العشرة السماعية.' },
+    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'ما نوع الهمزة في فعل الأمر من الثلاثي "اكْتُبْ"؟', options: ['همزة قطع', 'همزة وصل', 'همزة متوسطة', 'همزة طايرة'], answer: 1, explanation: 'أمر الثلاثي يبدأ بهمزة وصل.' },
+    { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'ما الكتابة الصحيحة لـ (م س أ ل ة)؟', options: ['مَسْأَلَة', 'مَسْئَلَة', 'مَسْآلَة', 'مَسْؤَلَة'], answer: 0, explanation: 'الهمزة مفتوحة بعد ساكن.' },
+    { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'كيف تُكتب الهمزة في (فِ ئَ ة)؟', options: ['فِأَة', 'فِئَة', 'فِؤَة', 'فِءَة'], answer: 1, explanation: 'على نبرة لأن ما قبلها مكسور.' },
+    { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'ما الكتابة الصحيحة للفعل الماضي الرباعي المهموز؟', options: ['أَحْسَنَ (قطع)', 'احْسَنَ (وصل)', 'أحسن (بدون همزة)', 'لا شيء'], answer: 0, explanation: 'ماضي الرباعي همزته قطع دائماً.' },
+    { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'المنوّن المنصوب الصحيح لـ "عِبْء"؟', options: ['عِبْءً', 'عِبْءًا', 'عِبْئًا', 'عِبْؤًا'], answer: 2, explanation: 'الباء تتصل بما بعدها، فتكتب الهمزة على نبرة.' },
+    { kingdom: 'imlaa', level: 3, type: 'true_false', text: 'الهمزة المتطرفة في "شاطِئ" تُكتب على ياء.', options: ['صح', 'خطأ'], answer: 0, explanation: 'لأن ما قبلها مكسور.' },
+    { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'متى تُحذف همزة "ابن" وجوباً؟', options: ['إذا وقعت أول السطر', 'إذا وقعت بين علمين الثاني أب للأول', 'إذا ثنيت', 'إذا جمعت'], answer: 1, explanation: 'تحذف بين علمين متصلين في سطر واحد (عمر بن الخطاب).' },
+    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'الألف المقصورة في "اسْتَسْقَى" كتبت (ى) لأن:', options: ['فعل ثلاثي يائي', 'فعل غير ثلاثي لم تسبق ألفه بياء', 'غير ثلاثي سبقت ألفه بياء', 'اسم عجمي'], answer: 1, explanation: 'الأفعال فوق الثلاثية ألفها (ى) إن لم تسبق بياء.' },
+    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'لماذا كتبت الألف قائمة في "دَعا"؟', options: ['أصلها واو', 'أصلها ياء', 'غير ثلاثي', 'همزة'], answer: 0, explanation: 'من يدعو، أصلها واو.' },
+    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'كيف نكتب اسم النبي "يحيى" للتفريق بينه وبين الفعل؟', options: ['الاسم (يحيا) والفعل (يحيى)', 'الاسم (يحيى) والفعل (يحيا)', 'كلاهما (يحيى)', 'كلاهما (يحيا)'], answer: 1, explanation: 'للتفريق يكتب الاسم يحيى مقصورة، والفعل يحيا قائمة (لأنها سبقت بياء).' },
+    { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'الكتابة الصحيحة لدخول (عَنْ) على (مَا) الاستفهامية؟', options: ['عَنْ ما', 'عَنما', 'عَمَّ', 'عَمَّا'], answer: 2, explanation: 'تُحذف ألف (ما) الاستفهامية عند جرها.' },
+    { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي الجمل ترقيمها صحيح؟', options: ['قال المعلمُ: "ادرسوا بجدٍّ."', 'قال المعلمُ؛ ادرسوا بجدٍّ', 'قال المعلمُ "ادرسوا بجدٍّ"', 'قال المعلمُ، ادرسوا بجدٍّ.'], answer: 0, explanation: 'النقطتان بعد القول والتنصيص للمنقول.' },
+    { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'متى تزاد ألف التفريق؟', options: ['بعد واو الجماعة في الأفعال', 'بعد جمع المذكر السالم المضاف', 'بعد الواو الأصلية في الفعل', 'بعد الأسماء الخمسة'], answer: 0, explanation: 'للتفريق بين واو الجماعة وغيرها (كتبوا).' },
+    { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'واو عمرو تزاد لـ:', options: ['التفريق بينها وبين عُمَر', 'مضمومة الأول', 'ممنوع من الصرف', 'جمال خطي'], answer: 0, explanation: 'في الرفع والجر للتفريق.' },
+    { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة همزتها على واو؟', options: ['مُؤْمِن', 'رَأْس', 'بِئْر', 'سائِل'], answer: 0, explanation: 'مُؤمِن ساكنة بعد ضم.' },
+    { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي الكلمات كتبت بإسقاط الواو خطاً رغم النطق؟', options: ['طاووس', 'داود', 'كلاهما', 'شؤون'], answer: 2, explanation: 'تحذف الواو كراهة توالي الأمثال في الرسم العثماني والإملائي القديم.' },
+    { kingdom: 'imlaa', level: 7, type: 'mcq', text: 'اتّصال (ما) بـ (إنَّ) في: "إِنَّمَا المؤمِنُونَ إِخْوَةٌ"؟', options: ['تنصب المبتدأ بترجيح', 'تكفّها عن العمل', 'تزيدها توكيداً', 'تجر ما بعدها'], answer: 1, explanation: 'ما الكافة.' },
+    { kingdom: 'imlaa', level: 7, type: 'true_false', text: 'همزة "سَماء" على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'بعد ساكن.' },
+    { kingdom: 'imlaa', level: 7, type: 'mcq', text: 'ما رسم الهمزة المتوسطة في كلمة (هَيْـ ـئـ ـة) عند علماء الإملاء المعاصرين؟', options: ['هَيْأَة', 'هَيْئَة', 'هَيْؤَة', 'هَيْءَة'], answer: 1, explanation: 'تكتب على نبرة لسكون الياء قبلها إجراء لها مجرى الكسرة.' },
+    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'الرسم الصحيح لـ "ثَمَّ" المكانية المغلقة بتاء؟', options: ['بالتاء المبسوطة', 'ثَمَّةَ (مربوطة)', 'ثَمَّت (مبسوطة)', 'ثَمَه'], answer: 1, explanation: 'ثَمَّةَ ظرف، أما ثُمَّتَ فعاطفة.' },
+    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'التركيب للمشيئة؟', options: ['إنْ شاءَ اللهُ', 'إنشاءَ اللهُ', 'أنشاء الله', 'إن شاءاللهُ'], answer: 0, explanation: 'فصل إن الشرطية.' },
+    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الكتابة الصحيحة لكلمة (ق ر ا ء ة)؟', options: ['قِرَائَة', 'قِرَاءَة', 'قِرَأَة', 'قِرَآة'], answer: 1, explanation: 'مفتوحة بعد ألف ساكنة تكتب على السطر.' },
+    { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'الشرطتان (— —) تستخدمان لـ:', options: ['العطف', 'الاقتباس', 'الجملة الاعتراضية', 'بعد القول'], answer: 2, explanation: 'حول الجملة التي يمكن حذفها.' },
+    { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'مدة (أ + ا) الصحيحة؟', options: ['القُرْآن', 'القُرْأن', 'القُرْان', 'القُرْءان'], answer: 0, explanation: 'إدغام الهمزة في الألف.' },
+    { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'الكتابة الصحيحة للمنوّن بالنصب لـ (مَاء)؟', options: ['مَاءً', 'مَاءًا', 'مَائًا', 'مَائاً'], answer: 0, explanation: 'لا تكتب ألف التنوين بعد همزة قبلها ألف لئلا تتوسط الهمزة بين ألفين.' },
+    { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'كلمة (مِ أَ هـ) الصحيحة؟', options: ['مِئَة / مِائَة', 'مِأَة', 'مِأاة', 'مئة'], answer: 0, explanation: 'مائة بالرسم العثماني ومئة حديثاً.' },
+    { kingdom: 'imlaa', level: 10, type: 'true_false', text: 'كلمة "شَيْء" تُكتب همزتها على الياء (شيئ).', options: ['صح', 'خطأ'], answer: 1, explanation: 'متطرفة بعد ساكن فتكتب على السطر.' },
+    { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'الفاصلة المنقوطة (؛) توضع بين جملتين:', options: ['إحداهما سبب للأخرى', 'مترادفتين', 'متضادتين', 'منقولتين'], answer: 0, explanation: 'للتعليل أو السببية.' },
+    { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أين توضع علامة الحذف (...) في النص؟', options: ['عند التعجب الشديد', 'للدلالة على كلام محذوف', 'قبل الاستشهاد', 'بين المبتدأ والخبر'], answer: 1, explanation: 'تدل على اختصار أو إسقاط.' },
+    { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'القوسان الهلاليان ( ) يستخدمان غالباً في:', options: ['توثيق المراجع أو التفسير', 'النقل الحرفي', 'النداء', 'نهاية السؤال'], answer: 0, explanation: 'لحصر الأرقام، المراجع، العبارات التفسيرية.' },
+    { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'الكتابة الصحيحة لجمع كلمة (قاضي) غير المعرفة بـ ال؟', options: ['قاضيون', 'قُضَاة', 'قواضي', 'قضاي'], answer: 1, explanation: 'قضاة بالتاء المربوطة لأنها جمع تكسير.' },
+    { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'كيف تكتب التاء في (ب ن ت)؟', options: ['بِنْت', 'بِنَّة', 'بِنَة', 'بِنْة'], answer: 0, explanation: 'تاء مبسوطة في الاسم الثلاثي ساكن الوسط.' },
+    { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'ما الحرف المحذوف في كلمة (بِمَ) في: بِمَ تفكر؟', options: ['الباء', 'ألف ما الاستفهامية', 'الميم', 'الياء'], answer: 1, explanation: 'تحذف ألف ما الاستفهامية عند دخول حرف الجر.' },
+    { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'كيف تكتب كلمة (ض و ء) متطرفة؟', options: ['ضَوْء', 'ضَوْؤ', 'ضَوْئ', 'ضَؤْء'], answer: 0, explanation: 'على السطر لأن ما قبلها ساكن.' },
+    { kingdom: 'imlaa', level: 7, type: 'mcq', text: 'الكتابة الصحيحة للفعل المضارع المجزوم (يَسْعَى)؟', options: ['لَمْ يَسْعَى', 'لَمْ يَسْعَ', 'لَمْ يَسْعِي', 'لَمْ يَسْعُ'], answer: 1, explanation: 'مجزوم بحذف حرف العلة.' },
+    { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الحرف الزائد إملائياً في كلمة (أُولَئِكَ)؟', options: ['الواو', 'الألف', 'الياء', 'الهمزة'], answer: 0, explanation: 'الواو تزاد خطاً لا لفظاً.' },
+    { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'كيف تكتب (لِـ أَنْ لا) متصلة؟', options: ['لِأَنْلا', 'لِئَلَّا', 'لألا', 'ليألا'], answer: 1, explanation: 'تُدغم النون في اللام وتكتب الهمزة على نبرة.' },
+    { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'وصل (حين) بـ (إذٍ) يكتب:', options: ['حين إذٍ', 'حينئذٍ', 'حينائذٍ', 'حينإذٍ'], answer: 1, explanation: 'توصل وتكتب الهمزة على نبرة لكسرها.' },
 
-    // ===== مملكة البلاغة =====
-    { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما نوع التشبيه في قولنا: "العلمُ كالنورِ"؟', options: ['تشبيه مجمل', 'تشبيه مفصل', 'تشبيه بليغ', 'استعارة تصريحية'], answer: 0, explanation: 'تشبيه مجمل حُذف منه وجه الشبه وذكرت فيه الأداة والمشبه والمشبه به.' },
-    { kingdom: 'balagha', level: 1, type: 'true_false', text: 'التشبيه البليغ هو ما حُذِف منه وجه الشبه وأداة التشبيه معًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'صح؛ التشبيه البليغ يقتصر على المشبه والمشبه به فقط (مثل: العلم نور).' },
-    { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع التشبيه في جملة: "الجهلُ الموتُ"؟', options: ['تشبيه بليغ', 'تشبيه مجمل', 'تشبيه مفصل', 'استعارة مكنية'], answer: 0, explanation: 'تشبيه بليغ لحذف الأداة ووجه الشبه.' },
-    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في قولنا: "نَطَقَتْ العَيْنُ بِمَا فِي القَلْبِ"؟', options: ['استعارة مكنية', 'استعارة تصريحية', 'كناية عن نسبة', 'مجاز مرسل'], answer: 0, explanation: 'استعارة مكنية؛ شُبّهت العين بإنسان ينطق وحُذف المشبه به ودُلّ عليه بشيء من لوازمه (نطقت).' },
-    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في: "رَأَيْتُ بَحْرًا يُلْقِي الخُطْبَةَ فِي الحَفْلِ"؟', options: ['استعارة تصريحية', 'استعارة مكنية', 'تشبيه بليغ', 'مجاز عقلي'], answer: 0, explanation: 'استعارة تصريحية؛ صُرّح بالمشبه به (البحر) وحُذف المشبه (العالم/الخطيب).' },
-    { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما المعنى الكنائي في قول العرب: "فُلانٌ طَويلُ النِّجادِ"؟', options: ['كناية عن شجاعته وطول قامته', 'كناية عن الكرم والضيافة', 'كناية عن الفقر', 'استعارة مكنية'], answer: 0, explanation: 'طول نجاد السيف يلزمه طول القامة والهيبة والشجاعة.' },
-    { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما علاقة المجاز المرسل في قولنا: "شَرِبْتُ مَاءَ النِّيلِ"؟', options: ['الكلّيّة', 'الجزئيّة', 'المكانيّة', 'السببيّة'], answer: 0, explanation: 'مجاز مرسل علاقته الكليّة؛ حيث أطلق الكل (ماء النيل) وأراد الجزء (عضعة أكواب).' },
-    { kingdom: 'balagha', level: 6, type: 'true_false', text: 'الجناس المحسن البديعي اللفظي هو توافق كلمتين في اللفظ واختلافهما في المعنى.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تعريف الجناس الصحيح (مثل: وسلا مصر هل سلا القلب عنها).' },
-    { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما نوع المحسن البديعي بين (الليل) و(النهار)؟', options: ['طباق إيجاب', 'طباق سلب', 'مقابلة', 'جناس ناقص'], answer: 0, explanation: 'طباق إيجاب بين كلمتين متضادتين.' },
-    { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع المحسن في: "يَعْلَمُونَ وَلا يَعْلَمُونَ"؟', options: ['طباق سلب', 'طباق إيجاب', 'مقابلة', 'سجع'], answer: 0, explanation: 'طباق سلب لاختلاف الكلمتين بالإيجاب والنفي.' },
-    { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما المحسن البديعي في: "العِلْمُ نُورٌ، وَالْجَهْلُ ظَلامٌ"؟', options: ['مقابلة', 'طباق إيجاب', 'جناس تام', 'سجع'], answer: 0, explanation: 'مقابلة بين التراكيب (معنيان أو أكثر مقابل معنيين أو أكثر على الترتيب).' },
+    // ==========================================
+    // 4. مملكة البلاغة (40 سؤالاً)
+    // ==========================================
+    { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما نوع التشبيه في قولنا: "العلمُ كالنورِ"؟', options: ['مجمل', 'مفصل', 'بليغ', 'استعارة'], answer: 0, explanation: 'مجمل لحذف وجه الشبه.' },
+    { kingdom: 'balagha', level: 1, type: 'mcq', text: 'التشبيه التمثيلي هو:', options: ['تشبيه مفرد بمفرد', 'تشبيه صورة بصورة', 'حذف أداة التشبيه', 'تشبيه المقلوب'], answer: 1, explanation: 'تمثيل هيئة بهيئة متسلسلة.' },
+    { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما هو التشبيه البليغ؟', options: ['ما ذكرت فيه الأداة', 'ما حذف منه وجه الشبه والأداة', 'ما حذف منه المشبه', 'ما ذكر فيه كل شيء'], answer: 1, explanation: 'مثل: العلم نور.' },
+    { kingdom: 'balagha', level: 2, type: 'mcq', text: 'التشبيه الضمني يُلمح فيه التشبيه من السياق ولا يوضع في صورة صريحة.', options: ['صح', 'خطأ'], answer: 0, explanation: 'ويكون الشطر الثاني برهاناً للأول غالباً.' },
+    { kingdom: 'balagha', level: 2, type: 'mcq', text: 'نوع التشبيه في: "الجهلُ الموتُ"؟', options: ['بليغ', 'مجمل', 'مفصل', 'مكنية'], answer: 0, explanation: 'حذفت الأداة والوجه.' },
+    { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع التشبيه في: "كأنَّ النسيمَ في الرقةِ أخلاقهُ" بدلاً من أخلاقه كالنسيم؟', options: ['تشبيه بليغ', 'تشبيه مقلوب', 'استعارة تصريحية', 'مجاز عقلي'], answer: 1, explanation: 'عكس طرفي التشبيه للمبالغة فجعل المشبه به مشبهاً.' },
+    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'نوع الاستعارة: "وإذا المَنِيَّةُ أَنْشَبَتْ أَظْفَارَهَا"؟', options: ['تصريحية', 'مكنية', 'بليغ', 'مرسل'], answer: 1, explanation: 'شبه المنية بسبع وحذف السبع ورمز له بأظفاره.' },
+    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'نوع الاستعارة: "رَأَيْتُ بَحْرًا يُلْقِي الخُطْبَةَ"؟', options: ['تصريحية', 'مكنية', 'بليغ', 'عقلي'], answer: 0, explanation: 'صرّح بالمشبه به (البحر).' },
+    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'في المثل: "قَطَعَتْ جَهِيزَةُ قَوْلَ كُلِّ خَطِيبٍ"، ما نوع الاستعارة؟', options: ['استعارة تمثيلية', 'استعارة مكنية', 'تشبيه بليغ', 'كناية عن موصوف'], answer: 0, explanation: 'الاستعارة في الأمثال استعارة تمثيلية (تشبيه حالة بحالة وحذف المشبه).' },
+    { kingdom: 'balagha', level: 4, type: 'mcq', text: 'الكناية في: "فلانٌ نَظِيفُ اليَدِ"؟', options: ['عن صفة (الأمانة)', 'عن موصوف', 'عن نسبة', 'تصريحية'], answer: 0, explanation: 'يلزم من نظافة اليد العفة والأمانة.' },
+    { kingdom: 'balagha', level: 4, type: 'mcq', text: 'الكناية في: "طَويلُ النِّجادِ"؟', options: ['شجاعة وطول', 'كرم', 'فقر', 'مكنية'], answer: 0, explanation: 'طول نجاد السيف يلزم منه الطول والشجاعة.' },
+    { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما الكناية في قوله تعالى: "فَاصْبِرْ لِحُكْمِ رَبِّكَ وَلَا تَكُن كَصَاحِبِ الْحُوتِ"؟', options: ['كناية عن صفة', 'كناية عن موصوف (يونس عليه السلام)', 'كناية عن نسبة', 'استعارة'], answer: 1, explanation: 'صاحب الحوت هو نبي الله يونس.' },
+    { kingdom: 'balagha', level: 5, type: 'mcq', text: 'علاقة المجاز المرسل: "قُمِ اللَّيْلَ إِلَّا قَلِيلًا" (الصلاة)؟', options: ['الجزئية', 'الحالية', 'السببية', 'المحلية'], answer: 0, explanation: 'أطلق الجزء (القيام) وأراد الكل (الصلاة).' },
+    { kingdom: 'balagha', level: 5, type: 'mcq', text: 'علاقة المجاز المرسل: "شَرِبْتُ مَاءَ النِّيلِ"؟', options: ['الكلّيّة', 'الجزئيّة', 'المكانيّة', 'السببيّة'], answer: 0, explanation: 'أطلق الكل وأراد الجزء.' },
+    { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما علاقة المجاز المرسل في: "وَآتُوا الْيَتَامَى أَمْوَالَهُمْ"؟', options: ['اعتبار ما كان', 'اعتبار ما سيكون', 'الحالية', 'المحلية'], answer: 0, explanation: 'أي الذين كانوا يتامى قبل البلوغ (اعتبار ما كان).' },
+    { kingdom: 'balagha', level: 6, type: 'mcq', text: 'ما علاقة المجاز المرسل في: "إِنِّي أَرَانِي أَعْصِرُ خَمْرًا"؟', options: ['اعتبار ما سيكون', 'اعتبار ما كان', 'الآلية', 'الجزئية'], answer: 0, explanation: 'يعصر عنباً سيؤول إلى خمر (اعتبار ما سيكون).' },
+    { kingdom: 'balagha', level: 6, type: 'mcq', text: 'المحسن البديعي السمعي في: "الصَّومُ حِرْمَانٌ مَشْرُوعٌ، وَخُشُوعٌ خَاضِعٌ"؟', options: ['جناس تام', 'سَجَع', 'تورية', 'مقابلة'], answer: 1, explanation: 'توافق الفواصل.' },
+    { kingdom: 'balagha', level: 6, type: 'true_false', text: 'الجناس توافق كلمتين في اللفظ واختلافهما في المعنى.', options: ['صح', 'خطأ'], answer: 0, explanation: 'مثال: سلا مصر هل سلا القلب عنها.' },
+    { kingdom: 'balagha', level: 7, type: 'mcq', text: 'المحسن في: "صَقَلَتْهُ الصَّدَى" (الصدى: العطش/صدأ الحديد)؟', options: ['تورية', 'سجع', 'طباق', 'جناس'], answer: 0, explanation: 'التورية: لفظ بمعنيين قريب وبعيد.' },
+    { kingdom: 'balagha', level: 7, type: 'mcq', text: 'المحسن بين (الليل) و(النهار)؟', options: ['طباق إيجاب', 'طباق سلب', 'مقابلة', 'جناس'], answer: 0, explanation: 'تضاد إيجابي.' },
+    { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما الغرض البلاغي من الالتفات في الشعر القرآني والعربي؟', options: ['تنشيط ذهن السامع ولفت انتباهه', 'السجع', 'المطابقة', 'التورية'], answer: 0, explanation: 'الانتقال من ضمير لآخر (كالمتكلم للغائب) ينشط الذهن.' },
+    { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما المحسن البديعي في الإجابة عن سؤال السائل بغير ما يترقب لتنبيهه؟ (مثل: يسألونك عن الأهلة قل هي مواقيت للناس)', options: ['أسلوب الحكيم', 'تجاهل العارف', 'الالتفات', 'التورية'], answer: 0, explanation: 'صرف السائل عن سؤاله إلى ما هو أنفع له.' },
+    { kingdom: 'balagha', level: 8, type: 'mcq', text: 'نوع الجناس: "وسَلا مَصْرَ هَلْ سَلا القَلْبُ عَنْهَا"؟', options: ['تام', 'ناقص', 'طباق', 'مقابلة'], answer: 0, explanation: 'اتفاق كلي في اللفظ واختلاف بالمعنى.' },
+    { kingdom: 'balagha', level: 8, type: 'mcq', text: 'المحسن في: "يَعْلَمُونَ وَلا يَعْلَمُونَ"؟', options: ['طباق سلب', 'طباق إيجاب', 'مقابلة', 'سجع'], answer: 0, explanation: 'إيجاب ونفي.' },
+    { kingdom: 'balagha', level: 9, type: 'mcq', text: 'أسلوب القصر في: "وَمَا مُحَمَّدٌ إِلَّا رَسُولٌ"؟', options: ['نفي واستثناء', 'إنما', 'تقديم', 'عطف'], answer: 0, explanation: 'طريقه النفي بما والاستثناء بإلا.' },
+    { kingdom: 'balagha', level: 9, type: 'mcq', text: 'المحسن في: "العِلْمُ نُورٌ، وَالْجَهْلُ ظَلامٌ"؟', options: ['مقابلة', 'طباق إيجاب', 'جناس', 'سجع'], answer: 0, explanation: 'معنيان ضد معنيين على الترتيب.' },
+    { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما نوع الإطناب في قوله تعالى: "تَنَزَّلُ الْمَلَائِكَةُ وَالرُّوحُ فِيهَا"؟', options: ['ذكر الخاص بعد العام', 'ذكر العام بعد الخاص', 'التكرار', 'الترادف'], answer: 0, explanation: 'الروح (جبريل) خاص بعد الملائكة (عام) لتعظيم شأنه.' },
+    { kingdom: 'balagha', level: 10, type: 'mcq', text: 'نوع الأسلوب في: "يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ"؟', options: ['خبري', 'إنشائي طلبي', 'إنشائي غير طلبي', 'خبري إنكاري'], answer: 1, explanation: 'نداء وأمر.' },
+    { kingdom: 'balagha', level: 10, type: 'mcq', text: 'ما الغرض البلاغي من الأمر في قوله تعالى: "فَأْتُوا بِسُورَةٍ مِّن مِّثْلِهِ"؟', options: ['الوجوب', 'النصح', 'التعجيز', 'التمني'], answer: 2, explanation: 'أمرهم بما لا يستطيعون لإظهار عجزهم.' },
+    { kingdom: 'balagha', level: 10, type: 'mcq', text: 'ما الغرض البلاغي من النداء في قول الشاعر: "يا قبرَ مَعْنٍ كَيْفَ وَارَيْتَ جُودَهُ"؟', options: ['التنبيه', 'التعظيم', 'التحسر والتعجب', 'الاستغاثة'], answer: 2, explanation: 'ينادي القبر متحسراً على فقد الممدوح العظيم.' },
+    { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما هو الإيجاز الذي يكون بحذف كلمة أو جملة مع بقاء المعنى؟', options: ['إيجاز حذف', 'إيجاز قِصَر', 'إطناب', 'مساواة'], answer: 0, explanation: 'حذف لفظ مع قيام قرينة تدل عليه.' },
+    { kingdom: 'balagha', level: 2, type: 'mcq', text: 'قوله تعالى: "وَلَكُمْ فِي الْقِصَاصِ حَيَاةٌ" من باب:', options: ['إيجاز القِصَر', 'إيجاز الحذف', 'الإطناب', 'السجع'], answer: 0, explanation: 'ألفاظ قليلة تتضمن معاني كثيرة دون حذف.' },
+    { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما الغرض من الاستفهام في قوله تعالى: "أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ"؟', options: ['النفي', 'التقرير والإثبات', 'الإنكار', 'التعظيم'], answer: 1, explanation: 'الاستفهام المنفي يفيد التقرير (قد شرحنا صدرك).' },
+    { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما طريقة القصر في: "إِيَّاكَ نَعْبُدُ"؟', options: ['التقديم والتأخير', 'النفي والاستثناء', 'إنما', 'العطف'], answer: 0, explanation: 'تقديم ما حقه التأخير (المفعول به) يفيد الحصر والقصر.' },
+    { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع المجاز في قولنا: "نَهَارُ الصَّائِمِ صَائِمٌ"؟', options: ['مجاز مرسل', 'مجاز عقلي (علاقته الزمانية)', 'استعارة تصريحية', 'تشبيه'], answer: 1, explanation: 'أسند الصيام إلى النهار وهو مجاز عقلي علاقته الزمانية.' },
+    { kingdom: 'balagha', level: 6, type: 'mcq', text: 'تضمين الشاعر لآية قرآنية أو حديث شريف في شعره يسمى:', options: ['اقتباساً', 'تضميناً', 'عقداً', 'حلاً'], answer: 0, explanation: 'الاقتباس هو أخذ شيء من القرآن أو الحديث دون التصريح بأنه منهما.' },
+    { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما المحسن البديعي في ادعاء الشاعر سبباً غير حقيقي ولكنه طريف لظاهرة طبيعية؟', options: ['حسن التعليل', 'الطباق', 'الجناس', 'تجاهل العارف'], answer: 0, explanation: 'كادعاء أن المطر يبكي حزناً على الفراق.' },
+    { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع الجناس بين (يَخْشَوْنَ) و(يَحْشَوْنَ)؟', options: ['جناس تام', 'جناس ناقص (اختلاف حرف)', 'تورية', 'سجع'], answer: 1, explanation: 'لاختلاف حرف الخاء والحاء.' },
+    { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما هو التضمين في علم البديع؟', options: ['تضمين آية قرانية', 'تضمين الشاعر بيتاً لشاعر آخر في قصيدته', 'طباق المعاني', 'تكرار القافية'], answer: 1, explanation: 'إدراج بيت لشاعر آخر في القصيدة.' },
+    { kingdom: 'balagha', level: 10, type: 'mcq', text: 'الغرض البلاغي من الأمر في قول الشاعر "ألا أَيُّهَا اللَّيْلُ الطَّوِيلُ أَلَا انْجَلِي"؟', options: ['التمني', 'الدعاء', 'التهديد', 'الالتماس'], answer: 0, explanation: 'الأمر الموجه لغير العاقل يفيد التمني.' },
 
-    // ===== مملكة الأخطاء الشائعة =====
-    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'اختر التصحيح اللغوي الصحيح للجملة الخطأ: "إنّ الطالبُ مجتهدٌ"', options: ['إنّ الطالبَ مجتهدٌ', 'إنّ الطالبِ مجتهدٌ', 'إنّ الطالبُ مجتهدًا', 'إنّ الطالبَ مجتهدًا'], answer: 0, explanation: 'اسم إنّ منصوب وعلامة نصبه الفتحة.' },
-    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'اختر التصحيح الصحيح للجملة: "لَنْ يَهْمِلْ الطالبُ دَرْسَهُ"', options: ['لَنْ يَهْمِلَ الطالبُ دَرْسَهُ', 'لَنْ يَهْمِلُ الطالبُ دَرْسَهُ', 'لَنْ يَهْمِلِ الطالبَ دَرْسَهُ', 'لَنْ يَهْمَلْ الطالبُ دَرْسَهُ'], answer: 0, explanation: 'الفعل المضارع بعد أداة النصب (لن) يكون منصوباً بالفتحة.' },
-    { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'صوّب الخطأ الإعرابي في: "مَرَرْتُ بِأَخُوكَ"', options: ['مَرَرْتُ بِأَخِيكَ', 'مَرَرْتُ بِأَخَاكَ', 'مَرَرْتُ بِأَخُوكَ', 'مَرَرْتُ بِأَخِيكْ'], answer: 0, explanation: 'الأسماء الخمسة تُجر بالياء، فيقال: بأخيك.' },
-    { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'ما الصواب اللغوي للعبارة الشائعة: "هَذا حَادِثٌ مَفْقُودٌ"؟', options: ['هَذا حَادِثٌ المَؤْسِفٌ / أليمٌ', 'هَذا حَادِثٌ مَفْقُودٌ', 'هَذا حَادِثٌ مَفْقُودَةٌ', 'لا يوجد خطأ'], answer: 0, explanation: 'كلمة مفقود تؤدي معنى الضياع، والأصل وصف الحادث بالأليم أو المؤسف.' },
-    { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'اختر الصواب في الدعاء لجزم فعل الأمر معتل الآخر: "اللّهُمَّ صَلِّي عَلَى مُحَمَّدٍ"', options: ['اللّهُمَّ صَلِّ عَلَى مُحَمَّدٍ', 'اللّهُمَّ صَلَّى عَلَى مُحَمَّدٍ', 'اللّهُمَّ صَالِي عَلَى مُحَمَّدٍ', 'اللّهُمَّ صَلِّي عَلَى مُحَمَّدٍ'], answer: 0, explanation: 'فعل أمر مبني على حذف حرف العلة (الياء).' },
-    { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'ما الصواب في العبارة التهنئة الشائعة: "مَبْرُوكٌ عَلَيْكَ النجاحُ"؟', options: ['مُبَارَكٌ عَلَيْكَ النجاحُ', 'مَبْرُوكٌ عَلَيْكَ النجاحُ', 'بَارَكَ عَلَيْكَ النجاحُ', 'مُبْرِكٌ عَلَيْكَ النجاحُ'], answer: 0, explanation: 'اسم المفعول من بارك هو مُبارَك، أما مبروك فمن بَرَكَ الجمل.' },
-    { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'ما الصواب عند إضافة التعريف للمركب الإضافي: "الغيرُ مَقْبُولٍ"؟', options: ['غَيْرُ المَقْبُولِ', 'الغيرُ المقبولِ', 'الغيرُ مقبولٍ', 'غيرُ مقبولٍ'], answer: 0, explanation: '(غير) اسم موغل في الإبهام لا يدخله التعريف، بل تُعرّف الكلمة المضافة إليها (غير المقبول).' },
-    { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'اختر الصواب لنسبة الشخص إلى التخصص: "هُوَ أَخِصَّائِيُّ عِلْمِ النَّفْسِ"', options: ['هُوَ مُتَخَصِّصُ عِلْمِ النَّفْسِ / مُتَخَصِّصٌ', 'هُوَ أَخِصَّائِيُّ عِلْمِ النَّفْسِ', 'هُوَ خَصَّائِيُّ عِلْمِ النَّفْسِ', 'لا يوجد تصحيح'], answer: 0, explanation: 'النسبة القياسية من الفعل تخصص هي (متخصص)، وأخصائي لفظ دخيل.' },
-    { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'صوّب جزم الفعل معتل الآخر بنهي: "لا تَنْسَى ذِكْرَ اللهِ"', options: ['لا تَنْسَ ذِكْرَ اللهِ', 'لا تَنْسَى ذِكْرَ اللهِ', 'لا تَنْسِي ذِكْرَ اللهِ', 'لا تَنْسُ ذِكْرَ اللهِ'], answer: 0, explanation: 'يجزم الفعل المضارع معتل الآخر بعد لا الناهية بحذف حرف العلة.' },
-    { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'صوّب العبارة مع الأسماء الموصولة: "حَضَرَ الطلابُ الَّذِي نَجَحُوا"', options: ['حَضَرَ الطلابُ الَّذِينَ نَجَحُوا', 'حَضَرَ الطلابُ الَّذِي نَجَحوا', 'حَضَرَ الطلابُ الَّذَانِ نَجَحُوا', 'حَضَرَ الطلابُ مَنْ نَجَحُوا'], answer: 0, explanation: 'يجب مطابقة الاسم الموصول لجمع المذكر العاقل (الذين).' },
-    { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'صوّب النهي في البيت الشهير: "لا تَنْهَى عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ"', options: ['لا تَنْهَ عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ', 'لا تَنْهَى عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ', 'لا تَنْهِي عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ', 'لا تَنْهُ عَنْ خُلُقٍ وَتَأْتِيَ مِثْلَهُ'], answer: 0, explanation: 'تنهَ: فعل مضارع مجزوم بلا الناهية وعلامة جزمه حذف حرف العلة.' }
+    // ==========================================
+    // 5. مملكة الأخطاء الشائعة (40 سؤالاً)
+    // ==========================================
+    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'التصحيح لـ: "إنّ الطالبُ مجتهدٌ"', options: ['إنّ الطالبَ مجتهدٌ', 'إنّ الطالبِ مجتهدٌ', 'إنّ الطالبُ مجتهدًا', 'إنّ الطالبَ مجتهدًا'], answer: 0, explanation: 'اسم إن منصوب.' },
+    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'التعدية الصحيحة: "اعْتَبَرْتُ المَسْأَلَةَ مَهِمَّةً"؟', options: ['عَدَدْتُ المَسْأَلَةَ مُهِمَّةً', 'اعْتَبَرْتُ المَسْأَلَةَ', 'تَعْتَبِرُ مَهِمَّةً', 'لا خطأ'], answer: 0, explanation: 'الاعتبار للعظة والعدّ للتقييم.' },
+    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'التعبير الأفصح لجذب الانتباه: "هذا أمرٌ مُلْفِتٌ للنظر" أم "لافِتٌ"؟', options: ['لافِتٌ للنظر', 'مُلْفِتٌ للنظر', 'تِلْفِيتٌ للنظر', 'كلاهما صحيح'], answer: 0, explanation: 'من الفعل لَفَتَ واسم الفاعل لافِت.' },
+    { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'الضبط الصحيح لـ الوفاة: "تَوَفَّى الرجلُ"؟', options: ['تُووُفِّيَ الرَّجُلُ', 'تَوَفَّى', 'تَوَفَّتْ', 'تُوَفِّيَ الرَّجُلَ'], answer: 0, explanation: 'مبني للمجهول: تُوُفِّيَ.' },
+    { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'الفرق بين "نَفَدَ" و "نَفَذَ"؟', options: ['نَفَدَ (انتهى) ونَفَذَ (اخترق)', 'كلاهما بنفس المعنى', 'لا فرق', 'لا يصح استخدامهما'], answer: 0, explanation: 'نفد بالدال فني، ونفذ بالذال اخترق.' },
+    { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'أي التعبيرين أصح: "نَفْسُ الشَّيْءِ" أم "الشَّيْءُ نَفْسُهُ"؟', options: ['الشَّيْءُ نَفْسُهُ', 'نَفْسُ الشَّيْءِ', 'كلاهما خاطئ', 'لا فرق'], answer: 0, explanation: 'نفس وعين من ألفاظ التوكيد فتأتي تابعة للمؤكَّد وتضاف لضميره.' },
+    { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'الصواب لـ "حَادِثٌ مَفْقُودٌ"؟', options: ['مَؤْسِفٌ / أليمٌ', 'مَفْقُودٌ', 'مَفْقُودَةٌ', 'لا خطأ'], answer: 0, explanation: 'مؤسف للألم، مفقود للضياع.' },
+    { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'الصواب لـ "كافَّةُ الناس"؟', options: ['الناسُ كافَّةً', 'كافَّةُ الناس', 'الكافَّةُ الناس', 'لا خطأ'], answer: 0, explanation: 'كافة تعرب حالاً ولا تضاف.' },
+    { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'التصحيح الصحيح لـ "اِعْتَذَرَ الأستاذُ عَنِ الْحُضُورِ"؟', options: ['اِعْتَذَرَ عَنْ عَدَمِ الْحُضُورِ', 'اِعْتَذَرَ مِنَ الْحُضُورِ', 'اِعْتَذَرَ بِالْحُضُورِ', 'لا خطأ'], answer: 0, explanation: 'الاعتذار يكون عن الفعل السيء لا عن الحضور، فيقال اعتذر عن عدم الحضور.' },
+    { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'التعبير الصواب للتخرج:', options: ['تَخَرَّجَ فِي كُلِّيَّةِ الآدَابِ', 'تَخَرَّجَ مِنْ', 'تَخَرَّجَ بِـ', 'تَخَرَّجَ كُلِّيَّةَ'], answer: 0, explanation: 'أي تدرب فيها.' },
+    { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'الصواب: "اللّهُمَّ صَلِّي"؟', options: ['صَلِّ', 'صَلَّى', 'صَالِي', 'صَلِّي'], answer: 0, explanation: 'مجزوم بحذف الياء.' },
+    { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'الأصح: "بالصُّدْفَة" أم "بِالْمُصَادَفَةِ"؟', options: ['بِالْمُصَادَفَةِ', 'بالصُّدْفَة', 'كلاهما صحيح', 'لا فرق'], answer: 0, explanation: 'المصادفة مصدر صادف، والصدفة تعني المحارة أو الظلمة.' },
+    { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'تعدية أَكَّدَ: "أَكَّدَ عَلَى المَشْرُوعِ"؟', options: ['أَكَّدَ المَشْرُوعَ', 'أَكَّدَ عَلَى', 'تَأَكَّدَ عَلَى', 'أَكَّدَ بِـ'], answer: 0, explanation: 'يتعدى بنفسه دون على.' },
+    { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'تهنئة النجاح الشائعة "مَبْرُوكٌ"؟', options: ['مُبَارَكٌ', 'مَبْرُوكٌ', 'بَارَكَ', 'مُبْرِكٌ'], answer: 0, explanation: 'من بارك مبارك، مبروك من برك الجمل.' },
+    { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'الصواب: "اِسْتَلَمَ الرِّسَالَةَ" أم "تَسَلَّمَ"؟', options: ['تَسَلَّمَ الرِّسَالَةَ (أخذها)', 'اِسْتَلَمَ (أخذها)', 'كلاهما صحيح', 'لا فرق'], answer: 0, explanation: 'تسلَّم تعني أخذ الشيء، واستلم تعني لمسه (كالركن الأسود).' },
+    { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'استعمال (نَيِّف):', options: ['ثَلاثُونَ رِيَالاً وَنَيِّفٌ', 'نَيِّفٌ وَثَلاثُونَ', 'ثَلاثُونَ وَنَيِّفَ', 'ثَلاثُونَ وَنَيِّفًا'], answer: 0, explanation: 'يعطف على العقود بعد المعدود.' },
+    { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'إضافة (أل) لـ غير المقبول:', options: ['غَيْرُ المَقْبُولِ', 'الغيرُ المقبولِ', 'الغيرُ مقبولٍ', 'غيرُ مقبولٍ'], answer: 0, explanation: 'غير لا تدخلها أل التعريف.' },
+    { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'هل يصح القول "تَوَاجَدَ الأستاذُ في القاعة"؟', options: ['الصواب: حَضَرَ / وُجِدَ', 'تَوَاجَدَ أصح', 'كلاهما صحيح', 'لا فرق'], answer: 0, explanation: 'التواجد من الوجد (العشق والحزن)، أما الحضور فيقال: وُجِدَ.' },
+    { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'ربط السبب: "بِنَاءً عَلَيْهِ" أم "عَلَى ذَلِكَ"؟', options: ['بِنَاءً عَلَى ذَلِكَ', 'بِنَاءً عَلَيْهِ', 'بَنَى عَلَيْهِ', 'مَبْنِيٌّ عَلَيْهِ'], answer: 0, explanation: 'الإشارة باسم الإشارة أوضح إن لم يسبق مرجع لضمير مفرد.' },
+    { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'نسبة التخصص: "أَخِصَّائِيُّ"؟', options: ['مُتَخَصِّصُ / اخْتِصَاصِيّ', 'أَخِصَّائِيُّ', 'خَصَّائِيُّ', 'لا تصحيح'], answer: 0, explanation: 'متخصص أصح، وأخصائي دخيلة.' },
+    { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'الصواب: "جَلَسْنَا سَوِيًّا" أم "جَلَسْنَا مَعًا"؟', options: ['مَعًا', 'سَوِيًّا', 'كلاهما صحيح', 'لا فرق'], answer: 0, explanation: 'سوياً تعني مستقيماً (فاتبعني أهدك صراطاً سوياً)، ومعاً للمصاحبة.' },
+    { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'الجمع القياسي لـ (مُدِير)؟', options: ['مُدِيرُونَ', 'مُدَرَاء', 'أَمْدَار', 'مَدَرَة'], answer: 0, explanation: 'مفردها غير ثلاثي تجمع جمع مذكر سالماً.' },
+    { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'جزم النهي: "لا تَنْسَى"؟', options: ['لا تَنْسَ', 'لا تَنْسَى', 'لا تَنْسِي', 'لا تَنْسُ'], answer: 0, explanation: 'بحذف الألف.' },
+    { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'أي التركيبين أصح: "كُلَّمَا دَرَسْتَ كُلَّمَا نَجَحْتَ" أم "كُلَّمَا دَرَسْتَ نَجَحْتَ"؟', options: ['كُلَّمَا دَرَسْتَ نَجَحْتَ', 'كُلَّمَا دَرَسْتَ كُلَّمَا نَجَحْتَ', 'كلاهما صحيح', 'لا يصح استخدامهما'], answer: 0, explanation: 'كلما لا تُكرر في الجملة.' },
+    { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'تعدية الرد: "أَجَابَ عَلَى السُّؤَالِ"؟', options: ['أَجَابَ عَنِ السُّؤَالِ', 'أَجَابَ عَلَى', 'أَجَابَ إِلى', 'أَجَابَ بِـ'], answer: 0, explanation: 'أجاب عن.' },
+    { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'الأسماء الموصولة: "الطلابُ الَّذِي"؟', options: ['الطلابُ الَّذِينَ', 'الطلابُ الَّذِي', 'الَّذَانِ', 'مَنْ'], answer: 0, explanation: 'المطابقة في الجمع.' },
+    { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'جمع النية: "نَوَايَا" أم "نِيَّات"؟', options: ['نِيَّات', 'نَوَايَا', 'كلاهما صحيح', 'أنْواء'], answer: 0, explanation: 'جمع نية نِيّات، والنوايا جمع نَوَاة أو ناوية.' },
+    { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'الفرق: "رَغِبَ فِي" و "رَغِبَ عَنْ"؟', options: ['رَغِبَ فِيهِ: أَرَادَهُ، عَنْهُ: تَرَكَهُ', 'كلاهما واحد', 'رَغِبَ عَنْهُ أي أراده', 'لا يتعدى بحرف'], answer: 0, explanation: 'حرف الجر يغير المعنى للضد.' },
+    { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'تصويب: "لا تَنْهَى عَنْ خُلُقٍ"؟', options: ['لا تَنْهَ', 'لا تَنْهَى', 'لا تَنْهِي', 'لا تَنْهُ'], answer: 0, explanation: 'مجزوم بحذف الألف.' },
+    { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'الأفصح في التعبير: "رَغْمَ أنَّهُ مَرِيضٌ حَضَرَ" أم "عَلَى الرَّغْمِ مِنْ مَرَضِهِ حَضَرَ"؟', options: ['عَلَى الرَّغْمِ مِنْ...', 'رَغْمَ أنَّهُ...', 'بالرَّغْمِ أنَّهُ...', 'كلاهما خاطئ'], answer: 0, explanation: 'الأفصح جرها بمن (على الرغم من).' },
+    { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'الصواب في نطق فترة زمنية: "حِقْبَة" أم "حَقْبَة"؟', options: ['حُقْبَة (بضم الحاء)', 'حِقْبَة', 'حَقْبَة', 'كلاهما صحيح'], answer: 0, explanation: 'الحُقبة بالضم هي المدة من الزمن.' },
+    { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'جمع "كَفِيف" و "كُفْء": ما الصواب؟', options: ['كَفيف: أَكِفَّاء، كُفْء: أَكْفَاء', 'كلاهما أَكْفَاء', 'كَفيف: أَكْفَاء، كُفْء: أَكِفَّاء', 'أَكَافِيف وأَكْفَاء'], answer: 0, explanation: 'أكفَّاء (مشددة الفاء) للمكفوف، وأكْفاء (ساكنة الكاف) للكفؤ.' },
+    { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'الأصح لغوياً: "هذا مَحَلٌّ لِلشَّكِّ" أم "مَدْعَاةٌ لِلشَّكِّ"؟', options: ['مَدْعَاةٌ أو مَجَالٌ', 'مَحَلٌّ', 'مُحْتَلٌّ', 'كلاهما صحيح'], answer: 0, explanation: 'المحل هو المكان المادي.' },
+    { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'وصف الحزين: "بَائِس" أم "مُبْتَئِس"؟', options: ['مُبْتَئِس (للحزين)', 'بَائِس (للحزين)', 'كلاهما بمعنى الحزن', 'بَئِيس'], answer: 0, explanation: 'المبتئس هو الحزين، أما البائس فهو الفقير شديد الفقر.' },
+    { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'جمع المستشفى الأفصح: "مُسْتَشْفَيَات" أم "مَشَافٍ"؟', options: ['مُسْتَشْفَيَات', 'مَشَافٍ', 'كلاهما صحيح وأفصح', 'مَشْفَيَات'], answer: 0, explanation: 'مستشفيات جمع مستشفى، أما مشافٍ فهي جمع مشفى.' },
+    { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'الصواب: "اِحْتَارَ الأستاذُ في الأمر" أم "حَارَ"؟', options: ['حَارَ الأستاذُ', 'اِحْتَارَ الأستاذُ', 'تَحَيَّرَ فقط', 'كلاهما صحيح'], answer: 0, explanation: 'حارَ وتَحَيَّرَ فصيحتان، ولم يُسمع (احتار) عن العرب.' },
+    { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'نطق الفاكهة: "بَطِّيخ" أم "بِطِّيخ"؟', options: ['بِطِّيخ (بكسر الباء)', 'بَطِّيخ (بفتح الباء)', 'بُطِّيخ (بالضم)', 'كلاهما صحيح'], answer: 0, explanation: 'الفصيح بِطِّيخ بكسر الباء.' },
+    { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'الأصح: "مَدْرَسَةٌ خُصُوصِيَّةٌ" أم "خَاصَّةٌ"؟', options: ['خَاصَّةٌ', 'خُصُوصِيَّةٌ', 'كلاهما صحيح', 'خَوَاصّ'], answer: 0, explanation: 'الخاصة خلاف العامة.' },
+    { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'القول: "حَضَرَ الأستاذُ بِالنِّيَابَةِ عَنِ العَمِيدِ" الصواب هو:', options: ['نِيَابَةً عَنِ العَمِيدِ', 'بِالنِّيَابَةِ عَنِ', 'نَائِبًا بِـ', 'لا خطأ'], answer: 0, explanation: 'نيابةً مفعول مطلق ناب عن فعله، إدخال الباء غير فصيح.' },
+    { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'الصواب: "هِيَ بِمَثَابَةِ أُمِّي" أم "هِيَ كَأُمِّي / بِمَنْزِلَةِ أُمِّي"؟', options: ['بِمَنْزِلَةِ أُمِّي', 'بِمَثَابَةِ', 'كلاهما فصيح', 'مُثُوبَةِ أُمِّي'], answer: 0, explanation: 'المثابة هي المرجع (وإذ جعلنا البيت مثابة)، واستعمالها بمعنى المنزلة خطأ شائع.' }
 ];
 
         // ==================== نظام الصوت ====================
@@ -384,14 +562,14 @@
             } catch (e) { console.error('Audio error:', e); }
         }
         function soundStart() {
-            playTone(523.25, 0.15, 'sine', 0.3); // C5
-            setTimeout(() => playTone(659.25, 0.15, 'sine', 0.3), 150); // E5
-            setTimeout(() => playTone(783.99, 0.2, 'sine', 0.3), 300); // G5
+            playTone(523.25, 0.15, 'sine', 0.3);
+            setTimeout(() => playTone(659.25, 0.15, 'sine', 0.3), 150);
+            setTimeout(() => playTone(783.99, 0.2, 'sine', 0.3), 300);
         }
         function soundCorrect() {
-            playTone(659.25, 0.12, 'sine', 0.3); // E5
-            setTimeout(() => playTone(783.99, 0.12, 'sine', 0.3), 120); // G5
-            setTimeout(() => playTone(1046.5, 0.25, 'sine', 0.35), 240); // C6
+            playTone(659.25, 0.12, 'sine', 0.3);
+            setTimeout(() => playTone(783.99, 0.12, 'sine', 0.3), 120);
+            setTimeout(() => playTone(1046.5, 0.25, 'sine', 0.35), 240);
         }
         function soundWrong() {
             playTone(300, 0.2, 'sawtooth', 0.2);
@@ -445,6 +623,24 @@
             $('topGold').textContent = gameState.gold;
             $('topName').textContent = gameState.playerName;
         }
+
+        // ==================== شاشة البداية ====================
+        function handleStartGame() {
+            const nameInput = $('playerNameInput');
+            const name = nameInput.value.trim();
+            if (!name) {
+                nameInput.focus();
+                alert('من فضلك أدخل اسمك');
+                return;
+            }
+            gameState.playerName = name;
+            saveState();
+            updateTopBar();
+            showScreen('screenMap');
+            renderKingdomGrid();
+        }
+        $('startGameBtn').addEventListener('click', handleStartGame);
+        $('playerNameInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleStartGame(); });
 
         // ==================== الخريطة ====================
         function renderKingdomGrid() {
@@ -517,6 +713,8 @@
             $('levelTitle').textContent = `${kingdom.name} - المرحلة ${levelNumber}`;
             $('levelSubtitle').textContent = kingdom.description;
             answerLocked = false;
+            $('nextBtn').classList.add('hidden');
+            $('finishLevelBtn').classList.add('hidden');
             soundStart();
             renderQuestion();
         }
@@ -546,6 +744,7 @@
             $('hintBtn').classList.remove('hidden');
             resetTimer();
             answerLocked = false;
+            $('feedbackBox').classList.add('hidden');
         }
 
         function selectAnswer(selectedIndex) {
@@ -576,15 +775,27 @@
                 soundWrong();
             }
             updateTopBar();
-            setTimeout(() => {
-                if (info.currentIndex < info.questions.length - 1) {
-                    info.currentIndex++;
-                    renderQuestion();
-                } else {
-                    finishLevel();
-                }
-            }, 2000);
+            // إظهار زر التالي أو إنهاء المرحلة حسب الموقف
+            if (info.currentIndex < info.questions.length - 1) {
+                $('nextBtn').classList.remove('hidden');
+                $('finishLevelBtn').classList.add('hidden');
+                $('nextBtn').textContent = 'السؤال التالي';
+            } else {
+                $('finishLevelBtn').classList.remove('hidden');
+                $('nextBtn').classList.add('hidden');
+                $('finishLevelBtn').textContent = 'إنهاء المرحلة';
+            }
         }
+
+        $('nextBtn').addEventListener('click', () => {
+            if (!currentLevelInfo) return;
+            currentLevelInfo.currentIndex++;
+            renderQuestion();
+        });
+
+        $('finishLevelBtn').addEventListener('click', () => {
+            finishLevel();
+        });
 
         function resetTimer() {
             clearInterval(levelTimerInterval);
@@ -639,6 +850,15 @@
             $('completeMessage').textContent = `أجبت على ${info.correct} من أصل ${info.questions.length} أسئلة صحيحة.`;
             soundFinish();
             showScreen('screenLevelComplete');
+        }
+
+        function endLevelEarly() {
+            if (!currentLevelInfo) return;
+            if (confirm('هل تريد إنهاء اللعب والعودة إلى الخريطة؟')) {
+                clearInterval(levelTimerInterval);
+                showScreen('screenMap');
+                renderKingdomGrid();
+            }
         }
 
         function goBackToMap() {
@@ -787,9 +1007,15 @@
         function init() {
             loadState();
             updateTopBar();
-            renderKingdomGrid();
-            renderLibrary();
+            // تعيين اسم اللاعب في حقل الإدخال إن وجد
+            $('playerNameInput').value = gameState.playerName || '';
+            // تعيين سنة الحقوق
+            $('year').textContent = new Date().getFullYear();
+            // عرض شاشة البداية
+            showScreen('screenStart');
+            // إخفاء شاشة التحميل
             setTimeout(() => { $('loadingScreen').style.display = 'none'; }, 500);
+            // ربط الأزرار العامة
             document.querySelectorAll('[onclick="showScreen(\'screenLibrary\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenLibrary'); renderLibrary(); }));
             document.querySelectorAll('[onclick="showScreen(\'screenAchievements\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenAchievements'); renderAchievements(); }));
             document.querySelectorAll('[onclick="goBackToMap()"]').forEach(el => el.addEventListener('click', goBackToMap));
@@ -798,4 +1024,4 @@
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-    </html>
+</html>
