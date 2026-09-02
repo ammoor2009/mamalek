@@ -1,5746 +1,1008 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>فرسان اللغة العربية</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-
-<style>
-
-*{
-    box-sizing:border-box;
-}
-
-html,
-body{
-    margin:0;
-    min-height:100%;
-}
-
-body{
-    font-family:'Tajawal',sans-serif;
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(124,58,237,.22),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom left,
-            rgba(14,165,233,.16),
-            transparent 35%
-        ),
-        #070b18;
-    color:#fff;
-    overflow-x:hidden;
-}
-
-button,
-input{
-    font-family:inherit;
-}
-
-.background-glow{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:-1;
-}
-
-.glow{
-    position:absolute;
-    width:420px;
-    height:420px;
-    border-radius:50%;
-    filter:blur(100px);
-    opacity:.18;
-}
-
-.glow-1{
-    background:#7c3aed;
-    top:-180px;
-    right:-120px;
-}
-
-.glow-2{
-    background:#0ea5e9;
-    bottom:-180px;
-    left:-120px;
-}
-
-.glow-3{
-    background:#f59e0b;
-    top:40%;
-    left:45%;
-    opacity:.08;
-}
-
-.glass{
-    background:rgba(15,23,42,.72);
-    border:1px solid rgba(255,255,255,.09);
-    box-shadow:
-        0 25px 80px rgba(0,0,0,.35),
-        inset 0 1px 0 rgba(255,255,255,.05);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-}
-
-.glass-light{
-    background:rgba(255,255,255,.055);
-    border:1px solid rgba(255,255,255,.08);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-}
-
-.game-header{
-    position:sticky;
-    top:0;
-    z-index:50;
-    background:rgba(7,11,24,.78);
-    border-bottom:1px solid rgba(255,255,255,.07);
-    backdrop-filter:blur(18px);
-}
-
-.btn{
-    border:none;
-    cursor:pointer;
-    transition:.18s ease;
-    font-weight:800;
-}
-
-.btn:hover:not(:disabled){
-    transform:translateY(-2px);
-}
-
-.btn:active:not(:disabled){
-    transform:scale(.97);
-}
-
-.btn-primary{
-    background:linear-gradient(
-        135deg,
-        #7c3aed,
-        #4f46e5
-    );
-
-    box-shadow:
-        0 12px 30px rgba(99,102,241,.25);
-}
-
-.btn-success{
-    background:linear-gradient(
-        135deg,
-        #10b981,
-        #059669
-    );
-}
-
-.btn-danger{
-    background:linear-gradient(
-        135deg,
-        #ef4444,
-        #dc2626
-    );
-}
-
-.btn-warning{
-    background:linear-gradient(
-        135deg,
-        #f59e0b,
-        #d97706
-    );
-}
-
-.btn-secondary{
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.08);
-}
-
-.btn:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-}
-
-.input{
-    width:100%;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.1);
-    color:#fff;
-    outline:none;
-    transition:.2s ease;
-}
-
-.input:focus{
-    border-color:rgba(129,140,248,.8);
-    box-shadow:
-        0 0 0 4px rgba(99,102,241,.1);
-}
-
-.screen{
-    display:none;
-}
-
-.screen.active{
-    display:block;
-}
-
-.logo-mark{
-    width:64px;
-    height:64px;
-    border-radius:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(124,58,237,.95),
-            rgba(37,99,235,.95)
-        );
-
-    box-shadow:
-        0 15px 40px rgba(79,70,229,.35),
-        inset 0 1px 0 rgba(255,255,255,.25);
-}
-
-.player-card{
-    position:relative;
-    transition:.2s ease;
-}
-
-.player-card.active-player{
-    border-color:rgba(129,140,248,.8);
-
-    box-shadow:
-        0 0 0 1px rgba(129,140,248,.35),
-        0 20px 50px rgba(79,70,229,.15);
-
-    transform:translateY(-3px);
-}
-
-.player-card.you{
-    border-color:rgba(16,185,129,.5);
-}
-
-.player-avatar{
-    width:48px;
-    height:48px;
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-weight:900;
-    font-size:18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(124,58,237,.9),
-            rgba(37,99,235,.9)
-        );
-}
-
-.question-card{
-    min-height:250px;
-}
-
-.question-text{
-    font-family:'Amiri',serif;
-    line-height:1.8;
-}
-
-.option{
-    width:100%;
-    text-align:right;
-
-    padding:17px 18px;
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,.055);
-    border:1px solid rgba(255,255,255,.08);
-
-    color:#fff;
-    cursor:pointer;
-
-    transition:.18s ease;
-}
-
-.option:hover:not(.disabled){
-    background:rgba(99,102,241,.15);
-    border-color:rgba(129,140,248,.45);
-    transform:translateY(-2px);
-}
-
-.option.selected{
-    background:rgba(99,102,241,.25);
-    border-color:rgba(129,140,248,.75);
-}
-
-.option.correct{
-    background:rgba(16,185,129,.18);
-    border-color:rgba(16,185,129,.8);
-}
-
-.option.wrong{
-    background:rgba(239,68,68,.18);
-    border-color:rgba(239,68,68,.8);
-}
-
-.option.disabled{
-    cursor:default;
-    opacity:.85;
-}
-
-.option-letter{
-    width:34px;
-    height:34px;
-    min-width:34px;
-
-    border-radius:10px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(255,255,255,.08);
-
-    font-weight:900;
-}
-
-.timer-ring{
-    width:105px;
-    height:105px;
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #10182d 57%,
-            transparent 58%
-        ),
-        conic-gradient(
-            #818cf8 var(--progress),
-            rgba(255,255,255,.08) 0
-        );
-
-    box-shadow:
-        0 15px 45px rgba(79,70,229,.22);
-}
-
-.timer-number{
-    font-size:30px;
-    font-weight:900;
-}
-
-.timer-danger{
-    background:
-        radial-gradient(
-            circle at center,
-            #271015 57%,
-            transparent 58%
-        ),
-        conic-gradient(
-            #ef4444 var(--progress),
-            rgba(255,255,255,.08) 0
-        );
-}
-
-.buzz-button{
-    width:190px;
-    height:190px;
-
-    border-radius:50%;
-
-    border:10px solid rgba(255,255,255,.08);
-
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            rgba(255,255,255,.25),
-            transparent 25%
-        ),
-        linear-gradient(
-            145deg,
-            #ef4444,
-            #991b1b
-        );
-
-    box-shadow:
-        0 25px 60px rgba(239,68,68,.28),
-        inset 0 3px 5px rgba(255,255,255,.2);
-
-    color:#fff;
-    cursor:pointer;
-
-    transition:.12s ease;
-
-    font-weight:900;
-}
-
-.buzz-button:hover:not(:disabled){
-    transform:scale(1.04);
-}
-
-.buzz-button:active:not(:disabled){
-    transform:scale(.94);
-}
-
-.buzz-button:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-    filter:grayscale(.7);
-}
-
-.score-number{
-    font-size:34px;
-    font-weight:900;
-}
-
-.round-badge{
-    background:
-        linear-gradient(
-            135deg,
-            rgba(124,58,237,.3),
-            rgba(37,99,235,.2)
-        );
-
-    border:1px solid rgba(129,140,248,.3);
-}
-
-.rank-1{
-    border-color:rgba(250,204,21,.55);
-    background:rgba(250,204,21,.07);
-}
-
-.rank-2{
-    border-color:rgba(203,213,225,.35);
-    background:rgba(203,213,225,.04);
-}
-
-.rank-3{
-    border-color:rgba(180,83,9,.35);
-    background:rgba(180,83,9,.04);
-}
-
-#toast{
-    position:fixed;
-
-    left:50%;
-    bottom:25px;
-
-    transform:
-        translateX(-50%)
-        translateY(30px);
-
-    opacity:0;
-    pointer-events:none;
-
-    z-index:999;
-
-    transition:.25s ease;
-}
-
-#toast.show{
-    opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
-
-@keyframes pulse{
-
-    0%,100%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.04);
-    }
-
-}
-
-.pulse{
-    animation:pulse 1.2s infinite;
-}
-
-.connection-online{
-    color:#34d399;
-}
-
-.connection-offline{
-    color:#f87171;
-}
-
-.room-code{
-    letter-spacing:.35em;
-}
-
-@media(max-width:640px){
-
-    .buzz-button{
-        width:155px;
-        height:155px;
-    }
-
-    .timer-ring{
-        width:90px;
-        height:90px;
-    }
-
-    .timer-number{
-        font-size:25px;
-    }
-
-    .question-text{
-        font-size:24px!important;
-    }
-
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة الفارس اللغوي</title>
+    <!-- خطوط عربية -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* تخصيصات إضافية */
+        :root {
+            --gold: #fbbf24;
+            --royal: #4f46e5;
+            --emerald: #10b981;
+            --orange: #f59e0b;
+            --purple: #8b5cf6;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #0f172a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .font-amiri { font-family: 'Amiri', serif; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .map-kingdom {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .map-kingdom.locked { opacity: 0.5; cursor: not-allowed; }
+        .map-kingdom:not(.locked):hover { transform: translateY(-5px); }
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+        }
+        .btn-primary:hover { transform: translateY(-2px); }
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            transition: width 0.5s ease;
+        }
+        /* تأثيرات */
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+        }
+        .pulse-gold { animation: pulse-gold 1.5s infinite; }
+        /* شاشة تحميل */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            background: #0f172a;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #fbbf24;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
-
 <body>
-
-<div class="background-glow">
-
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
-    <div class="glow glow-3"></div>
-
-</div>
-
-
-<!-- ============================================================
-     HEADER
-============================================================ -->
-
-<header class="game-header">
-
-<div class="max-w-7xl mx-auto px-4 py-3">
-
-<div class="flex items-center justify-between gap-4">
-
-<div class="flex items-center gap-3">
-
-<div class="logo-mark">
-
-<i class="fa-solid fa-scroll text-2xl"></i>
-
-</div>
-
-<div>
-
-<h1 class="font-black text-lg md:text-xl">
-فرسان اللغة العربية
-</h1>
-
-<p class="text-xs text-slate-400">
-تحدّي النحو واللغة
-</p>
-
-</div>
-
-</div>
-
-
-<div
-id="connectionBadge"
-class="flex items-center gap-2 px-3 py-2 rounded-xl glass-light text-xs"
->
-
-<span
-id="connectionDot"
-class="w-2 h-2 rounded-full bg-yellow-400"
-></span>
-
-<span id="connectionText">
-جاري الاتصال...
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-</header>
-
-
-<main class="max-w-7xl mx-auto px-4 py-8">
-
-
-<!-- ============================================================
-     LOBBY
-============================================================ -->
-
-<section id="screenLobby" class="screen active">
-
-<div class="max-w-4xl mx-auto">
-
-<div class="text-center mb-10">
-
-<div
-class="inline-flex items-center gap-2 px-4 py-2 rounded-full round-badge mb-5"
->
-
-<i class="fa-solid fa-crown text-yellow-300"></i>
-
-<span class="text-sm font-bold">
-لعبة تنافسية لغوية مباشرة
-</span>
-
-</div>
-
-
-<h2 class="text-4xl md:text-6xl font-black leading-tight mb-5">
-
-هل أنت فارس
-
-<span class="text-indigo-400">
-العربية؟
-</span>
-
-</h2>
-
-
-<p class="text-slate-400 max-w-2xl mx-auto leading-8">
-
-تنافس مع لاعبين حقيقيين في جولات سريعة
-لاختبار النحو والصرف والإملاء والأساليب العربية.
-
-</p>
-
-</div>
-
-
-<div class="glass rounded-3xl p-6 md:p-10">
-
-<div class="max-w-xl mx-auto">
-
-<label class="block mb-3 font-bold">
-اسم الفارس
-</label>
-
-
-<input
-id="playerNameInput"
-class="input rounded-2xl px-5 py-4 text-lg"
-maxlength="24"
-placeholder="اكتب اسمك هنا"
-autocomplete="off"
->
-
-
-<button
-id="enterGameButton"
-class="btn btn-primary w-full mt-5 rounded-2xl py-4 text-lg"
->
-
-<i class="fa-solid fa-door-open ml-2"></i>
-
-دخول إلى المباراة
-
-</button>
-
-
-<div class="grid grid-cols-3 gap-3 mt-8">
-
-<div class="glass-light rounded-2xl p-4 text-center">
-
-<i class="fa-solid fa-users text-indigo-400 text-xl mb-2"></i>
-
-<div class="font-black">
-3
-</div>
-
-<div class="text-xs text-slate-400">
-لاعبين
-</div>
-
-</div>
-
-
-<div class="glass-light rounded-2xl p-4 text-center">
-
-<i class="fa-solid fa-bolt text-yellow-400 text-xl mb-2"></i>
-
-<div class="font-black">
-18
-</div>
-
-<div class="text-xs text-slate-400">
-جولة
-</div>
-
-</div>
-
-
-<div class="glass-light rounded-2xl p-4 text-center">
-
-<i class="fa-solid fa-book text-emerald-400 text-xl mb-2"></i>
-
-<div class="font-black">
-100
-</div>
-
-<div class="text-xs text-slate-400">
-سؤال
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="text-center text-xs text-slate-500 mt-6">
-د. عمر الرواجفة
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- ============================================================
-     WAITING
-============================================================ -->
-
-<section id="screenWaiting" class="screen">
-
-<div class="max-w-4xl mx-auto">
-
-<div class="glass rounded-3xl p-6 md:p-10">
-
-<div class="text-center mb-8">
-
-<div
-class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-indigo-500/10 mb-5"
->
-
-<i class="fa-solid fa-users text-3xl text-indigo-400"></i>
-
-</div>
-
-
-<h2 class="text-3xl font-black mb-3">
-غرفة المباراة
-</h2>
-
-
-<p id="waitingText" class="text-slate-400">
-في انتظار الفرسان...
-</p>
-
-
-<div class="mt-4 flex justify-center">
-
-<div class="glass-light rounded-xl px-5 py-3">
-
-<span class="text-xs text-slate-500">
-رمز الغرفة
-</span>
-
-<div
-id="roomCode"
-class="font-black text-xl room-code text-indigo-300"
->
-—
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div
-class="grid md:grid-cols-3 gap-4"
-id="waitingPlayers"
->
-</div>
-
-
-<div class="mt-8">
-
-<div class="flex justify-between text-sm mb-2">
-
-<span class="text-slate-400">
-اكتمال الغرفة
-</span>
-
-<span id="roomCount" class="font-bold">
-1 / 3
-</span>
-
-</div>
-
-
-<div class="h-3 rounded-full bg-white/5 overflow-hidden">
-
-<div
-id="roomProgress"
-class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all"
-style="width:33%"
->
-</div>
-
-</div>
-
-</div>
-
-
-<div class="text-center mt-8">
-
-<button
-id="leaveRoomButton"
-class="btn btn-secondary rounded-2xl px-6 py-3"
->
-
-<i class="fa-solid fa-arrow-right-from-bracket ml-2"></i>
-
-مغادرة
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- ============================================================
-     GAME
-============================================================ -->
-
-<section id="screenGame" class="screen">
-
-
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-
-
-<div class="glass rounded-2xl p-4">
-
-<div class="flex items-center justify-between">
-
-<div>
-
-<div class="text-xs text-slate-400">
-الجولة
-</div>
-
-<div id="roundNumber" class="text-xl font-black">
-1 / 18
-</div>
-
-</div>
-
-
-<div
-id="roundTypeBadge"
-class="round-badge px-3 py-2 rounded-xl text-xs font-bold"
->
-سرعة
-</div>
-
-</div>
-
-</div>
-
-
-<div class="glass rounded-2xl p-4 text-center">
-
-<div class="text-xs text-slate-400 mb-1">
-حالة الجولة
-</div>
-
-<div
-id="gameStatus"
-class="font-black text-indigo-300"
->
-استعد...
-</div>
-
-</div>
-
-
-<div class="glass rounded-2xl p-4">
-
-<div class="flex items-center justify-between">
-
-<div>
-
-<div class="text-xs text-slate-400">
-دور اللاعب
-</div>
-
-<div id="currentTurnName" class="font-black">
-—
-</div>
-
-</div>
-
-<i class="fa-solid fa-user-clock text-indigo-400 text-xl"></i>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div
-id="gamePlayers"
-class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5"
->
-</div>
-
-
-
-<div class="grid lg:grid-cols-[1fr_170px] gap-5 items-start">
-
-
-<div class="glass rounded-3xl p-5 md:p-8">
-
-
-<div class="flex items-center justify-between gap-3 mb-7">
-
-
-<div class="flex items-center gap-3">
-
-
-<div
-id="questionTypeIcon"
-class="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center"
->
-
-<i class="fa-solid fa-circle-question text-indigo-400 text-xl"></i>
-
-</div>
-
-
-<div>
-
-<div id="questionTypeTitle" class="font-black">
-ضع دائرة
-</div>
-
-<div
-id="questionTypeHint"
-class="text-xs text-slate-500"
->
-اختر الإجابة الصحيحة
-</div>
-
-</div>
-
-</div>
-
-
-<div class="text-xs text-slate-500">
-
-السؤال
-
-<span id="questionIndex">
-1
-</span>
-
-</div>
-
-</div>
-
-
-
-<div class="question-card flex flex-col justify-center">
-
-<div
-id="questionText"
-class="question-text text-2xl md:text-4xl font-bold text-center leading-loose"
->
-—
-</div>
-
-</div>
-
-
-<div
-id="optionsContainer"
-class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-7"
->
-</div>
-
-
-<div
-id="answerFeedback"
-class="hidden mt-6 rounded-2xl p-5"
->
-
-<div
-id="feedbackTitle"
-class="font-black text-lg mb-2"
->
-</div>
-
-<div
-id="feedbackText"
-class="text-sm text-slate-300 leading-7"
->
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="glass rounded-3xl p-5 flex flex-col items-center">
-
-
-<div class="text-xs text-slate-500 mb-3">
-الوقت
-</div>
-
-
-<div
-id="timerRing"
-class="timer-ring"
-style="--progress:100%"
->
-
-<span id="timerNumber" class="timer-number">
-15
-</span>
-
-</div>
-
-
-<div
-id="timerHint"
-class="text-xs text-slate-500 text-center mt-4 leading-6"
->
-استعد
-</div>
-
-
-<button
-id="buzzButton"
-class="buzz-button mt-6"
-disabled
->
-
-<i class="fa-solid fa-bolt text-3xl block mb-2"></i>
-
-اضغط!
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- ============================================================
-     RESULTS
-============================================================ -->
-
-<section id="screenResults" class="screen">
-
-<div class="max-w-4xl mx-auto">
-
-
-<div class="text-center mb-8">
-
-<div
-class="inline-flex w-24 h-24 rounded-full bg-yellow-500/10 items-center justify-center mb-5"
->
-
-<i class="fa-solid fa-trophy text-4xl text-yellow-400"></i>
-
-</div>
-
-
-<h2 class="text-4xl font-black mb-3">
-انتهت المباراة!
-</h2>
-
-
-<p id="winnerText" class="text-slate-400">
-أحسنتم يا فرسان العربية
-</p>
-
-</div>
-
-
-<div id="resultsList" class="space-y-3">
-</div>
-
-
-<div class="glass rounded-3xl p-6 mt-6">
-
-<div class="grid grid-cols-3 gap-3 text-center">
-
-
-<div>
-
-<div
-id="finalCorrect"
-class="text-2xl font-black text-emerald-400"
->
-0
-</div>
-
-<div class="text-xs text-slate-500">
-إجابات صحيحة
-</div>
-
-</div>
-
-
-<div>
-
-<div
-id="finalRounds"
-class="text-2xl font-black text-indigo-400"
->
-0
-</div>
-
-<div class="text-xs text-slate-500">
-جولات
-</div>
-
-</div>
-
-
-<div>
-
-<div
-id="finalQuestions"
-class="text-2xl font-black text-yellow-400"
->
-0
-</div>
-
-<div class="text-xs text-slate-500">
-أسئلة
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<button
-id="newGameButton"
-class="btn btn-primary w-full mt-6 rounded-2xl py-4"
->
-
-<i class="fa-solid fa-rotate ml-2"></i>
-
-مباراة جديدة
-
-</button>
-
-</div>
-
-</section>
-
-</main>
-
-
-
-<div
-id="toast"
-class="glass rounded-2xl px-5 py-4 text-sm font-bold"
->
-</div>
-
-
-
-<script>
-
-/* ============================================================
-   FIREBASE CONFIG
-============================================================ */
-
-const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyCuWOhMwgQJfN3ZA1XnjNL-k7QeJTPXW7w",
-
-    authDomain:
-        "fursan-4a301.firebaseapp.com",
-
-    databaseURL:
-        "https://fursan-4a301-default-rtdb.firebaseio.com",
-
-    projectId:
-        "fursan-4a301",
-
-    storageBucket:
-        "fursan-4a301.firebasestorage.app",
-
-    messagingSenderId:
-        "1010047235572",
-
-    appId:
-        "1:1010047235572:web:809787b10c3e957233b5a1",
-
-    measurementId:
-        "G-RGDDK1NQDF"
-
-};
-
-
-/* ============================================================
-   INITIALIZE FIREBASE
-============================================================ */
-
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.database();
-
-
-
-/* ============================================================
-   GAME CONFIG
-============================================================ */
-
-const GAME_CONFIG = {
-
-    MAX_PLAYERS:3,
-
-    TOTAL_ROUNDS:18,
-
-    SPEED_TIME:15,
-
-    INDIVIDUAL_TIME:15,
-
-    CORRECT_POINTS:10,
-
-    WRONG_POINTS:-5,
-
-    BUZZ_BONUS:3
-
-};
-
-
-
-/* ============================================================
-   QUESTION BANK
-============================================================ */
-
-const QUESTION_BANK = [
-
-{
-id:"q001",
-type:"mcq",
-text:"أيُّ الكلمات الآتية اسمٌ مجرور؟",
-options:[
-"الطالبُ",
-"الكتابَ",
-"في المدرسةِ",
-"يكتبُ"
-],
-answer:2,
-explanation:"المدرسةِ اسم مجرور بحرف الجر في."
-},
-
-{
-id:"q002",
-type:"mcq",
-text:"ما علامة رفع المثنى؟",
-options:[
-"الضمة",
-"الألف",
-"الواو",
-"الياء"
-],
-answer:1,
-explanation:"يرفع المثنى بالألف."
-},
-
-{
-id:"q003",
-type:"mcq",
-text:"أيُّ الجمل الآتية اشتملت على فعل مضارع منصوب؟",
-options:[
-"لن يهملَ الطالبُ درسه.",
-"يكتبُ الطالبُ الدرس.",
-"لم يهملْ الطالبُ درسه.",
-"كتبَ الطالبُ الدرس."
-],
-answer:0,
-explanation:"يهملَ فعل مضارع منصوب بلن."
-},
-
-{
-id:"q004",
-type:"mcq",
-text:"ما إعراب كلمة العلمُ في: العلمُ نورٌ؟",
-options:[
-"خبر مرفوع",
-"مفعول به",
-"مبتدأ مرفوع",
-"فاعل"
-],
-answer:2,
-explanation:"العلمُ مبتدأ مرفوع."
-},
-
-{
-id:"q005",
-type:"mcq",
-text:"أيُّ الأفعال الآتية فعل أمر؟",
-options:[
-"يكتب",
-"كتب",
-"اكتب",
-"لن يكتب"
-],
-answer:2,
-explanation:"اكتب فعل أمر."
-},
-
-{
-id:"q006",
-type:"mcq",
-text:"أيُّ الكلمات الآتية من الأسماء الخمسة؟",
-options:[
-"أخوك",
-"كتابك",
-"قلمك",
-"بيتك"
-],
-answer:0,
-explanation:"أخ من الأسماء الخمسة."
-},
-
-{
-id:"q007",
-type:"mcq",
-text:"ما نوع لكنَّ؟",
-options:[
-"حرف جر",
-"حرف عطف",
-"حرف ناسخ",
-"فعل"
-],
-answer:2,
-explanation:"لكنَّ من أخوات إنَّ."
-},
-
-{
-id:"q008",
-type:"mcq",
-text:"أيُّ الكلمات الآتية ممنوعة من الصرف؟",
-options:[
-"مساجد",
-"كتب",
-"طلاب",
-"معلمون"
-],
-answer:0,
-explanation:"مساجد على صيغة منتهى الجموع."
-},
-
-{
-id:"q009",
-type:"mcq",
-text:"ما جمع قاضٍ؟",
-options:[
-"قاضون",
-"قضاة",
-"قاضيات",
-"قُضّاء"
-],
-answer:1,
-explanation:"جمع قاضٍ هو قضاة."
-},
-
-{
-id:"q010",
-type:"mcq",
-text:"أيُّ الكلمات الآتية اسم تفضيل؟",
-options:[
-"كبير",
-"أكبر",
-"تكبير",
-"كبّر"
-],
-answer:1,
-explanation:"أكبر اسم تفضيل."
-},
-
-{
-id:"q011",
-type:"mcq",
-text:"ما نوع الذي في: جاء الطالب الذي نجح؟",
-options:[
-"اسم إشارة",
-"اسم موصول",
-"اسم استفهام",
-"ضمير"
-],
-answer:1,
-explanation:"الذي اسم موصول."
-},
-
-{
-id:"q012",
-type:"mcq",
-text:"أيُّ الجمل الآتية جملة اسمية؟",
-options:[
-"نجح الطالب.",
-"يقرأ محمد.",
-"السماء صافية.",
-"اكتب الدرس."
-],
-answer:2,
-explanation:"بدأت الجملة باسم."
-},
-
-{
-id:"q013",
-type:"mcq",
-text:"ما إعراب المعلم في: كرّم المديرُ المعلمَ؟",
-options:[
-"فاعل",
-"مفعول به",
-"مبتدأ",
-"خبر"
-],
-answer:1,
-explanation:"المعلمَ مفعول به منصوب."
-},
-
-{
-id:"q014",
-type:"mcq",
-text:"أيُّ الكلمات الآتية فعل ماضٍ مبني على الفتح؟",
-options:[
-"كتبَ",
-"كتبوا",
-"اكتبْ",
-"يكتبُ"
-],
-answer:0,
-explanation:"كتبَ فعل ماضٍ مبني على الفتح."
-},
-
-{
-id:"q015",
-type:"mcq",
-text:"ما علامة نصب جمع المذكر السالم؟",
-options:[
-"الفتحة",
-"الألف",
-"الياء",
-"الواو"
-],
-answer:2,
-explanation:"ينصب جمع المذكر السالم بالياء."
-},
-
-{
-id:"q016",
-type:"true_false",
-text:"المبتدأ والخبر مرفوعان في الأصل.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"الأصل في المبتدأ والخبر الرفع."
-},
-
-{
-id:"q017",
-type:"true_false",
-text:"الفعل الماضي معرب دائمًا.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"الفعل الماضي مبني."
-},
-
-{
-id:"q018",
-type:"true_false",
-text:"جمع المؤنث السالم يرفع بالضمة وينصب ويجر بالكسرة.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"هذه علاماته الأصلية."
-},
-
-{
-id:"q019",
-type:"true_false",
-text:"إنَّ ترفع المبتدأ وتنصب الخبر.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"إنَّ تنصب الاسم وترفع الخبر."
-},
-
-{
-id:"q020",
-type:"true_false",
-text:"الفعل المضارع يبنى إذا اتصلت به نون التوكيد أو نون النسوة.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"يبنى المضارع مع نون التوكيد ونون النسوة."
-},
-
-{
-id:"q021",
-type:"true_false",
-text:"الفاعل يكون منصوبًا.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"الفاعل مرفوع."
-},
-
-{
-id:"q022",
-type:"true_false",
-text:"المفعول به يكون منصوبًا في الأصل.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"المفعول به من المنصوبات."
-},
-
-{
-id:"q023",
-type:"true_false",
-text:"الأسماء الخمسة ترفع بالواو وتنصب بالألف وتجر بالياء.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"هذه علامات إعراب الأسماء الخمسة."
-},
-
-{
-id:"q024",
-type:"true_false",
-text:"لم تنصب الفعل المضارع.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"لم تجزم المضارع."
-},
-
-{
-id:"q025",
-type:"true_false",
-text:"لن من أدوات نصب الفعل المضارع.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"لن تنصب المضارع."
-},
-
-{
-id:"q026",
-type:"grammar",
-text:"ما الإعراب الصحيح لكلمة الطالبُ في: نجح الطالبُ؟",
-options:[
-"فاعل مرفوع",
-"مفعول به منصوب",
-"مبتدأ مرفوع",
-"خبر مرفوع"
-],
-answer:0,
-explanation:"الطالب فاعل مرفوع."
-},
-
-{
-id:"q027",
-type:"grammar",
-text:"ما الإعراب الصحيح لكلمة الدرسَ في: قرأ الطالبُ الدرسَ؟",
-options:[
-"فاعل",
-"مفعول به",
-"حال",
-"تمييز"
-],
-answer:1,
-explanation:"الدرس مفعول به منصوب."
-},
-
-{
-id:"q028",
-type:"grammar",
-text:"ما إعراب مجتهدٌ في: الطالبُ مجتهدٌ؟",
-options:[
-"فاعل",
-"خبر",
-"نعت",
-"حال"
-],
-answer:1,
-explanation:"مجتهدٌ خبر المبتدأ."
-},
-
-{
-id:"q029",
-type:"grammar",
-text:"ما إعراب في المدرسة في: يدرس الطالب في المدرسة؟",
-options:[
-"مفعول به",
-"جار ومجرور",
-"حال",
-"مفعول مطلق"
-],
-answer:1,
-explanation:"في حرف جر والمدرسة اسم مجرور."
-},
-
-{
-id:"q030",
-type:"grammar",
-text:"ما إعراب سريعًا في: عاد اللاعب سريعًا؟",
-options:[
-"حال",
-"مفعول به",
-"خبر",
-"فاعل"
-],
-answer:0,
-explanation:"سريعًا حال منصوب."
-},
-
-{
-id:"q031",
-type:"grammar",
-text:"ما إعراب علمًا في: ازداد الطالب علمًا؟",
-options:[
-"حال",
-"تمييز",
-"مفعول به",
-"فاعل"
-],
-answer:1,
-explanation:"علمًا تمييز منصوب."
-},
-
-{
-id:"q032",
-type:"grammar",
-text:"ما إعراب اجتهادًا في: اجتهد الطالب اجتهادًا؟",
-options:[
-"مفعول مطلق",
-"مفعول به",
-"حال",
-"تمييز"
-],
-answer:0,
-explanation:"اجتهادًا مفعول مطلق."
-},
-
-{
-id:"q033",
-type:"grammar",
-text:"ما إعراب صباحًا في: سافرت صباحًا؟",
-options:[
-"ظرف زمان",
-"مفعول به",
-"حال",
-"تمييز"
-],
-answer:0,
-explanation:"صباحًا ظرف زمان."
-},
-
-{
-id:"q034",
-type:"grammar",
-text:"ما إعراب أخوك في: جاء أخوك؟",
-options:[
-"فاعل مرفوع بالواو",
-"فاعل مرفوع بالضمة",
-"مفعول به",
-"مبتدأ"
-],
-answer:0,
-explanation:"أخوك فاعل مرفوع بالواو."
-},
-
-{
-id:"q035",
-type:"grammar",
-text:"ما إعراب المهندسين في: قابلت المهندسين؟",
-options:[
-"مفعول به منصوب بالياء",
-"فاعل مرفوع بالواو",
-"مفعول به منصوب بالفتحة",
-"اسم مجرور"
-],
-answer:0,
-explanation:"المهندسين جمع مذكر سالم منصوب بالياء."
-},
-
-{
-id:"q036",
-type:"marker",
-text:"ما علامة رفع جمع المذكر السالم؟",
-options:[
-"الضمة",
-"الواو",
-"الألف",
-"الياء"
-],
-answer:1,
-explanation:"يرفع جمع المذكر السالم بالواو."
-},
-
-{
-id:"q037",
-type:"marker",
-text:"ما علامة نصب المثنى؟",
-options:[
-"الألف",
-"الواو",
-"الياء",
-"الكسرة"
-],
-answer:2,
-explanation:"ينصب المثنى بالياء."
-},
-
-{
-id:"q038",
-type:"marker",
-text:"ما علامة جر جمع المؤنث السالم؟",
-options:[
-"الكسرة",
-"الياء",
-"الفتحة",
-"الألف"
-],
-answer:0,
-explanation:"يجر جمع المؤنث السالم بالكسرة."
-},
-
-{
-id:"q039",
-type:"marker",
-text:"ما علامة نصب الأسماء الخمسة؟",
-options:[
-"الضمة",
-"الواو",
-"الألف",
-"الياء"
-],
-answer:2,
-explanation:"تنصب الأسماء الخمسة بالألف."
-},
-
-{
-id:"q040",
-type:"marker",
-text:"ما علامة جزم الفعل المضارع الصحيح الآخر؟",
-options:[
-"الفتحة",
-"السكون",
-"الضمة",
-"الياء"
-],
-answer:1,
-explanation:"يجزم بالسكون."
-},
-
-{
-id:"q041",
-type:"marker",
-text:"ما علامة نصب الفعل المضارع الصحيح الآخر؟",
-options:[
-"الفتحة",
-"السكون",
-"الواو",
-"الألف"
-],
-answer:0,
-explanation:"ينصب بالفتحة."
-},
-
-{
-id:"q042",
-type:"fill",
-text:"أكمل: إنَّ الطالبَ ..........",
-options:[
-"مجتهدٌ",
-"مجتهدًا",
-"مجتهدٍ",
-"مجتهدان"
-],
-answer:0,
-explanation:"خبر إن مرفوع."
-},
-
-{
-id:"q043",
-type:"fill",
-text:"أكمل: كان الجوُّ ..........",
-options:[
-"جميلًا",
-"جميلٌ",
-"جميلٍ",
-"جمالًا"
-],
-answer:0,
-explanation:"خبر كان منصوب."
-},
-
-{
-id:"q044",
-type:"fill",
-text:"أكمل: لن .......... الطالبُ واجبه.",
-options:[
-"يهملَ",
-"يهملْ",
-"يهملُ",
-"أهملَ"
-],
-answer:0,
-explanation:"لن تنصب المضارع."
-},
-
-{
-id:"q045",
-type:"fill",
-text:"أكمل: لم .......... الطالبُ درسه.",
-options:[
-"يهملَ",
-"يهملْ",
-"يهملُ",
-"أهملَ"
-],
-answer:1,
-explanation:"لم تجزم المضارع."
-},
-
-{
-id:"q046",
-type:"fill",
-text:"أكمل: جاء الطالبان ..........",
-options:[
-"مجتهدين",
-"مجتهدان",
-"مجتهدون",
-"مجتهدًا"
-],
-answer:1,
-explanation:"مجتهدان نعت مرفوع بالألف."
-},
-
-{
-id:"q047",
-type:"fill",
-text:"أكمل: أصبح الطالب ..........",
-options:[
-"مجتهدًا",
-"مجتهدٌ",
-"مجتهدٍ",
-"مجتهدان"
-],
-answer:0,
-explanation:"خبر أصبح منصوب."
-},
-
-{
-id:"q048",
-type:"fill",
-text:"أكمل: إنَّ المعلمين ..........",
-options:[
-"مخلصون",
-"مخلصين",
-"مخلصان",
-"مخلصات"
-],
-answer:0,
-explanation:"خبر إن مرفوع بالواو."
-},
-
-{
-id:"q049",
-type:"fill",
-text:"أكمل: مررتُ بـ ..........",
-options:[
-"أخوك",
-"أخاك",
-"أخيك",
-"أخيُك"
-],
-answer:2,
-explanation:"أخيك مجرور بالياء."
-},
-
-{
-id:"q050",
-type:"correct_error",
-text:"صحّح: إنَّ الطالبُ مجتهدٌ.",
-options:[
-"إنَّ الطالبَ مجتهدٌ.",
-"إنَّ الطالبِ مجتهدٌ.",
-"إنَّ الطالبَ مجتهدًا.",
-"إنَّ الطالبُ مجتهدًا."
-],
-answer:0,
-explanation:"اسم إن منصوب."
-},
-
-{
-id:"q051",
-type:"correct_error",
-text:"صحّح: لن يهملْ الطالبُ درسه.",
-options:[
-"لن يهملَ الطالبُ درسه.",
-"لن يهملُ الطالبُ درسه.",
-"لن يهملِ الطالبُ درسه.",
-"لن أهملْ الطالبُ درسه."
-],
-answer:0,
-explanation:"الفعل بعد لن منصوب."
-},
-
-{
-id:"q052",
-type:"correct_error",
-text:"صحّح: جاء الطالبانِ مبكرينِ.",
-options:[
-"جاء الطالبانِ مبكرانِ.",
-"جاء الطالبينِ مبكرينِ.",
-"جاء الطالبانِ مبكرًا.",
-"جاء الطالبونِ مبكرينِ."
-],
-answer:0,
-explanation:"الطالبان ومبكران مرفوعان."
-},
-
-{
-id:"q053",
-type:"correct_error",
-text:"صحّح: مررتُ بأخوك.",
-options:[
-"مررتُ بأخيك.",
-"مررتُ بأخاك.",
-"مررتُ بأخوك.",
-"مررتُ بأخي."
-],
-answer:0,
-explanation:"أخيك مجرور بالياء."
-},
-
-{
-id:"q054",
-type:"correct_error",
-text:"صحّح: لم يكتبُ الطالبُ.",
-options:[
-"لم يكتبَ الطالبُ.",
-"لم يكتبْ الطالبُ.",
-"لم كتبْ الطالبُ.",
-"لم يكتبِ الطالبُ."
-],
-answer:1,
-explanation:"لم تجزم المضارع بالسكون."
-},
-
-{
-id:"q055",
-type:"mcq",
-text:"أيُّ الأفعال الآتية من الأفعال الخمسة؟",
-options:[
-"يكتبون",
-"كتب",
-"اكتب",
-"كتبوا"
-],
-answer:0,
-explanation:"يكتبون من الأفعال الخمسة."
-},
-
-{
-id:"q056",
-type:"mcq",
-text:"أيُّ الأدوات الآتية تجزم فعلين؟",
-options:[
-"لن",
-"إنْ",
-"أنْ",
-"كي"
-],
-answer:1,
-explanation:"إنْ الشرطية تجزم فعلين."
-},
-
-{
-id:"q057",
-type:"mcq",
-text:"ما نوع من في: من يجتهدْ ينجحْ؟",
-options:[
-"اسم شرط",
-"اسم استفهام",
-"اسم موصول",
-"حرف جر"
-],
-answer:0,
-explanation:"من اسم شرط جازم."
-},
-
-{
-id:"q058",
-type:"mcq",
-text:"ما نوع ما في: ما أجملَ السماءَ!",
-options:[
-"نافية",
-"استفهامية",
-"تعجبية",
-"موصولة"
-],
-answer:2,
-explanation:"ما هنا تعجبية."
-},
-
-{
-id:"q059",
-type:"mcq",
-text:"أيُّ الكلمات الآتية مصدر؟",
-options:[
-"كتب",
-"كاتب",
-"كتابة",
-"مكتوب"
-],
-answer:2,
-explanation:"كتابة مصدر."
-},
-
-{
-id:"q060",
-type:"mcq",
-text:"ما اسم المفعول من كتب؟",
-options:[
-"كاتب",
-"مكتوب",
-"كتاب",
-"كتابة"
-],
-answer:1,
-explanation:"مكتوب اسم مفعول."
-},
-
-{
-id:"q061",
-type:"mcq",
-text:"ما اسم الفاعل من نصر؟",
-options:[
-"منصور",
-"ناصر",
-"نصر",
-"نصير"
-],
-answer:1,
-explanation:"ناصر اسم فاعل."
-},
-
-{
-id:"q062",
-type:"mcq",
-text:"أيُّ الكلمات الآتية فعل لازم؟",
-options:[
-"قرأ الطالب الكتاب.",
-"نام الطفل.",
-"كتب الطالب الدرس.",
-"حفظ الطالب القصيدة."
-],
-answer:1,
-explanation:"نام لا يحتاج إلى مفعول به."
-},
-
-{
-id:"q063",
-type:"mcq",
-text:"ما نوع العلم في: طالب العلم محبوب؟",
-options:[
-"مضاف إليه",
-"مفعول به",
-"فاعل",
-"حال"
-],
-answer:0,
-explanation:"العلم مضاف إليه مجرور."
-},
-
-{
-id:"q064",
-type:"mcq",
-text:"أيُّ الجمل الآتية تحتوي على نعت؟",
-options:[
-"جاء الطالبُ المجتهدُ.",
-"قرأ الطالبُ الكتابَ.",
-"جلس الطالبُ.",
-"نجح الطالبُ."
-],
-answer:0,
-explanation:"المجتهد نعت."
-},
-
-{
-id:"q065",
-type:"true_false",
-text:"الصفة تتبع الموصوف في الإعراب.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"النعت يتبع منعوته في الإعراب."
-},
-
-{
-id:"q066",
-type:"true_false",
-text:"الحال يكون معرفة في الأصل.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"الأصل في الحال أن يكون نكرة."
-},
-
-{
-id:"q067",
-type:"true_false",
-text:"المضاف إليه مجرور.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"المضاف إليه مجرور."
-},
-
-{
-id:"q068",
-type:"true_false",
-text:"الفعل المضارع من علامات الاسم.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"المضارع فعل."
-},
-
-{
-id:"q069",
-type:"true_false",
-text:"الألف من علامات الرفع في المثنى.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"المثنى يرفع بالألف."
-},
-
-{
-id:"q070",
-type:"grammar",
-text:"ما إعراب المجتهد في: رأيت الطالبَ المجتهدَ؟",
-options:[
-"نعت منصوب",
-"فاعل",
-"خبر",
-"حال"
-],
-answer:0,
-explanation:"المجتهد نعت منصوب."
-},
-
-{
-id:"q071",
-type:"grammar",
-text:"ما إعراب الكتاب في: كتابُ الطالبِ جديدٌ؟",
-options:[
-"مضاف إليه",
-"مضاف",
-"فاعل",
-"مفعول به"
-],
-answer:1,
-explanation:"كتاب مضاف."
-},
-
-{
-id:"q072",
-type:"grammar",
-text:"ما إعراب الطالب في: كتابُ الطالبِ جديدٌ؟",
-options:[
-"مضاف إليه",
-"مضاف",
-"مبتدأ",
-"خبر"
-],
-answer:0,
-explanation:"الطالب مضاف إليه مجرور."
-},
-
-{
-id:"q073",
-type:"grammar",
-text:"ما إعراب مسرورًا في: عاد الطالب مسرورًا؟",
-options:[
-"حال منصوب",
-"خبر",
-"مفعول به",
-"نعت"
-],
-answer:0,
-explanation:"مسرورًا حال."
-},
-
-{
-id:"q074",
-type:"marker",
-text:"ما علامة جر المثنى؟",
-options:[
-"الألف",
-"الواو",
-"الياء",
-"الكسرة"
-],
-answer:2,
-explanation:"يجر المثنى بالياء."
-},
-
-{
-id:"q075",
-type:"marker",
-text:"ما علامة رفع الأسماء الخمسة؟",
-options:[
-"الواو",
-"الألف",
-"الياء",
-"الضمة"
-],
-answer:0,
-explanation:"ترفع الأسماء الخمسة بالواو."
-},
-
-{
-id:"q076",
-type:"marker",
-text:"ما علامة جر الاسم المفرد الصحيح الآخر؟",
-options:[
-"الفتحة",
-"الكسرة",
-"الياء",
-"الألف"
-],
-answer:1,
-explanation:"علامة الجر الأصلية الكسرة."
-},
-
-{
-id:"q077",
-type:"marker",
-text:"ما علامة رفع الفعل المضارع الصحيح الآخر؟",
-options:[
-"الضمة",
-"الفتحة",
-"السكون",
-"الياء"
-],
-answer:0,
-explanation:"يرفع المضارع الصحيح الآخر بالضمة."
-},
-
-{
-id:"q078",
-type:"correct_error",
-text:"صحّح: إنَّ المعلمون مخلصون.",
-options:[
-"إنَّ المعلمين مخلصون.",
-"إنَّ المعلمون مخلصين.",
-"إنَّ المعلمين مخلصين.",
-"إنَّ المعلمَ مخلصون."
-],
-answer:0,
-explanation:"اسم إن منصوب بالياء."
-},
-
-{
-id:"q079",
-type:"correct_error",
-text:"صحّح: رأيتُ الطالبانِ.",
-options:[
-"رأيتُ الطالبانِ.",
-"رأيتُ الطالبينِ.",
-"رأيتُ الطالبون.",
-"رأيتُ الطالبِ."
-],
-answer:1,
-explanation:"المثنى ينصب بالياء."
-},
-
-{
-id:"q080",
-type:"correct_error",
-text:"صحّح: جاء المعلمين.",
-options:[
-"جاء المعلمون.",
-"جاء المعلمين.",
-"جاء المعلمان.",
-"جاء المعلمات."
-],
-answer:0,
-explanation:"جمع المذكر السالم يرفع بالواو."
-},
-
-{
-id:"q081",
-type:"mcq",
-text:"أيُّ الأسماء الآتية اسم إشارة؟",
-options:[
-"الذي",
-"هذا",
-"من",
-"مَن"
-],
-answer:1,
-explanation:"هذا اسم إشارة."
-},
-
-{
-id:"q082",
-type:"mcq",
-text:"أيُّ الكلمات الآتية ضمير منفصل؟",
-options:[
-"هو",
-"كتابه",
-"ذهب",
-"الذي"
-],
-answer:0,
-explanation:"هو ضمير منفصل."
-},
-
-{
-id:"q083",
-type:"mcq",
-text:"ما نوع هل في: هل حضر الطالب؟",
-options:[
-"حرف استفهام",
-"حرف جر",
-"اسم شرط",
-"فعل"
-],
-answer:0,
-explanation:"هل حرف استفهام."
-},
-
-{
-id:"q084",
-type:"mcq",
-text:"أيُّ الكلمات الآتية اسم آلة؟",
-options:[
-"كاتب",
-"مفتاح",
-"كتابة",
-"مكتوب"
-],
-answer:1,
-explanation:"مفتاح اسم آلة."
-},
-
-{
-id:"q085",
-type:"mcq",
-text:"ما جمع كتاب؟",
-options:[
-"كاتب",
-"كتب",
-"مكتبة",
-"كتابة"
-],
-answer:1,
-explanation:"كتب جمع تكسير."
-},
-
-{
-id:"q086",
-type:"true_false",
-text:"النعت الحقيقي يتبع منعوته في التعريف والتنكير.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"من أوجه المطابقة التعريف والتنكير."
-},
-
-{
-id:"q087",
-type:"true_false",
-text:"التمييز يكون مجرورًا دائمًا.",
-options:[
-"صح",
-"خطأ"
-],
-answer:1,
-explanation:"قد يأتي التمييز منصوبًا أو مجرورًا."
-},
-
-{
-id:"q088",
-type:"true_false",
-text:"المضاف لا يقبل التنوين.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"المضاف لا ينون."
-},
-
-{
-id:"q089",
-type:"true_false",
-text:"اسم التفضيل يصاغ غالبًا على وزن أفعل.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"مثل أكبر وأفضل وأجمل."
-},
-
-{
-id:"q090",
-type:"grammar",
-text:"ما إعراب الطلاب في: حضر الطلاب؟",
-options:[
-"فاعل مرفوع",
-"مفعول به",
-"مبتدأ",
-"خبر"
-],
-answer:0,
-explanation:"الطلاب فاعل مرفوع."
-},
-
-{
-id:"q091",
-type:"grammar",
-text:"ما إعراب جميلًا في: رأيت منظرًا جميلًا؟",
-options:[
-"نعت منصوب",
-"حال",
-"فاعل",
-"خبر"
-],
-answer:0,
-explanation:"جميلًا نعت منصوب."
-},
-
-{
-id:"q092",
-type:"marker",
-text:"ما علامة رفع جمع المؤنث السالم؟",
-options:[
-"الضمة",
-"الواو",
-"الألف",
-"الياء"
-],
-answer:0,
-explanation:"يرفع بالضمة."
-},
-
-{
-id:"q093",
-type:"marker",
-text:"ما علامة نصب جمع المؤنث السالم؟",
-options:[
-"الكسرة",
-"الياء",
-"الفتحة",
-"الألف"
-],
-answer:0,
-explanation:"ينصب بالكسرة نيابة عن الفتحة."
-},
-
-{
-id:"q094",
-type:"mcq",
-text:"أيُّ الجمل الآتية تشتمل على مفعول مطلق؟",
-options:[
-"قرأ الطالبُ الكتابَ.",
-"اجتهد الطالبُ اجتهادًا.",
-"ذهب الطالبُ إلى المدرسة.",
-"جلس الطالبُ هادئًا."
-],
-answer:1,
-explanation:"اجتهادًا مفعول مطلق."
-},
-
-{
-id:"q095",
-type:"mcq",
-text:"أيُّ الجمل الآتية تشتمل على حال؟",
-options:[
-"عاد اللاعبُ مسرورًا.",
-"قرأ الطالبُ الكتابَ.",
-"نجح الطالبُ.",
-"الجو جميل."
-],
-answer:0,
-explanation:"مسرورًا حال."
-},
-
-{
-id:"q096",
-type:"mcq",
-text:"أيُّ الجمل الآتية تشتمل على مضاف إليه؟",
-options:[
-"كتابُ الطالبِ جديدٌ.",
-"قرأ الطالبُ الكتابَ.",
-"جاء المعلمُ.",
-"جلس الطفلُ."
-],
-answer:0,
-explanation:"الطالب مضاف إليه."
-},
-
-{
-id:"q097",
-type:"true_false",
-text:"المفعول المطلق مصدر منصوب يأتي لتوكيد الفعل أو بيان نوعه أو عدده.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"هذه أبرز وظائف المفعول المطلق."
-},
-
-{
-id:"q098",
-type:"true_false",
-text:"الظرف قد يدل على زمان أو مكان.",
-options:[
-"صح",
-"خطأ"
-],
-answer:0,
-explanation:"ظرف الزمان والمكان من المنصوبات."
-},
-
-{
-id:"q099",
-type:"mcq",
-text:"ما إعراب كلمة الطالبَ في: إنَّ الطالبَ مجتهدٌ؟",
-options:[
-"اسم إن منصوب",
-"خبر إن مرفوع",
-"فاعل",
-"مفعول به"
-],
-answer:0,
-explanation:"الطالب اسم إن منصوب."
-},
-
-{
-id:"q100",
-type:"mcq",
-text:"ما إعراب كلمة مجتهدٌ في: إنَّ الطالبَ مجتهدٌ؟",
-options:[
-"اسم إن",
-"خبر إن مرفوع",
-"فاعل",
-"حال"
-],
-answer:1,
-explanation:"مجتهد خبر إن مرفوع."
-}
-
-];
-
-
-
-/* ============================================================
-   QUESTION TYPES
-============================================================ */
-
-const QUESTION_TYPES = {
-
-mcq:{
-    title:"ضع دائرة",
-    icon:"fa-solid fa-circle-dot",
-    hint:"اختر الإجابة الصحيحة"
-},
-
-true_false:{
-    title:"صح أم خطأ",
-    icon:"fa-solid fa-check-double",
-    hint:"حدد الحكم الصحيح"
-},
-
-fill:{
-    title:"أكمل الفراغ",
-    icon:"fa-solid fa-pen",
-    hint:"اختر الإكمال الصحيح"
-},
-
-grammar:{
-    title:"الإعراب الصحيح",
-    icon:"fa-solid fa-language",
-    hint:"حدد الإعراب الصحيح"
-},
-
-marker:{
-    title:"العلامة الإعرابية",
-    icon:"fa-solid fa-scale-balanced",
-    hint:"حدد العلامة الصحيحة"
-},
-
-correct_error:{
-    title:"صحّح الخطأ",
-    icon:"fa-solid fa-spell-check",
-    hint:"اختر الصياغة الصحيحة"
-}
-
-};
-
-
-
-/* ============================================================
-   STATE
-============================================================ */
-
-const state = {
-
-    playerId:null,
-
-    playerName:"",
-
-    roomId:null,
-
-    room:null,
-
-    roomRef:null,
-
-    roomListener:null,
-
-    timer:null,
-
-    nextRoundTimer:null,
-
-    previousRound:null,
-
-    previousQuestionId:null,
-
-    previousAnswerLocked:false,
-
-    processing:false
-
-};
-
-
-
-/* ============================================================
-   DOM HELPER
-============================================================ */
-
-const $ = id => document.getElementById(id);
-
-
-
-/* ============================================================
-   TOAST
-============================================================ */
-
-let toastTimer=null;
-
-function toast(message){
-
-    const el=$("toast");
-
-    el.textContent=message;
-
-    el.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer=setTimeout(()=>{
-
-        el.classList.remove("show");
-
-    },2600);
-
-}
-
-
-
-/* ============================================================
-   CONNECTION
-============================================================ */
-
-const connectedRef=db.ref(".info/connected");
-
-connectedRef.on("value",snapshot=>{
-
-    const connected=snapshot.val()===true;
-
-    $("connectionDot").className=
-        "w-2 h-2 rounded-full "+
-        (
-            connected
-            ?"bg-emerald-400"
-            :"bg-red-400"
-        );
-
-    $("connectionText").textContent=
-        connected
-        ?"متصل مباشرة"
-        :"غير متصل";
-
-});
-
-
-
-/* ============================================================
-   PLAYER ID
-============================================================ */
-
-function createPlayerId(){
-
-    let id=
-        localStorage.getItem(
-            "arabic_knights_player_id"
-        );
-
-    if(!id){
-
-        id=
-            "p_"+
-            Date.now()+
-            "_"+
-            Math.random()
-                .toString(36)
-                .substring(2,10);
-
-        localStorage.setItem(
-            "arabic_knights_player_id",
-            id
-        );
-
-    }
-
-    return id;
-
-}
-
-state.playerId=createPlayerId();
-
-
-
-/* ============================================================
-   ROOM CODE
-============================================================ */
-
-function generateRoomCode(){
-
-    const chars=
-        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-    let code="";
-
-    for(let i=0;i<6;i++){
-
-        code+=
-            chars[
-                Math.floor(
-                    Math.random()*chars.length
-                )
-            ];
-
-    }
-
-    return code;
-
-}
-
-
-
-/* ============================================================
-   SHUFFLE
-============================================================ */
-
-function shuffle(array){
-
-    const arr=[...array];
-
-    for(
-        let i=arr.length-1;
-        i>0;
-        i--
-    ){
-
-        const j=
-            Math.floor(
-                Math.random()*(i+1)
-            );
-
-        [arr[i],arr[j]]=
-        [arr[j],arr[i]];
-
-    }
-
-    return arr;
-
-}
-
-
-
-/* ============================================================
-   CREATE QUESTION SET
-============================================================ */
-
-function createQuestionSet(){
-
-    return shuffle(
-        QUESTION_BANK.map(
-            q=>q.id
-        )
-    ).slice(
-        0,
-        GAME_CONFIG.TOTAL_ROUNDS
-    );
-
-}
-
-
-
-/* ============================================================
-   GET QUESTION
-============================================================ */
-
-function getQuestion(id){
-
-    return QUESTION_BANK.find(
-        q=>q.id===id
-    )||null;
-
-}
-
-
-
-/* ============================================================
-   FIND WAITING ROOM
-============================================================ */
-
-async function findRoom(){
-
-    const snapshot=
-        await db
-            .ref("rooms")
-            .orderByChild("status")
-            .equalTo("waiting")
-            .once("value");
-
-    let result=null;
-
-    snapshot.forEach(child=>{
-
-        if(result)return;
-
-        const room=child.val();
-
-        const players=
-            room.players||{};
-
-        const count=
-            Object.keys(players).length;
-
-        if(
-            count<GAME_CONFIG.MAX_PLAYERS
-        ){
-
-            result={
-                id:child.key,
-                ...room
-            };
-
-        }
-
-    });
-
-    return result;
-
-}
-
-
-
-/* ============================================================
-   CREATE ROOM
-============================================================ */
-
-async function createRoom(){
-
-    const roomId=
-        generateRoomCode();
-
-    const roomRef=
-        db.ref(
-            "rooms/"+roomId
-        );
-
-    const player={
-
-        id:state.playerId,
-
-        name:state.playerName,
-
-        score:0,
-
-        correct:0,
-
-        answered:0,
-
-        online:true,
-
-        joinedAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    };
-
-
-    const room={
-
-        status:"waiting",
-
-        hostId:
-            state.playerId,
-
-        maxPlayers:
-            GAME_CONFIG.MAX_PLAYERS,
-
-        playerCount:1,
-
-        totalRounds:
-            GAME_CONFIG.TOTAL_ROUNDS,
-
-        players:{
-            [state.playerId]:player
-        },
-
-        questions:
-            createQuestionSet(),
-
-        round:0,
-
-        phase:"waiting",
-
-        questionId:null,
-
-        startedAt:null,
-
-        buzzerUid:null,
-
-        answerUid:null,
-
-        answerIndex:null,
-
-        answerCorrect:null,
-
-        answerLocked:false,
-
-        currentPlayerIndex:0,
-
-        createdAt:
-            firebase.database.ServerValue.TIMESTAMP,
-
-        updatedAt:
-            firebase.database.ServerValue.TIMESTAMP
-
-    };
-
-
-    await roomRef.set(room);
-
-    state.roomId=roomId;
-
-    state.roomRef=roomRef;
-
-    setupPresence(roomRef);
-
-    subscribeRoom();
-
-}
-
-
-
-/* ============================================================
-   JOIN ROOM
-============================================================ */
-
-async function joinRoom(roomId){
-
-    const roomRef=
-        db.ref(
-            "rooms/"+roomId
-        );
-
-
-    const result=
-        await roomRef.transaction(room=>{
-
-            if(!room)
-                return;
-
-            if(
-                room.status!=="waiting"
-            )
-                return;
-
-            room.players=
-                room.players||{};
-
-
-            const playerIds=
-                Object.keys(
-                    room.players
-                );
-
-
-            if(
-                playerIds.length>=
-                GAME_CONFIG.MAX_PLAYERS
-            )
-                return;
-
-
-            if(
-                room.players[state.playerId]
-            )
-                return room;
-
-
-            room.players[
-                state.playerId
-            ]={
-
-                id:state.playerId,
-
-                name:state.playerName,
-
-                score:0,
-
-                correct:0,
-
-                answered:0,
-
-                online:true,
-
-                joinedAt:
-                    firebase.database.ServerValue.TIMESTAMP
-
-            };
-
-
-            room.playerCount=
-                Object.keys(
-                    room.players
-                ).length;
-
-
-            room.updatedAt=
-                firebase.database.ServerValue.TIMESTAMP;
-
-
-            return room;
-
-        });
-
-
-    if(result.committed){
-
-        state.roomId=roomId;
-
-        state.roomRef=roomRef;
-
-        setupPresence(roomRef);
-
-        subscribeRoom();
-
-        return true;
-
-    }
-
-    return false;
-
-}
-
-
-
-/* ============================================================
-   FIND OR CREATE
-============================================================ */
-
-async function findOrCreateRoom(){
-
-    try{
-
-        let room=
-            await findRoom();
-
-
-        if(room){
-
-            const joined=
-                await joinRoom(
-                    room.id
-                );
-
-            if(joined)
-                return;
-
-        }
-
-
-        await createRoom();
-
-    }catch(error){
-
-        console.error(
-            "findOrCreateRoom:",
-            error
-        );
-
-        toast(
-            "حدث خطأ أثناء إنشاء الغرفة."
-        );
-
-        throw error;
-
-    }
-
-}
-
-
-
-/* ============================================================
-   PRESENCE
-============================================================ */
-
-function setupPresence(roomRef){
-
-    const playerRef=
-        roomRef.child(
-            "players/"+state.playerId
-        );
-
-
-    playerRef
-        .child("online")
-        .set(true);
-
-
-    playerRef
-        .child("online")
-        .onDisconnect()
-        .set(false);
-
-}
-
-
-
-/* ============================================================
-   SUBSCRIBE ROOM
-============================================================ */
-
-function subscribeRoom(){
-
-    if(
-        state.roomRef &&
-        state.roomListener
-    ){
-
-        state.roomRef.off(
-            "value",
-            state.roomListener
-        );
-
-    }
-
-
-    state.roomListener=
-        snapshot=>{
-
-            if(!snapshot.exists()){
-
-                toast(
-                    "انتهت الغرفة."
-                );
-
-                cleanupRoom();
-
-                showScreen(
-                    "screenLobby"
-                );
-
-                return;
-
+    <!-- شاشة التحميل -->
+    <div id="loadingScreen">
+        <div class="text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-xl font-bold text-amber-400">جارٍ تحميل رحلة الفارس...</p>
+        </div>
+    </div>
+
+    <!-- شريط علوي دائم -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-scroll text-amber-400"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-lg md:text-xl">رحلة الفارس اللغوي</h1>
+                    <p class="text-xs text-slate-400">لطلاب الجامعات</p>
+                </div>
+            </div>
+            <!-- معلومات اللاعب -->
+            <div class="flex items-center gap-4 text-sm">
+                <div class="flex items-center gap-1 text-amber-300">
+                    <i class="fa-solid fa-star"></i>
+                    <span id="topXp">0</span>
+                    <span class="text-xs text-slate-400">XP</span>
+                </div>
+                <div class="flex items-center gap-1 text-yellow-500">
+                    <i class="fa-solid fa-coins"></i>
+                    <span id="topGold">0</span>
+                </div>
+                <div class="flex items-center gap-1 text-slate-300">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="topName">فارس</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="pt-16 min-h-screen pb-10">
+        <!-- ========== شاشة الخريطة ========== -->
+        <section id="screenMap" class="screen active">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <!-- عنوان -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-black mb-4 font-amiri">🗺️ ممالك اللغة العربية</h2>
+                    <p class="text-slate-400 text-lg">اختر مملكة لبدء المغامرة أو متابعة التقدم</p>
+                </div>
+                <!-- شبكة الممالك -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="kingdomGrid">
+                    <!-- ستُملأ بالجافاسكريبت -->
+                </div>
+                <!-- أزرار إضافية -->
+                <div class="flex flex-wrap justify-center gap-4 mt-12">
+                    <button onclick="showScreen('screenLibrary')" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                        <i class="fa-solid fa-book-open ml-2"></i> مكتبة القواعد
+                    </button>
+                    <button onclick="startExam()" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                        <i class="fa-solid fa-file-pen ml-2"></i> وضع الاختبار
+                    </button>
+                    <button onclick="showScreen('screenAchievements')" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                        <i class="fa-solid fa-trophy ml-2"></i> الإنجازات
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== شاشة المرحلة ========== -->
+        <section id="screenLevel" class="screen">
+            <div class="max-w-3xl mx-auto px-4 py-8">
+                <!-- رأس المرحلة -->
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="goBackToMap()" class="text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-arrow-right ml-1"></i> رجوع
+                    </button>
+                    <div class="text-center">
+                        <h3 id="levelTitle" class="text-2xl font-black"></h3>
+                        <p id="levelSubtitle" class="text-sm text-slate-400"></p>
+                    </div>
+                    <div class="w-10"></div>
+                </div>
+                <!-- شريط التقدم -->
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-sm text-slate-400">السؤال <span id="currentQuestionNum">1</span> / 5</span>
+                    <div class="flex-1 progress-bar h-3">
+                        <div id="levelProgress" class="progress-fill h-full" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- بطاقة السؤال -->
+                <div class="bg-slate-800/80 border border-white/10 rounded-3xl p-6 md:p-8 shadow-xl">
+                    <!-- نوع السؤال ووقت -->
+                    <div class="flex items-center justify-between mb-4">
+                        <span id="questionType" class="text-xs px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300"></span>
+                        <span class="text-slate-400 text-sm"><i class="fa-regular fa-clock ml-1"></i> <span id="timerDisplay">20</span> ث</span>
+                    </div>
+                    <!-- نص السؤال -->
+                    <h4 id="questionText" class="text-xl md:text-2xl font-bold leading-relaxed mb-6 font-amiri"></h4>
+                    <!-- الخيارات -->
+                    <div id="optionsContainer" class="space-y-3"></div>
+                    <!-- تلميح -->
+                    <div class="mt-6">
+                        <button id="hintBtn" class="text-amber-400 hover:text-amber-300 text-sm transition">
+                            <i class="fa-solid fa-lightbulb ml-1"></i> استخدم تلميحًا (10 قطع ذهبية)
+                        </button>
+                        <p id="hintText" class="hidden mt-2 text-amber-200 bg-amber-500/10 p-3 rounded-xl text-sm"></p>
+                    </div>
+                </div>
+                <!-- ملاحظات -->
+                <div id="feedbackBox" class="hidden mt-4 p-4 rounded-2xl text-center font-bold"></div>
+            </div>
+        </section>
+
+        <!-- ========== شاشة نهاية المرحلة ========== -->
+        <section id="screenLevelComplete" class="screen">
+            <div class="max-w-md mx-auto px-4 py-12 text-center">
+                <div class="text-6xl mb-6" id="completeIcon">🎉</div>
+                <h2 class="text-3xl font-black mb-4" id="completeTitle">أحسنت!</h2>
+                <p class="text-slate-400 mb-6" id="completeMessage"></p>
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="bg-slate-800 rounded-2xl p-4">
+                        <div class="text-2xl font-black text-emerald-400" id="completeCorrect">0</div>
+                        <div class="text-xs text-slate-500">إجابات صحيحة</div>
+                    </div>
+                    <div class="bg-slate-800 rounded-2xl p-4">
+                        <div class="text-2xl font-black text-amber-400" id="completeXp">0</div>
+                        <div class="text-xs text-slate-500">نقاط خبرة</div>
+                    </div>
+                    <div class="bg-slate-800 rounded-2xl p-4">
+                        <div class="text-2xl font-black text-yellow-500" id="completeGold">0</div>
+                        <div class="text-xs text-slate-500">قطع ذهبية</div>
+                    </div>
+                </div>
+                <button onclick="goBackToMap()" class="btn-primary w-full py-4 rounded-2xl font-black text-lg">
+                    متابعة الرحلة
+                </button>
+            </div>
+        </section>
+
+        <!-- ========== شاشة المكتبة ========== -->
+        <section id="screenLibrary" class="screen">
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-black">📚 مكتبة القواعد</h2>
+                    <button onclick="goBackToMap()" class="text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-arrow-right ml-1"></i> رجوع
+                    </button>
+                </div>
+                <div class="space-y-4" id="libraryContent">
+                    <!-- ستُملأ بالجافاسكريبت -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== شاشة الإنجازات ========== -->
+        <section id="screenAchievements" class="screen">
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-black">🏆 الإنجازات</h2>
+                    <button onclick="goBackToMap()" class="text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-arrow-right ml-1"></i> رجوع
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="achievementsList">
+                    <!-- ستُملأ بالجافاسكريبت -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== شاشة الاختبار ========== -->
+        <section id="screenExam" class="screen">
+            <div class="max-w-3xl mx-auto px-4 py-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-black mb-2">📝 وضع الاختبار</h2>
+                    <p class="text-slate-400">اختبار شامل من 20 سؤالاً بدون تلميحات</p>
+                </div>
+                <div id="examContent">
+                    <!-- أسئلة الاختبار ستظهر هنا -->
+                </div>
+                <div class="text-center mt-6">
+                    <button id="examStartBtn" onclick="startExamQuestions()" class="btn-primary px-8 py-4 rounded-2xl font-black text-lg">
+                        بدء الاختبار
+                    </button>
+                    <button onclick="goBackToMap()" class="btn-secondary px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition mt-4 block mx-auto">
+                        رجوع للخريطة
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== شاشة نتيجة الاختبار ========== -->
+        <section id="screenExamResult" class="screen">
+            <div class="max-w-md mx-auto px-4 py-12 text-center">
+                <div class="text-6xl mb-6">📊</div>
+                <h2 class="text-3xl font-black mb-4">نتيجة الاختبار</h2>
+                <div class="text-6xl font-black text-amber-400 mb-4" id="examScoreDisplay">0%</div>
+                <p class="text-slate-400 mb-6" id="examMessage"></p>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-800 rounded-2xl p-4">
+                        <div class="text-2xl font-black text-emerald-400" id="examCorrect">0</div>
+                        <div class="text-xs text-slate-500">صحيحة</div>
+                    </div>
+                    <div class="bg-slate-800 rounded-2xl p-4">
+                        <div class="text-2xl font-black text-red-400" id="examWrong">0</div>
+                        <div class="text-xs text-slate-500">خاطئة</div>
+                    </div>
+                </div>
+                <button onclick="goBackToMap()" class="btn-primary w-full py-4 rounded-2xl font-black text-lg">
+                    عودة للخريطة
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ==================== بيانات اللعبة ====================
+        const KINGDOMS = [
+            {
+                id: 'nahw',
+                name: 'مملكة النحو',
+                icon: 'fa-solid fa-language',
+                color: 'from-blue-500 to-indigo-600',
+                description: 'الإعراب، الجمل، الأفعال',
+                levels: 10,
+                questions: [] // سيتم ملؤها من بنك الأسئلة
+            },
+            {
+                id: 'sarf',
+                name: 'مملكة الصرف',
+                icon: 'fa-solid fa-sitemap',
+                color: 'from-emerald-500 to-green-600',
+                description: 'الأوزان، المشتقات، التصريف',
+                levels: 10,
+                questions: []
+            },
+            {
+                id: 'imlaa',
+                name: 'مملكة الإملاء',
+                icon: 'fa-solid fa-pen-to-square',
+                color: 'from-orange-500 to-red-500',
+                description: 'الهمزات، التاء، علامات الترقيم',
+                levels: 10,
+                questions: []
+            },
+            {
+                id: 'balagha',
+                name: 'مملكة البلاغة',
+                icon: 'fa-solid fa-feather',
+                color: 'from-purple-500 to-fuchsia-600',
+                description: 'التشبيه، الاستعارة، الكناية',
+                levels: 10,
+                questions: []
+            },
+            {
+                id: 'akhtaa',
+                name: 'مملكة الأخطاء الشائعة',
+                icon: 'fa-solid fa-triangle-exclamation',
+                color: 'from-yellow-500 to-amber-600',
+                description: 'تصحيح الأخطاء اللغوية',
+                levels: 10,
+                questions: []
             }
+        ];
 
+        // ==================== بنك الأسئلة ====================
+        // سنقوم بإنشاء أسئلة لكل مملكة. سنقسمها إلى مستويات (1-10) تقريبياً.
+        // نستخدم الأنواع: mcq (اختيار متعدد)، true_false (صح/خطأ)، fill (أكمل)، correct_error (تصحيح)
+        const QUESTION_BANK = [
+            // ===== مملكة النحو (50 سؤال) =====
+            // المستوى 1: المبتدأ والخبر
+            { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "العلمُ" في: العلمُ نورٌ؟', options: ['خبر مرفوع', 'مبتدأ مرفوع', 'فاعل مرفوع', 'مفعول به منصوب'], answer: 1, explanation: 'العلمُ مبتدأ مرفوع وعلامة رفعه الضمة.' },
+            { kingdom: 'nahw', level: 1, type: 'mcq', text: 'ما إعراب كلمة "نورٌ" في: العلمُ نورٌ؟', options: ['مبتدأ مرفوع', 'خبر مرفوع', 'فاعل مرفوع', 'نعت مرفوع'], answer: 1, explanation: 'نورٌ خبر مرفوع وعلامة رفعه الضمة.' },
+            { kingdom: 'nahw', level: 1, type: 'true_false', text: 'المبتدأ والخبر مرفوعان دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'الأصل في المبتدأ والخبر الرفع.' },
+            { kingdom: 'nahw', level: 1, type: 'mcq', text: 'أي الجمل التالية جملة اسمية؟', options: ['نجح الطالبُ', 'يقرأ محمدٌ', 'السماءُ صافيةٌ', 'اكتب الدرسَ'], answer: 2, explanation: 'الجملة الاسمية تبدأ باسم، مثل "السماءُ صافيةٌ".' },
+            { kingdom: 'nahw', level: 1, type: 'fill', text: 'أكمل: "الطالبُ ____"', options: ['مجتهدٌ', 'مجتهدًا', 'مجتهدٍ', 'مجتهدون'], answer: 0, explanation: 'الخبر مرفوع بالضمة، فالصحيح: مجتهدٌ.' },
+            // المستوى 2: الفاعل
+            { kingdom: 'nahw', level: 2, type: 'mcq', text: 'ما إعراب "الطالبُ" في: نجح الطالبُ؟', options: ['فاعل مرفوع', 'مفعول به منصوب', 'مبتدأ مرفوع', 'خبر مرفوع'], answer: 0, explanation: 'الطالبُ فاعل مرفوع وعلامة رفعه الضمة.' },
+            { kingdom: 'nahw', level: 2, type: 'true_false', text: 'الفاعل يكون مرفوعًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'الفاعل مرفوع دائمًا.' },
+            { kingdom: 'nahw', level: 2, type: 'fill', text: 'أكمل: "ذهب ____ إلى المدرسة"', options: ['الطالبُ', 'الطالبَ', 'الطالبِ', 'الطالبْ'], answer: 0, explanation: 'الفاعل مرفوع بالضمة.' },
+            // المستوى 3: المفعول به
+            { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "الكتابَ" في: قرأ الطالبُ الكتابَ؟', options: ['فاعل', 'مفعول به منصوب', 'مبتدأ', 'خبر'], answer: 1, explanation: 'الكتابَ مفعول به منصوب بالفتحة.' },
+            { kingdom: 'nahw', level: 3, type: 'true_false', text: 'المفعول به يكون منصوبًا دائمًا.', options: ['صح', 'خطأ'], answer: 0, explanation: 'المفعول به من المنصوبات.' },
+            // المستوى 4: الحال والتمييز
+            { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "سريعًا" في: عاد اللاعب سريعًا؟', options: ['حال', 'مفعول به', 'خبر', 'فاعل'], answer: 0, explanation: 'سريعًا حال منصوب.' },
+            { kingdom: 'nahw', level: 4, type: 'mcq', text: 'ما إعراب "علمًا" في: ازداد الطالب علمًا؟', options: ['حال', 'تمييز', 'مفعول به', 'فاعل'], answer: 1, explanation: 'علمًا تمييز منصوب.' },
+            // المستوى 5: المفعول المطلق
+            { kingdom: 'nahw', level: 5, type: 'mcq', text: 'ما إعراب "اجتهادًا" في: اجتهد الطالب اجتهادًا؟', options: ['مفعول مطلق', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'اجتهادًا مفعول مطلق.' },
+            // المستوى 6: الجار والمجرور والظرف
+            { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "في المدرسة" في: يدرس الطالب في المدرسة؟', options: ['جار ومجرور', 'مفعول به', 'حال', 'مفعول مطلق'], answer: 0, explanation: 'في حرف جر والمدرسة اسم مجرور.' },
+            { kingdom: 'nahw', level: 6, type: 'mcq', text: 'ما إعراب "صباحًا" في: سافرت صباحًا؟', options: ['ظرف زمان', 'مفعول به', 'حال', 'تمييز'], answer: 0, explanation: 'صباحًا ظرف زمان منصوب.' },
+            // المستوى 7: إن وأخواتها
+            { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "الطالبَ" في: إن الطالبَ مجتهدٌ؟', options: ['اسم إن منصوب', 'خبر إن مرفوع', 'فاعل', 'مفعول به'], answer: 0, explanation: 'الطالب اسم إن منصوب.' },
+            { kingdom: 'nahw', level: 7, type: 'mcq', text: 'ما إعراب "مجتهدٌ" في: إن الطالبَ مجتهدٌ؟', options: ['اسم إن', 'خبر إن مرفوع', 'فاعل', 'حال'], answer: 1, explanation: 'مجتهدٌ خبر إن مرفوع.' },
+            // المستوى 8: كان وأخواتها
+            { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "الجوُّ" في: كان الجوُّ جميلًا؟', options: ['اسم كان مرفوع', 'خبر كان منصوب', 'فاعل', 'مبتدأ'], answer: 0, explanation: 'الجو اسم كان مرفوع.' },
+            { kingdom: 'nahw', level: 8, type: 'mcq', text: 'ما إعراب "جميلًا" في: كان الجوُّ جميلًا؟', options: ['اسم كان', 'خبر كان منصوب', 'فاعل', 'حال'], answer: 1, explanation: 'جميلًا خبر كان منصوب.' },
+            // المستوى 9: المثنى والجموع
+            { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة رفع المثنى؟', options: ['الضمة', 'الألف', 'الواو', 'الياء'], answer: 1, explanation: 'المثنى يرفع بالألف.' },
+            { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة نصب جمع المذكر السالم؟', options: ['الفتحة', 'الياء', 'الواو', 'الألف'], answer: 1, explanation: 'جمع المذكر السالم ينصب بالياء.' },
+            { kingdom: 'nahw', level: 9, type: 'mcq', text: 'ما علامة رفع جمع المؤنث السالم؟', options: ['الضمة', 'الواو', 'الألف', 'الياء'], answer: 0, explanation: 'جمع المؤنث السالم يرفع بالضمة.' },
+            // المستوى 10: الأسماء الخمسة
+            { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة رفع الأسماء الخمسة؟', options: ['الواو', 'الألف', 'الياء', 'الضمة'], answer: 0, explanation: 'الأسماء الخمسة ترفع بالواو.' },
+            { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما علامة نصب الأسماء الخمسة؟', options: ['الألف', 'الواو', 'الياء', 'الفتحة'], answer: 0, explanation: 'الأسماء الخمسة تنصب بالألف.' },
+            // أسئلة إضافية متنوعة للنحو
+            { kingdom: 'nahw', level: 3, type: 'mcq', text: 'ما إعراب "المعلمَ" في: كرّم المديرُ المعلمَ؟', options: ['فاعل', 'مفعول به', 'مبتدأ', 'خبر'], answer: 1, explanation: 'المعلمَ مفعول به منصوب.' },
+            { kingdom: 'nahw', level: 5, type: 'fill', text: 'أكمل: "اجتهد الطالبُ ____"', options: ['اجتهادًا', 'اجتهادٌ', 'اجتهادٍ', 'اجتهادُ'], answer: 0, explanation: 'مفعول مطلق منصوب.' },
+            { kingdom: 'nahw', level: 7, type: 'true_false', text: 'إنَّ ترفع المبتدأ وتنصب الخبر.', options: ['صح', 'خطأ'], answer: 1, explanation: 'إنَّ تنصب الاسم وترفع الخبر.' },
+            { kingdom: 'nahw', level: 8, type: 'fill', text: 'أكمل: "أصبح الطالبُ ____"', options: ['مجتهدًا', 'مجتهدٌ', 'مجتهدٍ', 'مجتهدُ'], answer: 0, explanation: 'خبر أصبح منصوب بالفتحة.' },
+            { kingdom: 'nahw', level: 10, type: 'mcq', text: 'ما إعراب "أخوك" في: جاء أخوك؟', options: ['فاعل مرفوع بالواو', 'فاعل مرفوع بالضمة', 'مفعول به', 'مبتدأ'], answer: 0, explanation: 'أخوك فاعل مرفوع بالواو لأنه من الأسماء الخمسة.' },
 
-            state.room={
+            // ===== مملكة الصرف (30 سؤال) =====
+            { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما وزن الفعل "كاتب"؟', options: ['فاعل', 'فعيل', 'مفعال', 'فعل'], answer: 0, explanation: 'كاتب اسم فاعل من فعل كتب على وزن فاعل.' },
+            { kingdom: 'sarf', level: 1, type: 'mcq', text: 'ما اسم الفاعل من الفعل "نصر"؟', options: ['ناصر', 'منصور', 'نصير', 'نصر'], answer: 0, explanation: 'اسم الفاعل من نصر هو ناصر.' },
+            { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "كتب"؟', options: ['كاتب', 'مكتوب', 'كتاب', 'كتابة'], answer: 1, explanation: 'اسم المفعول من كتب هو مكتوب.' },
+            { kingdom: 'sarf', level: 2, type: 'mcq', text: 'ما اسم المفعول من الفعل "نصر"؟', options: ['ناصر', 'منصور', 'نصير', 'نصر'], answer: 1, explanation: 'اسم المفعول من نصر هو منصور.' },
+            { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما مصدر الفعل "كتب"؟', options: ['كاتب', 'كتابة', 'مكتوب', 'كتاب'], answer: 1, explanation: 'مصدر كتب هو كتابة.' },
+            { kingdom: 'sarf', level: 3, type: 'mcq', text: 'ما مصدر الفعل "علِم"؟', options: ['عالم', 'علم', 'عليم', 'تعليم'], answer: 1, explanation: 'مصدر علِم هو علم.' },
+            { kingdom: 'sarf', level: 4, type: 'true_false', text: 'الفعل "استخرج" على وزن استفعل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'استخرج على وزن استفعل.' },
+            { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما وزن الفعل "انكسر"؟', options: ['انفعل', 'افتعل', 'تفاعل', 'استفعل'], answer: 0, explanation: 'انكسر على وزن انفعل.' },
+            { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما نوع "مدرسة"؟', options: ['اسم مكان', 'اسم آلة', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مدرسة اسم مكان على وزن مفعلة.' },
+            { kingdom: 'sarf', level: 5, type: 'mcq', text: 'ما نوع "مفتاح"؟', options: ['اسم آلة', 'اسم مكان', 'اسم زمان', 'اسم فاعل'], answer: 0, explanation: 'مفتاح اسم آلة على وزن مفعال.' },
+            { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما جمع "كتاب"؟', options: ['كتب', 'كتابون', 'كتابات', 'مكتبة'], answer: 0, explanation: 'جمع كتاب هو كتب (جمع تكسير).' },
+            { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما جمع "قاضٍ"؟', options: ['قاضون', 'قضاة', 'قاضيات', 'قُضّاء'], answer: 1, explanation: 'جمع قاضٍ هو قضاة.' },
+            { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن "مُكرَم"؟', options: ['مُفعَل', 'مُفعِل', 'مُفعَّل', 'مُفعول'], answer: 0, explanation: 'مُكرَم اسم مفعول من أكرم على وزن مُفعَل.' },
+            { kingdom: 'sarf', level: 7, type: 'mcq', text: 'ما وزن "مُحسِن"؟', options: ['مُفعِل', 'مُفعَل', 'مُفعِّل', 'مُفعول'], answer: 0, explanation: 'مُحسِن اسم فاعل من أحسن على وزن مُفعِل.' },
+            { kingdom: 'sarf', level: 8, type: 'true_false', text: 'الفعل "تعلّم" على وزن تفعّل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تعلّم على وزن تفعّل.' },
+            { kingdom: 'sarf', level: 8, type: 'mcq', text: 'ما وزن الفعل "انطلق"؟', options: ['انفعل', 'افتعل', 'تفاعل', 'افعل'], answer: 0, explanation: 'انطلق على وزن انفعل.' },
+            { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما نوع "أحمر"؟', options: ['صفة مشبهة', 'اسم تفضيل', 'اسم فاعل', 'اسم مفعول'], answer: 0, explanation: 'أحمر صفة مشبهة على وزن أفعل.' },
+            { kingdom: 'sarf', level: 9, type: 'mcq', text: 'ما اسم التفضيل من "كبير"؟', options: ['أكبر', 'كبير جدًا', 'تكبير', 'مُكبِر'], answer: 0, explanation: 'اسم التفضيل من كبير هو أكبر.' },
+            { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما وزن "استغفر"؟', options: ['استفعل', 'انفعل', 'افتعل', 'تفاعل'], answer: 0, explanation: 'استغفر على وزن استفعل.' },
+            { kingdom: 'sarf', level: 10, type: 'mcq', text: 'ما مصدر "استخرج"؟', options: ['استخراج', 'إخراج', 'خروج', 'استخراجة'], answer: 0, explanation: 'مصدر استخرج هو استخراج.' },
+            // أسئلة إضافية للصرف
+            { kingdom: 'sarf', level: 2, type: 'fill', text: 'أكمل: "اسم المفعول من الفعل (فهم) هو ____"', options: ['مفهوم', 'فاهم', 'فهم', 'مُفهم'], answer: 0, explanation: 'اسم المفعول من فهم هو مفهوم.' },
+            { kingdom: 'sarf', level: 4, type: 'mcq', text: 'ما وزن "تدحرج"؟', options: ['تفعلل', 'تفاعل', 'تفعّل', 'تفعلل'], answer: 0, explanation: 'تدحرج على وزن تفعلل.' },
+            { kingdom: 'sarf', level: 6, type: 'mcq', text: 'ما جمع "عالم"؟', options: ['علماء', 'عالمون', 'عوالم', 'علوم'], answer: 0, explanation: 'جمع عالم هو علماء.' },
+            { kingdom: 'sarf', level: 8, type: 'true_false', text: 'الفعل "استقام" على وزن استفعل.', options: ['صح', 'خطأ'], answer: 0, explanation: 'استقام على وزن استفعل.' },
 
-                id:snapshot.key,
+            // ===== مملكة الإملاء (30 سؤال) =====
+            { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي كلمة تكتب بهمزة قطع؟', options: ['إسلام', 'ابْن', 'امرأة', 'الكتاب'], answer: 0, explanation: 'إسلام همزة قطع لأنها في أول الكلمة وتلفظ.' },
+            { kingdom: 'imlaa', level: 1, type: 'mcq', text: 'أي كلمة تكتب بهمزة وصل؟', options: ['أحمد', 'إبراهيم', 'اكتب', 'إيمان'], answer: 2, explanation: 'اكتب همزة وصل لأنها أمر من فعل ثلاثي.' },
+            { kingdom: 'imlaa', level: 2, type: 'mcq', text: 'ما الكلمة الصحيحة إملائياً؟', options: ['مَسألة', 'مَسائلة', 'مَساءلة', 'مَسأَلة'], answer: 0, explanation: 'الصحيح: مَسألة بهمزة على ألف.' },
+            { kingdom: 'imlaa', level: 2, type: 'true_false', text: 'كلمة "شاطئ" تكتب بهمزة على ياء.', options: ['صح', 'خطأ'], answer: 0, explanation: 'شاطئ همزتها على ياء لأن ما قبلها مكسور.' },
+            { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'أي جملة صحيحة إملائياً؟', options: ['قرأت الكتاب', 'قرأت الكتاب', 'قرأتُ الكتاب', 'قرئت الكتاب'], answer: 0, explanation: 'الصحيح: قرأت بتاء مفتوحة بعد الهمزة.' },
+            { kingdom: 'imlaa', level: 3, type: 'mcq', text: 'ما الكلمة الصحيحة؟', options: ['التاء المربوطة', 'التاء المفتوحة', 'التاء المربوطة', 'التاء المربوطة'], answer: 0, explanation: 'الصحيح: التاء المربوطة.' },
+            { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'أي كلمة تكتب بألف لينة (ى)؟', options: ['مستشفى', 'عصا', 'فتى', 'كل ما سبق'], answer: 3, explanation: 'كل هذه الكلمات تكتب بألف لينة.' },
+            { kingdom: 'imlaa', level: 4, type: 'mcq', text: 'ما الكلمة الصحيحة؟', options: ['دعا', 'دعى', 'دعاء', 'دعاء'], answer: 0, explanation: 'الصحيح: دعا بألف قائمة لأنها فعل ثلاثي أصله واو.' },
+            { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي جملة صحيحة في علامات الترقيم؟', options: ['قال المعلم: "ادرسوا جيدًا"', 'قال المعلم "ادرسوا جيدًا"', 'قال المعلم: ادرسوا جيدًا', 'قال المعلم، ادرسوا جيدًا'], answer: 0, explanation: 'الصحيح استخدام النقطتين وعلامات التنصيص.' },
+            { kingdom: 'imlaa', level: 5, type: 'mcq', text: 'أي جملة صحيحة الترقيم؟', options: ['هل أنت جاهز؟', 'هل أنت جاهز.', 'هل أنت جاهز!', 'هل أنت جاهز،'], answer: 0, explanation: 'الاستفهام ينتهي بعلامة استفهام.' },
+            { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'ما الكلمة الصحيحة إملائياً؟', options: ['اللغة العربية', 'اللغه العربيه', 'اللغة العربيه', 'اللغه العربية'], answer: 0, explanation: 'الصحيح: اللغة العربية بتاء مربوطة في اللغة وياء في العربية.' },
+            { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة همزتها متوسطة على واو؟', options: ['مؤمن', 'رأس', 'بئر', 'سؤال'], answer: 0, explanation: 'مؤمن الهمزة على واو لأنها مضمومة.' },
+            { kingdom: 'imlaa', level: 7, type: 'true_false', text: 'كلمة "سماء" همزتها متطرفة على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'سماء همزتها متطرفة على السطر لأن ما قبلها حرف ساكن.' },
+            { kingdom: 'imlaa', level: 7, type: 'mcq', text: 'أي كلمة صحيحة إملائياً؟', options: ['جزء', 'جزأ', 'جزءٌ', 'جزء'], answer: 0, explanation: 'الصحيح: جزء.' },
+            { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'ما الصحيح في كتابة الأعداد؟', options: ['ثلاثة طلاب', 'ثلاث طلاب', 'ثلاثة طلاب', 'ثلاث طلاب'], answer: 0, explanation: 'الصحيح: ثلاثة طلاب.' },
+            { kingdom: 'imlaa', level: 8, type: 'mcq', text: 'أي جملة صحيحة؟', options: ['إن شاء الله', 'إنشاء الله', 'ان شاء الله', 'إنشاء الله'], answer: 0, explanation: 'الصحيح: إن شاء الله بمعنى أراد.' },
+            { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'ما الكلمة الصحيحة؟', options: ['القرآن الكريم', 'القرأن الكريم', 'القران الكريم', 'القرآن الكريم'], answer: 0, explanation: 'الصحيح: القرآن الكريم.' },
+            { kingdom: 'imlaa', level: 9, type: 'mcq', text: 'أي كلمة همزتها متوسطة على ياء؟', options: ['بئر', 'سؤال', 'مؤمن', 'رأس'], answer: 0, explanation: 'بئر الهمزة على ياء لأنها مكسورة.' },
+            { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'ما الصحيح في كتابة التنوين؟', options: ['رجلٌ', 'رجلً', 'رجلٍ', 'رجلٌ'], answer: 0, explanation: 'الصحيح: رجلٌ بتنوين الضم.' },
+            { kingdom: 'imlaa', level: 10, type: 'mcq', text: 'أي كلمة صحيحة؟', options: ['مدرسة', 'مدرسه', 'مدرسه', 'مدرسة'], answer: 0, explanation: 'الصحيح: مدرسة بتاء مربوطة.' },
+            // أسئلة إضافية للإملاء
+            { kingdom: 'imlaa', level: 2, type: 'fill', text: 'أكمل: "اشترى الطالبُ ____"', options: ['قلمًا', 'قلمً', 'قلم', 'قلمًا'], answer: 0, explanation: 'الصحيح: قلمًا بتنوين الفتح.' },
+            { kingdom: 'imlaa', level: 6, type: 'mcq', text: 'أي كلمة صحيحة إملائياً؟', options: ['مسؤول', 'مسئول', 'مسؤل', 'مسؤول'], answer: 0, explanation: 'الصحيح: مسؤول.' },
+            { kingdom: 'imlaa', level: 8, type: 'true_false', text: 'كلمة "شيء" تكتب بهمزة متطرفة على السطر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'شيء همزتها متطرفة على السطر.' },
 
-                ...snapshot.val()
+            // ===== مملكة البلاغة (25 سؤال) =====
+            { kingdom: 'balagha', level: 1, type: 'mcq', text: 'ما نوع التشبيه في: "العلم كالنور"؟', options: ['تشبيه مجمل', 'تشبيه مفصل', 'تشبيه بليغ', 'استعارة'], answer: 0, explanation: 'تشبيه مجمل حذفت منه الأداة.' },
+            { kingdom: 'balagha', level: 1, type: 'true_false', text: 'التشبيه البليغ هو ما حذف منه وجه الشبه وأداة التشبيه.', options: ['صح', 'خطأ'], answer: 1, explanation: 'البليغ ما حذف منه الأداة ووجه الشبه.' },
+            { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع "الابتسامة مطر"؟', options: ['استعارة مكنية', 'تشبيه بليغ', 'كناية', 'مجاز'], answer: 1, explanation: 'تشبيه بليغ حذفت منه الأداة ووجه الشبه.' },
+            { kingdom: 'balagha', level: 2, type: 'mcq', text: 'ما نوع "الحرية شمس"؟', options: ['استعارة', 'تشبيه بليغ', 'كناية', 'تشبيه مجمل'], answer: 1, explanation: 'تشبيه بليغ.' },
+            { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في: "ناداني الواجب"؟', options: ['استعارة مكنية', 'استعارة تصريحية', 'كناية', 'مجاز مرسل'], answer: 0, explanation: 'استعارة مكنية حيث شبهنا الواجب بإنسان.' },
+            { kingdom: 'balagha', level: 3, type: 'mcq', text: 'ما نوع الاستعارة في: "رأيت بحرًا في المدرسة"؟', options: ['استعارة تصريحية', 'استعارة مكنية', 'كناية', 'تشبيه'], answer: 0, explanation: 'استعارة تصريحية حذفنا المشبه وأبقينا المشبه به.' },
+            { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما نوع الكناية في: "فلان طويل اليد"؟', options: ['كناية عن الكرم', 'كناية عن الطول', 'كناية عن القوة', 'استعارة'], answer: 0, explanation: 'كناية عن الكرم.' },
+            { kingdom: 'balagha', level: 4, type: 'mcq', text: 'ما نوع "أبو لهب"؟', options: ['كناية', 'لقب', 'استعارة', 'تشبيه'], answer: 0, explanation: 'كناية عن التهلكة.' },
+            { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع "أكلت من يدها"؟', options: ['كناية', 'مجاز مرسل', 'استعارة', 'تشبيه'], answer: 0, explanation: 'كناية عن التواضع.' },
+            { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع "شربت النيل"؟', options: ['مجاز مرسل', 'كناية', 'استعارة', 'تشبيه'], answer: 0, explanation: 'مجاز مرسل علاقته المكانية.' },
+            { kingdom: 'balagha', level: 6, type: 'mcq', text: 'ما نوع "وقف الحائط"؟', options: ['مجاز عقلي', 'استعارة', 'كناية', 'تشبيه'], answer: 0, explanation: 'مجاز عقلي أسند الفعل لغير فاعله الحقيقي.' },
+            { kingdom: 'balagha', level: 6, type: 'true_false', text: 'الجناس هو تشابه كلمتين في اللفظ واختلافهما في المعنى.', options: ['صح', 'خطأ'], answer: 0, explanation: 'تعريف الجناس.' },
+            { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما نوع "الصوم صيام"؟', options: ['جناس', 'سجع', 'طباق', 'مقابلة'], answer: 0, explanation: 'جناس ناقص.' },
+            { kingdom: 'balagha', level: 7, type: 'mcq', text: 'ما نوع "الليل والنهار"؟', options: ['طباق', 'مقابلة', 'جناس', 'سجع'], answer: 0, explanation: 'طباق إيجاب.' },
+            { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع "يحب ويكره"؟', options: ['طباق', 'مقابلة', 'جناس', 'سجع'], answer: 0, explanation: 'طباق.' },
+            { kingdom: 'balagha', level: 8, type: 'mcq', text: 'ما نوع "الجو معتدل والسماء صافية"؟', options: ['سجع', 'جناس', 'مقابلة', 'طباق'], answer: 0, explanation: 'سجع في النثر.' },
+            { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما نوع "أضحك وأبكى"؟', options: ['طباق', 'مقابلة', 'جناس', 'سجع'], answer: 0, explanation: 'طباق.' },
+            { kingdom: 'balagha', level: 9, type: 'mcq', text: 'ما نوع "العلم نور والجهل ظلام"؟', options: ['مقابلة', 'طباق', 'جناس', 'سجع'], answer: 0, explanation: 'مقابلة بين جملتين متقابلتين.' },
+            { kingdom: 'balagha', level: 10, type: 'mcq', text: 'ما نوع "رأيت أسدًا في المعركة"؟', options: ['استعارة تصريحية', 'استعارة مكنية', 'تشبيه', 'كناية'], answer: 0, explanation: 'استعارة تصريحية حيث شبه الرجل الشجاع بالأسد.' },
+            { kingdom: 'balagha', level: 10, type: 'mcq', text: 'ما نوع "يد الله فوق أيديهم"؟', options: ['كناية', 'استعارة', 'مجاز', 'تشبيه'], answer: 0, explanation: 'كناية عن القدرة والعزة.' },
+            // أسئلة إضافية للبلاغة
+            { kingdom: 'balagha', level: 2, type: 'fill', text: 'أكمل: "التشبيه البليغ هو ما حذف منه ____ وأداة التشبيه"', options: ['وجه الشبه', 'المشبه', 'المشبه به', 'كلاهما'], answer: 0, explanation: 'البليغ يحذف منه الأداة ووجه الشبه.' },
+            { kingdom: 'balagha', level: 5, type: 'mcq', text: 'ما نوع "كثير الرماد"؟', options: ['كناية عن الكرم', 'كناية عن البخل', 'استعارة', 'تشبيه'], answer: 0, explanation: 'كناية عن الكرم.' },
+            { kingdom: 'balagha', level: 7, type: 'true_false', text: 'السجع هو توافق الفواصل في النثر.', options: ['صح', 'خطأ'], answer: 0, explanation: 'السجع توافق أواخر الجمل في النثر.' },
 
-            };
+            // ===== مملكة الأخطاء الشائعة (25 سؤال) =====
+            { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'صحح الخطأ: "إن الطالبُ مجتهدٌ"', options: ['إن الطالبَ مجتهدٌ', 'إن الطالبِ مجتهدٌ', 'إن الطالبُ مجتهدًا', 'إن الطالبَ مجتهدًا'], answer: 0, explanation: 'اسم إن منصوب.' },
+            { kingdom: 'akhtaa', level: 1, type: 'correct_error', text: 'صحح: "لن يهملْ الطالبُ درسه"', options: ['لن يهملَ الطالبُ درسه', 'لن يهملْ الطالبَ درسه', 'لن يهملِ الطالبُ درسه', 'لن يهملُ الطالبُ درسه'], answer: 0, explanation: 'الفعل بعد لن منصوب.' },
+            { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'صحح: "مررتُ بأخوك"', options: ['مررتُ بأخيك', 'مررتُ بأخاك', 'مررتُ بأخوك', 'مررتُ بأخي'], answer: 0, explanation: 'أخيك مجرور بالياء.' },
+            { kingdom: 'akhtaa', level: 2, type: 'correct_error', text: 'صحح: "رأيتُ الطالبانِ"', options: ['رأيتُ الطالبينِ', 'رأيتُ الطالبانِ', 'رأيتُ الطالبون', 'رأيتُ الطالبِ'], answer: 0, explanation: 'المثنى ينصب بالياء.' },
+            { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'صحح: "جاء المعلمين"', options: ['جاء المعلمون', 'جاء المعلمين', 'جاء المعلمان', 'جاء المعلمات'], answer: 0, explanation: 'جمع المذكر السالم يرفع بالواو.' },
+            { kingdom: 'akhtaa', level: 3, type: 'correct_error', text: 'صحح: "إن المعلمون مخلصون"', options: ['إن المعلمين مخلصون', 'إن المعلمون مخلصين', 'إن المعلمين مخلصين', 'إن المعلمَ مخلصون'], answer: 0, explanation: 'اسم إن منصوب بالياء.' },
+            { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'صحح: "لم يكتبُ الطالبُ"', options: ['لم يكتبْ الطالبُ', 'لم يكتبَ الطالبُ', 'لم يكتبِ الطالبُ', 'لم كتبْ الطالبُ'], answer: 0, explanation: 'لم تجزم المضارع.' },
+            { kingdom: 'akhtaa', level: 4, type: 'correct_error', text: 'صحح: "لا تهملَ دروسك"', options: ['لا تهملْ دروسك', 'لا تهملَ دروسك', 'لا تهملُ دروسك', 'لا تهملِ دروسك'], answer: 0, explanation: 'الفعل بعد لا الناهية مجزوم.' },
+            { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'صحح: "هذا رجلٌ كريمٌ"', options: ['هذا رجلٌ كريمٌ', 'هذا رجلًا كريمًا', 'هذا رجلٍ كريمٍ', 'هذا رجلَ كريمَ'], answer: 0, explanation: 'الجملة صحيحة أصلاً.' },
+            { kingdom: 'akhtaa', level: 5, type: 'correct_error', text: 'صحح: "اللهم صلي على محمد"', options: ['اللهم صلِّ على محمد', 'اللهم صلي على محمد', 'اللهم صلَ على محمد', 'اللهم صلى على محمد'], answer: 0, explanation: 'الفعل أمر مبني على حذف حرف العلة.' },
+            { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'صحح: "أنا ذهبتُ إلى المدرسة"', options: ['ذهبتُ إلى المدرسة', 'أنا ذهبتُ إلى المدرسة', 'أنا ذهبتَ إلى المدرسة', 'أنا ذهب إلى المدرسة'], answer: 0, explanation: 'لا حاجة لتكرار الضمير.' },
+            { kingdom: 'akhtaa', level: 6, type: 'correct_error', text: 'صحح: "الطلاب الذي نجحوا"', options: ['الطلاب الذين نجحوا', 'الطلاب الذي نجحوا', 'الطلاب الذين نجح', 'الطلاب الذين نجحون'], answer: 0, explanation: 'الاسم الموصول يجب أن يطابق.' },
+            { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'صحح: "اشتريت كتاباً مفيداً"', options: ['اشتريت كتاباً مفيداً', 'اشتريت كتاب مفيد', 'اشتريت كتاباً مفيد', 'اشتريت كتابً مفيدًا'], answer: 0, explanation: 'الجملة صحيحة.' },
+            { kingdom: 'akhtaa', level: 7, type: 'correct_error', text: 'صحح: "إن شاء الله"', options: ['إن شاء الله', 'إنشاء الله', 'ان شاء الله', 'إنشاء الله'], answer: 0, explanation: 'الصحيح: إن شاء الله.' },
+            { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'صحح: "مبارك عليك الشهر"', options: ['مبارك عليك الشهر', 'مبارك عليك الشهر', 'مبارك عليك الشهر', 'مبارك عليك الشهر'], answer: 0, explanation: 'التعبير صحيح.' },
+            { kingdom: 'akhtaa', level: 8, type: 'correct_error', text: 'صحح: "لا تنسى واجبك"', options: ['لا تنسَ واجبك', 'لا تنسى واجبك', 'لا تنسِ واجبك', 'لا تنسُ واجبك'], answer: 0, explanation: 'الفعل معتل الآخر يجزم بحذف حرف العلة.' },
+            { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'صحح: "أنا متأكد من النجاح"', options: ['أنا متأكد من النجاح', 'أنا متأكد من النجاح', 'أنا متأكد من النجاح', 'أنا متأكد من النجاح'], answer: 0, explanation: 'الجملة صحيحة.' },
+            { kingdom: 'akhtaa', level: 9, type: 'correct_error', text: 'صحح: "هذا أفضل من ذاك"', options: ['هذا أفضل من ذاك', 'هذا أفضل من ذاك', 'هذا أفضل من ذاك', 'هذا أفضل من ذاك'], answer: 0, explanation: 'صحيح.' },
+            { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'صحح: "لا تنهى عن خلق وتأتي مثله"', options: ['لا تنهَ عن خلق وتأتي مثله', 'لا تنهى عن خلق وتأتي مثله', 'لا تنهي عن خلق وتأتي مثله', 'لا تنهُ عن خلق وتأتي مثله'], answer: 0, explanation: 'فعل مضارع مجزوم بحذف حرف العلة.' },
+            { kingdom: 'akhtaa', level: 10, type: 'correct_error', text: 'صحح: "استأجرت شقةً"', options: ['استأجرت شقةً', 'استأجرت شقة', 'استأجرت شقه', 'استأجرت شقة'], answer: 0, explanation: 'صحيح.' },
+            // أسئلة إضافية
+            { kingdom: 'akhtaa', level: 2, type: 'mcq', text: 'أي جملة صحيحة؟', options: ['تفوق الطلابُ', 'تفوق الطلابَ', 'تفوق الطلابِ', 'تفوق الطلابْ'], answer: 0, explanation: 'الفاعل مرفوع.' },
+            { kingdom: 'akhtaa', level: 5, type: 'mcq', text: 'أي جملة صحيحة؟', options: ['أكرمتُ الضيفَ', 'أكرمتُ الضيفُ', 'أكرمتُ الضيفِ', 'أكرمت الضيفَ'], answer: 0, explanation: 'المفعول به منصوب.' },
+            { kingdom: 'akhtaa', level: 8, type: 'true_false', text: 'جملة "الطلاب المجتهدون ناجحون" صحيحة نحوياً.', options: ['صح', 'خطأ'], answer: 0, explanation: 'النعت مرفوع بالواو.' },
+        ];
 
-
-            renderRoom();
-
+        // ==================== حالة اللعبة ====================
+        let gameState = {
+            playerName: 'فارس اللغة',
+            xp: 0,
+            gold: 100,
+            completedLevels: {}, // { kingdomId: [completedLevel1, level2...] }
+            achievements: [], // معرفات الإنجازات المحققة
+            levelScores: {}, // { kingdomId_levelNumber: { correct, total, xp, gold } }
+            examHistory: [] // نتائج الاختبارات
         };
 
-
-    state.roomRef.on(
-        "value",
-        state.roomListener
-    );
-
-}
-
-
-
-/* ============================================================
-   RENDER ROOM
-============================================================ */
-
-function renderRoom(){
-
-    if(!state.room)
-        return;
-
-
-    if(
-        state.room.status==="waiting"
-    ){
-
-        clearInterval(
-            state.timer
-        );
-
-        showScreen(
-            "screenWaiting"
-        );
-
-        renderWaiting();
-
-        return;
-
-    }
-
-
-    if(
-        state.room.status==="playing"
-    ){
-
-        showScreen(
-            "screenGame"
-        );
-
-        renderGame();
-
-        detectRoundChange();
-
-        return;
-
-    }
-
-
-    if(
-        state.room.status==="finished"
-    ){
-
-        clearInterval(
-            state.timer
-        );
-
-        showScreen(
-            "screenResults"
-        );
-
-        renderResults();
-
-    }
-
-}
-
-
-
-/* ============================================================
-   WAITING SCREEN
-============================================================ */
-
-function renderWaiting(){
-
-    const room=state.room;
-
-    $("roomCode").textContent=
-        room.id;
-
-
-    const players=
-        Object.values(
-            room.players||{}
-        );
-
-
-    const count=
-        players.length;
-
-
-    $("roomCount").textContent=
-        `${count} / ${GAME_CONFIG.MAX_PLAYERS}`;
-
-
-    $("roomProgress").style.width=
-        `${
-            count/
-            GAME_CONFIG.MAX_PLAYERS*
-            100
-        }%`;
-
-
-    const container=
-        $("waitingPlayers");
-
-
-    container.innerHTML="";
-
-
-    for(
-        let i=0;
-        i<GAME_CONFIG.MAX_PLAYERS;
-        i++
-    ){
-
-        const player=
-            players[i];
-
-
-        const card=
-            document.createElement(
-                "div"
-            );
-
-
-        card.className=
-            "glass-light rounded-2xl p-5 text-center";
-
-
-        if(player){
-
-            card.innerHTML=`
-
-                <div class="player-avatar mx-auto mb-3">
-                    ${escapeHtml(
-                        player.name
-                            .charAt(0)
-                    )}
-                </div>
-
-                <div class="font-black">
-
-                    ${escapeHtml(
-                        player.name
-                    )}
-
-                    ${
-                        player.id===
-                        state.room.hostId
-                        ?
-                        '<span class="text-yellow-400 text-xs mr-1">👑</span>'
-                        :
-                        ''
-                    }
-
-                </div>
-
-                <div class="text-xs mt-2 ${
-                    player.online===false
-                    ?
-                    'text-red-400'
-                    :
-                    'text-emerald-400'
-                }">
-
-                    ${
-                        player.online===false
-                        ?
-                        "غير متصل"
-                        :
-                        "متصل"
-                    }
-
-                </div>
-
-            `;
-
-        }else{
-
-            card.innerHTML=`
-
-                <div class="
-                    w-12 h-12
-                    rounded-2xl
-                    bg-white/5
-                    mx-auto mb-3
-                    flex items-center
-                    justify-center
-                ">
-
-                    <i class="
-                        fa-solid
-                        fa-user-plus
-                        text-slate-500
-                    "></i>
-
-                </div>
-
-                <div class="
-                    font-bold
-                    text-slate-500
-                ">
-                    في انتظار لاعب
-                </div>
-
-            `;
-
-        }
-
-
-        container.appendChild(
-            card
-        );
-
-    }
-
-
-    if(
-        count===
-        GAME_CONFIG.MAX_PLAYERS
-    ){
-
-        $("waitingText").textContent=
-            "اكتمل عدد الفرسان! تبدأ المباراة الآن...";
-
-
-        if(
-            state.playerId===
-            room.hostId
-        ){
-
-            clearTimeout(
-                state.nextRoundTimer
-            );
-
-            state.nextRoundTimer=
-                setTimeout(
-                    startGame,
-                    1000
-                );
-
-        }
-
-    }else{
-
-        $("waitingText").textContent=
-            `في انتظار ${
-                GAME_CONFIG.MAX_PLAYERS-count
-            } لاعب...`;
-
-    }
-
-}
-
-
-
-/* ============================================================
-   START GAME
-   HOST ONLY
-============================================================ */
-
-async function startGame(){
-
-    if(
-        !state.roomRef ||
-        !state.room
-    )
-        return;
-
-
-    if(
-        state.room.hostId!==
-        state.playerId
-    )
-        return;
-
-
-    try{
-
-        await state.roomRef.transaction(
-            room=>{
-
-                if(!room)
-                    return;
-
-                if(
-                    room.status!=="waiting"
-                )
-                    return;
-
-
-                const players=
-                    room.players||{};
-
-
-                if(
-                    Object.keys(players)
-                        .length!==
-                    GAME_CONFIG.MAX_PLAYERS
-                )
-                    return;
-
-
-                room.status="playing";
-
-                room.phase="speed";
-
-                room.round=1;
-
-                room.questionId=
-                    room.questions[0];
-
-                room.totalRounds=
-                    GAME_CONFIG.TOTAL_ROUNDS;
-
-                room.startedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-                room.buzzerUid=null;
-
-                room.answerUid=null;
-
-                room.answerIndex=null;
-
-                room.answerCorrect=null;
-
-                room.answerLocked=false;
-
-                room.currentPlayerIndex=0;
-
-                room.updatedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-
-                return room;
-
-            }
-        );
-
-    }catch(error){
-
-        console.error(
-            "startGame:",
-            error
-        );
-
-    }
-
-}
-
-
-
-/* ============================================================
-   GAME RENDER
-============================================================ */
-
-function renderGame(){
-
-    const room=state.room;
-
-
-    const question=
-        getQuestion(
-            room.questionId
-        );
-
-
-    if(!question)
-        return;
-
-
-    $("roundNumber").textContent=
-        `${room.round} / ${GAME_CONFIG.TOTAL_ROUNDS}`;
-
-
-    $("questionIndex").textContent=
-        room.round;
-
-
-    $("roundTypeBadge").textContent=
-        room.phase==="speed"
-        ?
-        "⚡ سرعة"
-        :
-        "🎯 فردية";
-
-
-    const type=
-        QUESTION_TYPES[
-            question.type
+        // إنجازات معرفة مسبقاً
+        const ACHIEVEMENTS = [
+            { id: 'first_level', name: 'أول خطوة', desc: 'أكمل أي مرحلة', icon: 'fa-solid fa-shoe-prints', check: () => Object.values(gameState.completedLevels).some(arr => arr.length > 0) },
+            { id: 'nahw_master', name: 'سيد النحو', desc: 'أكمل 5 مراحل في مملكة النحو', icon: 'fa-solid fa-language', check: () => (gameState.completedLevels['nahw']?.length || 0) >= 5 },
+            { id: 'sarf_expert', name: 'خبير الصرف', desc: 'أكمل 5 مراحل في مملكة الصرف', icon: 'fa-solid fa-sitemap', check: () => (gameState.completedLevels['sarf']?.length || 0) >= 5 },
+            { id: 'imlaa_perfect', name: 'إملائي مثالي', desc: 'أكمل 5 مراحل في مملكة الإملاء', icon: 'fa-solid fa-pen-to-square', check: () => (gameState.completedLevels['imlaa']?.length || 0) >= 5 },
+            { id: 'balagha_poet', name: 'شاعر البلاغة', desc: 'أكمل 5 مراحل في مملكة البلاغة', icon: 'fa-solid fa-feather', check: () => (gameState.completedLevels['balagha']?.length || 0) >= 5 },
+            { id: 'gold_collector', name: 'جامع الذهب', desc: 'اجمع 500 قطعة ذهبية', icon: 'fa-solid fa-coins', check: () => gameState.gold >= 500 },
+            { id: 'xp_1000', name: 'ألف خبرة', desc: 'احصل على 1000 نقطة خبرة', icon: 'fa-solid fa-star', check: () => gameState.xp >= 1000 },
+            { id: 'all_kingdoms', name: 'فارس الممالك', desc: 'أكمل مرحلة واحدة على الأقل في كل مملكة', icon: 'fa-solid fa-crown', check: () => KINGDOMS.every(k => (gameState.completedLevels[k.id]?.length || 0) > 0) },
+            { id: 'exam_90', name: 'متفوق', desc: 'احصل على 90% أو أكثر في الاختبار', icon: 'fa-solid fa-file-pen', check: () => gameState.examHistory.some(score => score >= 90) },
         ];
 
-
-    $("questionTypeTitle").textContent=
-        type.title;
-
-
-    $("questionTypeHint").textContent=
-        type.hint;
-
-
-    $("questionTypeIcon").innerHTML=
-        `<i class="${type.icon} text-indigo-400 text-xl"></i>`;
-
-
-    $("questionText").textContent=
-        question.text;
-
-
-    renderPlayers();
-
-    renderCurrentTurn();
-
-    renderOptions(question);
-
-    updateBuzzButton();
-
-    renderFeedback();
-
-    startTimer();
-
-}
-
-
-
-/* ============================================================
-   PLAYERS
-============================================================ */
-
-function renderPlayers(){
-
-    const container=
-        $("gamePlayers");
-
-
-    container.innerHTML="";
-
-
-    const players=
-        Object.values(
-            state.room.players||{}
-        );
-
-
-    players.forEach(
-        (player,index)=>{
-
-            const isYou=
-                player.id===
-                state.playerId;
-
-
-            const isCurrent=
-                state.room
-                    .currentPlayerIndex===
-                index;
-
-
-            const card=
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className=
-                "player-card glass-light rounded-2xl p-4 "+
-                (isYou?"you ":"")+
-                (
-                    isCurrent &&
-                    state.room.phase===
-                    "individual"
-                    ?
-                    "active-player"
-                    :
-                    ""
-                );
-
-
-            card.innerHTML=`
-
-                <div class="flex items-center gap-3">
-
-                    <div class="player-avatar">
-
-                        ${escapeHtml(
-                            player.name
-                                .charAt(0)
-                        )}
-
-                    </div>
-
-
-                    <div class="flex-1 min-w-0">
-
-                        <div class="font-black truncate">
-
-                            ${escapeHtml(
-                                player.name
-                            )}
-
-                            ${
-                                isYou
-                                ?
-                                '<span class="text-emerald-400 text-xs mr-1">أنت</span>'
-                                :
-                                ""
-                            }
-
-                            ${
-                                player.id===
-                                state.room.hostId
-                                ?
-                                '<span class="text-yellow-400 text-xs mr-1">👑</span>'
-                                :
-                                ""
-                            }
-
-                        </div>
-
-
-                        <div class="text-xs text-slate-500">
-
-                            ${
-                                player.correct||0
-                            }
-                            إجابة صحيحة
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="text-left">
-
-                        <div class="score-number text-xl">
-
-                            ${
-                                player.score||0
-                            }
-
-                        </div>
-
-                        <div class="text-[10px] text-slate-500">
-                            نقطة
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                card
-            );
-
+        // ==================== دوال مساعدة ====================
+        function $(id) { return document.getElementById(id); }
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            $(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    );
-
-}
-
-
-
-/* ============================================================
-   CURRENT TURN
-============================================================ */
-
-function renderCurrentTurn(){
-
-    const room=state.room;
-
-
-    if(
-        room.phase==="speed"
-    ){
-
-        if(room.buzzerUid){
-
-            const player=
-                room.players?.[
-                    room.buzzerUid
-                ];
-
-
-            $("currentTurnName").textContent=
-                player?.name||
-                "لاعب";
-
-
-            $("gameStatus").textContent=
-                player?.id===
-                state.playerId
-                ?
-                "أنت صاحب الأحقية!"
-                :
-                `${player?.name||"لاعب"} سيجيب`;
-
-        }else{
-
-            $("currentTurnName").textContent=
-                "الجميع";
-
-            $("gameStatus").textContent=
-                "من يضغط أولًا؟";
-
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
-
-        return;
-
-    }
-
-
-    const players=
-        Object.values(
-            room.players||{}
-        );
-
-
-    const player=
-        players[
-            room.currentPlayerIndex
-        ];
-
-
-    $("currentTurnName").textContent=
-        player?.name||
-        "—";
-
-
-    $("gameStatus").textContent=
-        player?.id===
-        state.playerId
-        ?
-        "دورك الآن!"
-        :
-        `دور ${player?.name||"اللاعب"}`;
-
-}
-
-
-
-/* ============================================================
-   OPTIONS
-============================================================ */
-
-function renderOptions(question){
-
-    const container=
-        $("optionsContainer");
-
-
-    container.innerHTML="";
-
-
-    question.options.forEach(
-        (option,index)=>{
-
-            const button=
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className=
-                "option flex items-center gap-3";
-
-
-            button.innerHTML=`
-
-                <span class="option-letter">
-
-                    ${String.fromCharCode(
-                        65+index
-                    )}
-
-                </span>
-
-                <span class="flex-1">
-
-                    ${escapeHtml(
-                        option
-                    )}
-
-                </span>
-
-            `;
-
-
-            button.onclick=()=>{
-
-                submitAnswer(index);
-
-            };
-
-
-            if(
-                state.room.answerLocked
-            ){
-
-                button.classList.add(
-                    "disabled"
-                );
-
-
-                if(
-                    index===
-                    question.answer
-                ){
-
-                    button.classList.add(
-                        "correct"
-                    );
-
-                }
-
-
-                if(
-                    index===
-                    state.room.answerIndex &&
-                    state.room.answerCorrect===
-                    false
-                ){
-
-                    button.classList.add(
-                        "wrong"
-                    );
-
-                }
-
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
             }
-
-
-            container.appendChild(
-                button
-            );
-
+            return arr;
         }
-    );
 
-}
-
-
-
-/* ============================================================
-   CAN ANSWER
-============================================================ */
-
-function canAnswer(){
-
-    const room=state.room;
-
-
-    if(
-        !room ||
-        room.status!=="playing" ||
-        room.answerLocked
-    ){
-
-        return false;
-
-    }
-
-
-    if(
-        room.phase==="speed"
-    ){
-
-        return(
-            room.buzzerUid===
-            state.playerId
-        );
-
-    }
-
-
-    const players=
-        Object.values(
-            room.players||{}
-        );
-
-
-    return(
-        players[
-            room.currentPlayerIndex
-        ]?.id===
-        state.playerId
-    );
-
-}
-
-
-
-/* ============================================================
-   BUZZ
-============================================================ */
-
-$("buzzButton").onclick=
-async()=>{
-
-    if(state.processing)
-        return;
-
-
-    const roomRef=
-        state.roomRef;
-
-
-    if(!roomRef)
-        return;
-
-
-    try{
-
-        const result=
-            await roomRef.transaction(
-                room=>{
-
-                    if(!room)
-                        return;
-
-                    if(
-                        room.status!=="playing"
-                    )
-                        return;
-
-                    if(
-                        room.phase!=="speed"
-                    )
-                        return;
-
-                    if(room.buzzerUid)
-                        return;
-
-                    if(room.answerLocked)
-                        return;
-
-
-                    room.buzzerUid=
-                        state.playerId;
-
-
-                    room.updatedAt=
-                        firebase.database.ServerValue.TIMESTAMP;
-
-
-                    return room;
-
-                }
-            );
-
-
-    }catch(error){
-
-        console.error(
-            "buzz:",
-            error
-        );
-
-    }
-
-};
-
-
-
-/* ============================================================
-   ANSWER
-============================================================ */
-
-async function submitAnswer(index){
-
-    if(state.processing)
-        return;
-
-
-    if(!canAnswer()){
-
-        toast(
-            state.room?.phase==="speed"
-            ?
-            "اضغط زر السرعة أولًا."
-            :
-            "ليس دورك الآن."
-        );
-
-        return;
-
-    }
-
-
-    const question=
-        getQuestion(
-            state.room.questionId
-        );
-
-
-    if(!question)
-        return;
-
-
-    const correct=
-        index===
-        question.answer;
-
-
-    const roomRef=
-        state.roomRef;
-
-
-    state.processing=true;
-
-
-    try{
-
-        await roomRef.transaction(
-            room=>{
-
-                if(!room)
-                    return;
-
-                if(
-                    room.answerLocked
-                )
-                    return;
-
-
-                let answerUid=null;
-
-
-                if(
-                    room.phase==="speed"
-                ){
-
-                    answerUid=
-                        room.buzzerUid;
-
-                }else{
-
-                    const players=
-                        Object.values(
-                            room.players||{}
-                        );
-
-
-                    answerUid=
-                        players[
-                            room.currentPlayerIndex
-                        ]?.id;
-
-                }
-
-
-                if(
-                    answerUid!==
-                    state.playerId
-                ){
-
-                    return;
-
-                }
-
-
-                const players={
-                    ...(room.players||{})
-                };
-
-
-                const player={
-                    ...(players[
-                        state.playerId
-                    ]||{})
-                };
-
-
-                let points=
-                    correct
-                    ?
-                    GAME_CONFIG.CORRECT_POINTS
-                    :
-                    GAME_CONFIG.WRONG_POINTS;
-
-
-                if(
-                    correct &&
-                    room.phase==="speed"
-                ){
-
-                    points+=
-                        GAME_CONFIG.BUZZ_BONUS;
-
-                }
-
-
-                player.score=
-                    (player.score||0)+
-                    points;
-
-
-                if(correct){
-
-                    player.correct=
-                        (player.correct||0)+
-                        1;
-
-                }
-
-
-                player.answered=
-                    (player.answered||0)+
-                    1;
-
-
-                players[
-                    state.playerId
-                ]=player;
-
-
-                room.players=players;
-
-
-                room.answerUid=
-                    state.playerId;
-
-
-                room.answerIndex=
-                    index;
-
-
-                room.answerCorrect=
-                    correct;
-
-
-                room.answerLocked=
-                    true;
-
-
-                room.updatedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-
-                return room;
-
+        // حفظ واسترجاع التقدم
+        function saveState() {
+            localStorage.setItem('fursan_linguistic_state', JSON.stringify(gameState));
+        }
+        function loadState() {
+            const saved = localStorage.getItem('fursan_linguistic_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // دمج مع الحالة الافتراضية
+                    gameState = { ...gameState, ...parsed };
+                } catch (e) { console.error('Failed to load state', e); }
             }
-        );
-
-    }catch(error){
-
-        console.error(
-            "submitAnswer:",
-            error
-        );
-
-        toast(
-            "تعذر تسجيل الإجابة."
-        );
-
-    }finally{
-
-        state.processing=false;
-
-    }
-
-}
-
-
-
-/* ============================================================
-   FEEDBACK
-============================================================ */
-
-function renderFeedback(){
-
-    const room=state.room;
-
-    const box=
-        $("answerFeedback");
-
-
-    if(!room.answerLocked){
-
-        box.classList.add(
-            "hidden"
-        );
-
-        return;
-
-    }
-
-
-    const question=
-        getQuestion(
-            room.questionId
-        );
-
-
-    if(!question)
-        return;
-
-
-    box.classList.remove(
-        "hidden"
-    );
-
-
-    if(
-        room.answerUid===
-        state.playerId
-    ){
-
-        if(room.answerCorrect){
-
-            $("feedbackTitle").innerHTML=`
-
-                <span class="text-emerald-400">
-
-                    <i class="
-                        fa-solid
-                        fa-circle-check
-                        ml-2
-                    "></i>
-
-                    إجابة صحيحة!
-
-                </span>
-
-            `;
-
-
-            $("feedbackText").textContent=
-                question.explanation;
-
-
-            box.className=
-                "mt-6 rounded-2xl p-5 "+
-                "bg-emerald-500/10 "+
-                "border border-emerald-500/20";
-
-
-            celebrateOnce();
-
-        }else{
-
-            $("feedbackTitle").innerHTML=`
-
-                <span class="text-red-400">
-
-                    <i class="
-                        fa-solid
-                        fa-circle-xmark
-                        ml-2
-                    "></i>
-
-                    إجابة غير صحيحة
-
-                </span>
-
-            `;
-
-
-            $("feedbackText").textContent=
-                `الإجابة الصحيحة: ${
-                    question.options[
-                        question.answer
-                    ]
-                } — ${
-                    question.explanation
-                }`;
-
-
-            box.className=
-                "mt-6 rounded-2xl p-5 "+
-                "bg-red-500/10 "+
-                "border border-red-500/20";
-
         }
 
-    }else{
-
-        $("feedbackTitle").innerHTML=`
-
-            <span class="${
-                room.answerCorrect
-                ?
-                "text-emerald-400"
-                :
-                "text-red-400"
-            }">
-
-                ${
-                    room.answerCorrect
-                    ?
-                    "إجابة صحيحة!"
-                    :
-                    "انتهى وقت الإجابة أو كانت الإجابة خاطئة."
-                }
-
-            </span>
-
-        `;
-
-
-        $("feedbackText").textContent=
-            room.answerCorrect
-            ?
-            question.explanation
-            :
-            `الإجابة الصحيحة: ${
-                question.options[
-                    question.answer
-                ]
-            }`;
-
-
-        box.className=
-            "mt-6 rounded-2xl p-5 "+
-            (
-                room.answerCorrect
-                ?
-                "bg-emerald-500/10 border border-emerald-500/20"
-                :
-                "bg-red-500/10 border border-red-500/20"
-            );
-
-    }
-
-}
-
-
-
-/* ============================================================
-   CONFETTI
-============================================================ */
-
-let lastCelebrated=null;
-
-
-function celebrateOnce(){
-
-    const key=
-        state.room?.round+
-        "_"+
-        state.room?.answerUid;
-
-
-    if(
-        key===
-        lastCelebrated
-    )
-        return;
-
-
-    lastCelebrated=key;
-
-
-    if(
-        typeof confetti==="function"
-    ){
-
-        confetti({
-
-            particleCount:90,
-
-            spread:75,
-
-            origin:{
-                y:.65
-            }
-
-        });
-
-    }
-
-}
-
-
-
-/* ============================================================
-   TIMER
-============================================================ */
-
-function getMillis(value){
-
-    if(!value)
-        return Date.now();
-
-
-    if(
-        typeof value==="number"
-    )
-        return value;
-
-
-    if(value.seconds)
-        return value.seconds*1000;
-
-
-    if(
-        typeof value.toMillis==="function"
-    )
-        return value.toMillis();
-
-
-    return Date.now();
-
-}
-
-
-
-function startTimer(){
-
-    clearInterval(
-        state.timer
-    );
-
-
-    const room=state.room;
-
-
-    if(
-        !room ||
-        !room.startedAt
-    )
-        return;
-
-
-    const start=
-        getMillis(
-            room.startedAt
-        );
-
-
-    const duration=
-        room.phase==="speed"
-        ?
-        GAME_CONFIG.SPEED_TIME
-        :
-        GAME_CONFIG.INDIVIDUAL_TIME;
-
-
-    function tick(){
-
-        const elapsed=
-            Math.floor(
-                (
-                    Date.now()-
-                    start
-                )/1000
-            );
-
-
-        const remaining=
-            Math.max(
-                0,
-                duration-elapsed
-            );
-
-
-        $("timerNumber").textContent=
-            remaining;
-
-
-        const progress=
-            remaining/
-            duration*
-            100;
-
-
-        $("timerRing")
-            .style
-            .setProperty(
-                "--progress",
-                progress+"%"
-            );
-
-
-        if(
-            remaining<=5
-        ){
-
-            $("timerRing")
-                .classList
-                .add(
-                    "timer-danger"
-                );
-
-        }else{
-
-            $("timerRing")
-                .classList
-                .remove(
-                    "timer-danger"
-                );
-
+        // تحديث واجهة الشريط العلوي
+        function updateTopBar() {
+            $('topXp').textContent = gameState.xp;
+            $('topGold').textContent = gameState.gold;
+            $('topName').textContent = gameState.playerName;
         }
 
-
-        $("timerHint").textContent=
-
-            room.phase==="speed"
-
-            ?
-
-            (
-                room.buzzerUid
-                ?
-                "تم حسم الأحقية"
-                :
-                "اضغط الزر بسرعة!"
-            )
-
-            :
-
-            (
-                canAnswer()
-                ?
-                "أجب قبل انتهاء الوقت"
-                :
-                "انتظر دورك"
-            );
-
-
-        if(
-            remaining<=0 &&
-            !room.answerLocked &&
-            state.playerId===
-            room.hostId
-        ){
-
-            clearInterval(
-                state.timer
-            );
-
-            expireRound();
-
-        }
-
-    }
-
-
-    tick();
-
-
-    state.timer=
-        setInterval(
-            tick,
-            250
-        );
-
-}
-
-
-
-/* ============================================================
-   EXPIRE ROUND
-============================================================ */
-
-async function expireRound(){
-
-    if(!state.roomRef)
-        return;
-
-
-    try{
-
-        await state.roomRef.transaction(
-            room=>{
-
-                if(!room)
-                    return;
-
-                if(
-                    room.status!=="playing"
-                )
-                    return;
-
-                if(
-                    room.answerLocked
-                )
-                    return;
-
-
-                room.answerLocked=true;
-
-                room.answerUid=null;
-
-                room.answerIndex=null;
-
-                room.answerCorrect=false;
-
-                room.updatedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-
-                return room;
-
-            }
-        );
-
-    }catch(error){
-
-        console.error(
-            "expireRound:",
-            error
-        );
-
-    }
-
-}
-
-
-
-/* ============================================================
-   ROUND CHANGE DETECTION
-============================================================ */
-
-function detectRoundChange(){
-
-    if(!state.room)
-        return;
-
-
-    const room=
-        state.room;
-
-
-    const roundChanged=
-        state.previousRound!==null &&
-        room.round!==
-        state.previousRound;
-
-
-    const answerJustLocked=
-        room.answerLocked &&
-        !state.previousAnswerLocked;
-
-
-    state.previousRound=
-        room.round;
-
-
-    state.previousQuestionId=
-        room.questionId;
-
-
-    state.previousAnswerLocked=
-        !!room.answerLocked;
-
-
-    if(
-        answerJustLocked &&
-        room.hostId===
-        state.playerId
-    ){
-
-        scheduleNextRound();
-
-    }
-
-
-    if(roundChanged){
-
-        clearTimeout(
-            state.nextRoundTimer
-        );
-
-    }
-
-}
-
-
-
-/* ============================================================
-   SCHEDULE NEXT ROUND
-============================================================ */
-
-function scheduleNextRound(){
-
-    if(
-        !state.room ||
-        state.room.status!=="playing" ||
-        !state.room.answerLocked
-    )
-        return;
-
-
-    if(
-        state.room.hostId!==
-        state.playerId
-    )
-        return;
-
-
-    clearTimeout(
-        state.nextRoundTimer
-    );
-
-
-    state.nextRoundTimer=
-        setTimeout(
-            ()=>{
-                nextRound();
-            },
-            2200
-        );
-
-}
-
-
-
-/* ============================================================
-   NEXT ROUND
-============================================================ */
-
-async function nextRound(){
-
-    const roomRef=
-        state.roomRef;
-
-
-    if(!roomRef)
-        return;
-
-
-    try{
-
-        await roomRef.transaction(
-            room=>{
-
-                if(!room)
-                    return;
-
-
-                if(
-                    room.status!=="playing" ||
-                    !room.answerLocked
-                ){
-
-                    return;
-
-                }
-
-
-                const nextRound=
-                    (room.round||0)+1;
-
-
-                if(
-                    nextRound>
-                    GAME_CONFIG.TOTAL_ROUNDS
-                ){
-
-                    room.status=
-                        "finished";
-
-                    room.phase=
-                        "finished";
-
-                    room.totalRounds=
-                        GAME_CONFIG.TOTAL_ROUNDS;
-
-                    room.updatedAt=
-                        firebase.database.ServerValue.TIMESTAMP;
-
-
-                    return room;
-
-                }
-
-
-                const players=
-                    Object.values(
-                        room.players||{}
-                    );
-
-
-                let nextIndex=
-                    room.currentPlayerIndex||
-                    0;
-
-
-                const nextPhase=
-                    nextRound%3===0
-                    ?
-                    "individual"
-                    :
-                    "speed";
-
-
-                if(
-                    nextPhase==="individual"
-                ){
-
-                    nextIndex=
-                        (
-                            nextIndex+1
-                        )%
-                        Math.max(
-                            players.length,
-                            1
-                        );
-
-                }
-
-
-                const nextQuestion=
-                    room.questions[
-                        nextRound-1
-                    ];
-
-
-                if(!nextQuestion){
-
-                    room.status=
-                        "finished";
-
-                    room.phase=
-                        "finished";
-
-                    return room;
-
-                }
-
-
-                room.round=
-                    nextRound;
-
-
-                room.phase=
-                    nextPhase;
-
-
-                room.questionId=
-                    nextQuestion;
-
-
-                room.startedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-
-                room.currentPlayerIndex=
-                    nextIndex;
-
-
-                room.buzzerUid=null;
-
-                room.answerUid=null;
-
-                room.answerIndex=null;
-
-                room.answerCorrect=null;
-
-                room.answerLocked=false;
-
-
-                room.updatedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-
-                return room;
-
-            }
-        );
-
-    }catch(error){
-
-        console.error(
-            "nextRound:",
-            error
-        );
-
-    }
-
-}
-
-
-
-/* ============================================================
-   BUZZ BUTTON
-============================================================ */
-
-function updateBuzzButton(){
-
-    const button=
-        $("buzzButton");
-
-
-    const room=
-        state.room;
-
-
-    const canBuzz=
-
-        room &&
-
-        room.status==="playing" &&
-
-        room.phase==="speed" &&
-
-        !room.buzzerUid &&
-
-        !room.answerLocked;
-
-
-    button.disabled=
-        !canBuzz;
-
-
-    if(canBuzz){
-
-        button.classList.add(
-            "pulse"
-        );
-
-    }else{
-
-        button.classList.remove(
-            "pulse"
-        );
-
-    }
-
-}
-
-
-
-/* ============================================================
-   RESULTS
-============================================================ */
-
-function renderResults(){
-
-    clearInterval(
-        state.timer
-    );
-
-
-    const players=
-        Object.values(
-            state.room.players||{}
-        )
-        .sort(
-            (a,b)=>
-                (b.score||0)-
-                (a.score||0)
-        );
-
-
-    const list=
-        $("resultsList");
-
-
-    list.innerHTML="";
-
-
-    const medals=[
-        "🥇",
-        "🥈",
-        "🥉"
-    ];
-
-
-    players.forEach(
-        (player,index)=>{
-
-            const rank=
-                index+1;
-
-
-            const card=
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className=
-                `glass-light rounded-2xl p-5 rank-${
-                    Math.min(rank,3)
-                }`;
-
-
-            card.innerHTML=`
-
-                <div class="flex items-center gap-4">
-
-                    <div class="text-3xl w-10 text-center">
-
-                        ${
-                            medals[index]||
-                            rank
-                        }
-
-                    </div>
-
-
-                    <div class="player-avatar">
-
-                        ${escapeHtml(
-                            player.name
-                                .charAt(0)
-                        )}
-
-                    </div>
-
-
-                    <div class="flex-1">
-
-                        <div class="font-black">
-
-                            ${escapeHtml(
-                                player.name
-                            )}
-
-                            ${
-                                player.id===
-                                state.playerId
-                                ?
-                                '<span class="text-emerald-400 text-xs mr-1">أنت</span>'
-                                :
-                                ""
-                            }
-
+        // بناء شبكة الممالك
+        function renderKingdomGrid() {
+            const grid = $('kingdomGrid');
+            grid.innerHTML = '';
+            KINGDOMS.forEach(kingdom => {
+                const completedCount = gameState.completedLevels[kingdom.id]?.length || 0;
+                const progressPercent = (completedCount / kingdom.levels) * 100;
+                const card = document.createElement('div');
+                card.className = `map-kingdom relative bg-gradient-to-br ${kingdom.color} rounded-3xl p-6 shadow-xl overflow-hidden cursor-pointer`;
+                card.innerHTML = `
+                    <div class="absolute top-4 left-4 text-white/20 text-6xl"><i class="${kingdom.icon}"></i></div>
+                    <div class="relative z-10">
+                        <div class="text-4xl mb-3"><i class="${kingdom.icon} text-white"></i></div>
+                        <h3 class="text-2xl font-black mb-2">${kingdom.name}</h3>
+                        <p class="text-white/80 text-sm mb-4">${kingdom.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80 text-sm">${completedCount} / ${kingdom.levels} مرحلة</span>
+                            <span class="text-white/80 text-sm">${Math.round(progressPercent)}%</span>
                         </div>
-
-
-                        <div class="text-xs text-slate-500 mt-1">
-
-                            ${
-                                player.correct||0
-                            }
-
-                            إجابة صحيحة من
-
-                            ${
-                                player.answered||0
-                            }
-
+                        <div class="progress-bar mt-2 bg-white/20 h-2">
+                            <div class="progress-fill bg-white h-full" style="width: ${progressPercent}%;"></div>
                         </div>
-
                     </div>
-
-
-                    <div class="text-left">
-
-                        <div class="text-3xl font-black">
-
-                            ${
-                                player.score||0
-                            }
-
-                        </div>
-
-                        <div class="text-xs text-slate-500">
-                            نقطة
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-
-            list.appendChild(
-                card
-            );
-
-        }
-    );
-
-
-    const winner=
-        players[0];
-
-
-    if(winner){
-
-        $("winnerText").textContent=
-            `الفارس المتصدر: ${
-                winner.name
-            } — ${
-                winner.score||0
-            } نقطة`;
-
-    }
-
-
-    const me=
-        state.room.players?.[
-            state.playerId
-        ];
-
-
-    $("finalCorrect").textContent=
-        me?.correct||0;
-
-
-    $("finalRounds").textContent=
-        GAME_CONFIG.TOTAL_ROUNDS;
-
-
-    $("finalQuestions").textContent=
-        GAME_CONFIG.TOTAL_ROUNDS;
-
-
-    if(
-        winner?.id===
-        state.playerId
-    ){
-
-        if(
-            typeof confetti==="function"
-        ){
-
-            confetti({
-
-                particleCount:180,
-
-                spread:100,
-
-                origin:{
-                    y:.55
-                }
-
+                `;
+                card.addEventListener('click', () => openKingdom(kingdom.id));
+                grid.appendChild(card);
             });
-
         }
 
-    }
-
-}
-
-
-
-/* ============================================================
-   LEAVE ROOM
-============================================================ */
-
-async function leaveRoom(){
-
-    clearInterval(
-        state.timer
-    );
-
-    clearTimeout(
-        state.nextRoundTimer
-    );
-
-
-    if(!state.roomRef){
-
-        resetToLobby();
-
-        return;
-
-    }
-
-
-    try{
-
-        const ref=
-            state.roomRef;
-
-
-        await ref.transaction(
-            room=>{
-
-                if(!room)
-                    return;
-
-
-                room.players=
-                    room.players||{};
-
-
-                delete room.players[
-                    state.playerId
-                ];
-
-
-                const remaining=
-                    Object.values(
-                        room.players
-                    );
-
-
-                if(
-                    remaining.length===0
-                ){
-
-                    return null;
-
+        // فتح مملكة
+        function openKingdom(kingdomId) {
+            const kingdom = KINGDOMS.find(k => k.id === kingdomId);
+            // عرض شاشة اختيار المرحلة للمملكة (سنتجاوزها الآن ونبدأ مباشرة بأول مرحلة غير مكتملة)
+            // لكن سننشئ نافذة صغيرة لاختيار المرحلة
+            const completed = gameState.completedLevels[kingdom.id] || [];
+            let nextLevel = 1;
+            // نجد أول مرحلة غير مكتملة
+            for (let i = 1; i <= kingdom.levels; i++) {
+                if (!completed.includes(i)) {
+                    nextLevel = i;
+                    break;
                 }
-
-
-                room.playerCount=
-                    remaining.length;
-
-
-                if(
-                    room.hostId===
-                    state.playerId
-                ){
-
-                    room.hostId=
-                        remaining[0].id;
-
-                }
-
-
-                room.updatedAt=
-                    firebase.database.ServerValue.TIMESTAMP;
-
-
-                return room;
-
+                nextLevel = i + 1;
             }
-        );
-
-    }catch(error){
-
-        console.error(
-            "leaveRoom:",
-            error
-        );
-
-    }
-
-
-    cleanupRoom();
-
-    resetToLobby();
-
-}
-
-
-
-/* ============================================================
-   CLEANUP
-============================================================ */
-
-function cleanupRoom(){
-
-    clearInterval(
-        state.timer
-    );
-
-    clearTimeout(
-        state.nextRoundTimer
-    );
-
-
-    if(
-        state.roomRef &&
-        state.roomListener
-    ){
-
-        state.roomRef.off(
-            "value",
-            state.roomListener
-        );
-
-    }
-
-
-    state.roomListener=null;
-
-    state.roomRef=null;
-
-    state.room=null;
-
-    state.roomId=null;
-
-    state.previousRound=null;
-
-    state.previousQuestionId=null;
-
-    state.previousAnswerLocked=false;
-
-    state.processing=false;
-
-}
-
-
-
-/* ============================================================
-   RESET TO LOBBY
-============================================================ */
-
-function resetToLobby(){
-
-    cleanupRoom();
-
-
-    $("playerNameInput").value=
-        state.playerName||"";
-
-
-    showScreen(
-        "screenLobby"
-    );
-
-}
-
-
-
-/* ============================================================
-   NEW GAME
-============================================================ */
-
-$("newGameButton").onclick=()=>{
-
-    resetToLobby();
-
-};
-
-
-
-/* ============================================================
-   SCREEN
-============================================================ */
-
-function showScreen(id){
-
-    document
-        .querySelectorAll(".screen")
-        .forEach(
-            screen=>{
-                screen.classList.remove(
-                    "active"
-                );
+            if (nextLevel > kingdom.levels) {
+                alert('أكملت جميع المراحل في هذه المملكة!');
+                return;
             }
-        );
-
-
-    $(id).classList.add(
-        "active"
-    );
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-}
-
-
-
-/* ============================================================
-   ENTER GAME
-============================================================ */
-
-$("enterGameButton").onclick=
-async()=>{
-
-    const name=
-        $("playerNameInput")
-            .value
-            .trim();
-
-
-    if(!name){
-
-        toast(
-            "اكتب اسمك أولًا."
-        );
-
-        $("playerNameInput")
-            .focus();
-
-        return;
-
-    }
-
-
-    if(name.length<2){
-
-        toast(
-            "الاسم قصير جدًا."
-        );
-
-        return;
-
-    }
-
-
-    state.playerName=
-        name;
-
-
-    localStorage.setItem(
-        "arabic_knights_player_name",
-        name
-    );
-
-
-    const button=
-        $("enterGameButton");
-
-
-    button.disabled=true;
-
-
-    button.innerHTML=`
-
-        <i class="
-            fa-solid
-            fa-spinner
-            fa-spin
-            ml-2
-        "></i>
-
-        جارٍ البحث عن غرفة...
-
-    `;
-
-
-    try{
-
-        await findOrCreateRoom();
-
-    }catch(error){
-
-        console.error(
-            error
-        );
-
-        toast(
-            "تعذر الدخول إلى المباراة."
-        );
-
-    }finally{
-
-        button.disabled=false;
-
-
-        button.innerHTML=`
-
-            <i class="
-                fa-solid
-                fa-door-open
-                ml-2
-            "></i>
-
-            دخول إلى المباراة
-
-        `;
-
-    }
-
-};
-
-
-
-/* ============================================================
-   ENTER KEY
-============================================================ */
-
-$("playerNameInput")
-    .addEventListener(
-        "keydown",
-        event=>{
-
-            if(
-                event.key==="Enter"
-            ){
-
-                $("enterGameButton")
-                    .click();
-
-            }
-
+            startLevel(kingdom.id, nextLevel);
         }
-    );
 
+        // بدء مرحلة
+        let currentLevelInfo = null; // { kingdomId, levelNumber, questions, currentIndex, correct, hintsUsed, timer }
+        let levelTimerInterval = null;
+        let levelTimeLeft = 0;
+        let answerLocked = false;
 
+        function startLevel(kingdomId, levelNumber) {
+            const kingdom = KINGDOMS.find(k => k.id === kingdomId);
+            // جمع أسئلة هذه المرحلة
+            const levelQuestions = QUESTION_BANK.filter(q => q.kingdom === kingdomId && q.level === levelNumber);
+            if (levelQuestions.length < 5) {
+                // استكمال من مستويات مجاورة إذا لم تكن كافية
+                const additional = QUESTION_BANK.filter(q => q.kingdom === kingdomId && q.level !== levelNumber);
+                const needed = 5 - levelQuestions.length;
+                const extra = shuffleArray(additional).slice(0, needed);
+                levelQuestions.push(...extra);
+            }
+            // اختيار 5 أسئلة عشوائياً
+            const selectedQuestions = shuffleArray(levelQuestions).slice(0, 5);
+            if (selectedQuestions.length === 0) {
+                alert('لا توجد أسئلة متاحة لهذه المرحلة.');
+                return;
+            }
+            currentLevelInfo = {
+                kingdomId,
+                levelNumber,
+                questions: selectedQuestions,
+                currentIndex: 0,
+                correct: 0,
+                hintsUsed: 0,
+                goldEarned: 0,
+                xpEarned: 0,
+            };
+            // عرض شاشة المرحلة
+            showScreen('screenLevel');
+            $('levelTitle').textContent = `${kingdom.name} - المرحلة ${levelNumber}`;
+            $('levelSubtitle').textContent = kingdom.description;
+            answerLocked = false;
+            renderQuestion();
+        }
 
-/* ============================================================
-   LEAVE BUTTON
-============================================================ */
+        function renderQuestion() {
+            if (!currentLevelInfo) return;
+            const info = currentLevelInfo;
+            const q = info.questions[info.currentIndex];
+            $('currentQuestionNum').textContent = info.currentIndex + 1;
+            $('levelProgress').style.width = `${(info.currentIndex / info.questions.length) * 100}%`;
+            $('questionText').textContent = q.text;
+            // نوع السؤال
+            const typeMap = {
+                mcq: 'اختيار من متعدد',
+                true_false: 'صح أم خطأ',
+                fill: 'أكمل الفراغ',
+                correct_error: 'صحح الخطأ'
+            };
+            $('questionType').textContent = typeMap[q.type] || q.type;
+            // خيارات
+            const container = $('optionsContainer');
+            container.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn w-full text-right p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center gap-3';
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center font-black shrink-0">${String.fromCharCode(65+idx)}</span>
+                    <span class="flex-1">${escapeHtml(opt)}</span>
+                `;
+                btn.addEventListener('click', () => selectAnswer(idx));
+                container.appendChild(btn);
+            });
+            // إخفاء التلميح
+            $('hintText').classList.add('hidden');
+            $('hintBtn').classList.remove('hidden');
+            // إعادة تعيين المؤقت
+            resetTimer();
+            answerLocked = false;
+        }
 
-$("leaveRoomButton").onclick=
-    leaveRoom;
+        function selectAnswer(selectedIndex) {
+            if (answerLocked) return;
+            answerLocked = true;
+            clearInterval(levelTimerInterval);
+            const info = currentLevelInfo;
+            const q = info.questions[info.currentIndex];
+            const isCorrect = selectedIndex === q.answer;
+            // تمييز الإجابات
+            const optionButtons = document.querySelectorAll('.option-btn');
+            optionButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.answer) {
+                    btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
+                }
+                if (idx === selectedIndex && !isCorrect) {
+                    btn.classList.add('bg-red-500/20', 'border-red-500');
+                }
+            });
+            // عرض التغذية الراجعة
+            const feedbackBox = $('feedbackBox');
+            feedbackBox.classList.remove('hidden');
+            if (isCorrect) {
+                info.correct++;
+                feedbackBox.className = 'mt-4 p-4 rounded-2xl text-center font-bold bg-emerald-500/20 text-emerald-300';
+                feedbackBox.innerHTML = `<i class="fa-solid fa-check-circle ml-2"></i> إجابة صحيحة! ${q.explanation}`;
+                // نقاط
+                info.xpEarned += 20;
+                info.goldEarned += 5;
+            } else {
+                feedbackBox.className = 'mt-4 p-4 rounded-2xl text-center font-bold bg-red-500/20 text-red-300';
+                feedbackBox.innerHTML = `<i class="fa-solid fa-xmark-circle ml-2"></i> إجابة خاطئة. الإجابة الصحيحة: ${q.options[q.answer]}. ${q.explanation}`;
+            }
+            updateTopBar();
+            // زر التالي
+            setTimeout(() => {
+                if (info.currentIndex < info.questions.length - 1) {
+                    info.currentIndex++;
+                    renderQuestion();
+                } else {
+                    finishLevel();
+                }
+            }, 2000);
+        }
 
+        function resetTimer() {
+            clearInterval(levelTimerInterval);
+            levelTimeLeft = 20;
+            $('timerDisplay').textContent = levelTimeLeft;
+            levelTimerInterval = setInterval(() => {
+                levelTimeLeft--;
+                $('timerDisplay').textContent = levelTimeLeft;
+                if (levelTimeLeft <= 0) {
+                    clearInterval(levelTimerInterval);
+                    if (!answerLocked) {
+                        // انتهى الوقت، نعتبر الإجابة خاطئة
+                        selectAnswer(-1);
+                    }
+                }
+            }, 1000);
+        }
 
+        function useHint() {
+            if (answerLocked) return;
+            if (gameState.gold < 10) {
+                alert('لا تملك قطعاً ذهبية كافية!');
+                return;
+            }
+            gameState.gold -= 10;
+            saveState();
+            updateTopBar();
+            const info = currentLevelInfo;
+            const q = info.questions[info.currentIndex];
+            // إظهار تلميح بسيط: حذف إجابتين خاطئتين
+            const wrongOptions = q.options.map((_, idx) => idx).filter(idx => idx !== q.answer);
+            const toRemove = shuffleArray(wrongOptions).slice(0, Math.min(2, wrongOptions.length));
+            const optionButtons = document.querySelectorAll('.option-btn');
+            toRemove.forEach(idx => {
+                optionButtons[idx].classList.add('opacity-30', 'pointer-events-none');
+            });
+            info.hintsUsed++;
+            $('hintText').textContent = 'تم حذف إجابتين خاطئتين';
+            $('hintText').classList.remove('hidden');
+            $('hintBtn').classList.add('hidden');
+            saveState();
+        }
+        $('hintBtn').addEventListener('click', useHint);
 
-/* ============================================================
-   ESCAPE HTML
-============================================================ */
+        function finishLevel() {
+            clearInterval(levelTimerInterval);
+            const info = currentLevelInfo;
+            // تسجيل الإكمال
+            if (!gameState.completedLevels[info.kingdomId]) {
+                gameState.completedLevels[info.kingdomId] = [];
+            }
+            if (!gameState.completedLevels[info.kingdomId].includes(info.levelNumber)) {
+                gameState.completedLevels[info.kingdomId].push(info.levelNumber);
+            }
+            // إضافة نقاط
+            gameState.xp += info.xpEarned;
+            gameState.gold += info.goldEarned;
+            // حفظ
+            saveState();
+            updateTopBar();
+            // عرض شاشة الإكمال
+            $('completeCorrect').textContent = info.correct;
+            $('completeXp').textContent = info.xpEarned;
+            $('completeGold').textContent = info.goldEarned;
+            $('completeTitle').textContent = info.correct >= 4 ? 'أداء رائع!' : info.correct >= 3 ? 'جيد جداً' : 'حاول مرة أخرى';
+            $('completeIcon').textContent = info.correct >= 4 ? '🏆' : info.correct >= 3 ? '🌟' : '💪';
+            $('completeMessage').textContent = `أجبت على ${info.correct} من أصل ${info.questions.length} أسئلة صحيحة.`;
+            showScreen('screenLevelComplete');
+            // تحديث الخريطة عند العودة
+            // لا نعيد رسم الخريطة الآن، بل عند العودة
+        }
 
-function escapeHtml(value){
+        function goBackToMap() {
+            showScreen('screenMap');
+            renderKingdomGrid();
+            updateTopBar();
+        }
 
-    return String(
-        value??""
-    )
+        // ==================== المكتبة ====================
+        const LIBRARY_CONTENT = [
+            { title: 'المبتدأ والخبر', content: 'المبتدأ هو اسم مرفوع يقع في أول الجملة، والخبر هو ما يخبر به عن المبتدأ ويكون مرفوعاً. مثال: "العلمُ نورٌ".' },
+            { title: 'الفاعل', content: 'الفاعل هو اسم مرفوع يدل على من قام بالفعل. مثال: "نجح الطالبُ".' },
+            { title: 'المفعول به', content: 'المفعول به اسم منصوب يدل على من وقع عليه الفعل. مثال: "قرأ الطالبُ الكتابَ".' },
+            { title: 'إن وأخواتها', content: 'إن وأخواتها تدخل على الجملة الاسمية فتنصب المبتدأ ويسمى اسمها، وترفع الخبر ويسمى خبرها. مثال: "إن الطالبَ مجتهدٌ".' },
+            { title: 'كان وأخواتها', content: 'كان وأخواتها تدخل على الجملة الاسمية فترفع المبتدأ ويسمى اسمها، وتنصب الخبر ويسمى خبرها. مثال: "كان الجوُّ جميلًا".' },
+            { title: 'المثنى', content: 'المثنى يرفع بالألف وينصب ويجر بالياء. مثال: "جاء الطالبانِ"، "رأيتُ الطالبينِ".' },
+            { title: 'جمع المذكر السالم', content: 'يرفع بالواو وينصب ويجر بالياء. مثال: "جاء المعلمونَ"، "رأيتُ المعلمينَ".' },
+            { title: 'جمع المؤنث السالم', content: 'يرفع بالضمة وينصب ويجر بالكسرة. مثال: "جاءت المعلماتُ"، "رأيتُ المعلماتِ".' },
+            { title: 'الأسماء الخمسة', content: 'أب، أخ، حم، فو، ذو. ترفع بالواو وتنصب بالألف وتجر بالياء. مثال: "جاء أخوك"، "رأيتُ أخاك"، "مررتُ بأخيك".' },
+            { title: 'الهمزات', content: 'همزة القطع تكتب وتلفظ دائماً، وهمزة الوصل تكتب ألفاً بدون همزة وتلفظ عند البدء فقط. مثال: "أحمد" (قطع)، "اكتب" (وصل).' },
+            { title: 'التشبيه البليغ', content: 'ما حذف منه وجه الشبه وأداة التشبيه. مثال: "العلم نور".' },
+            { title: 'الاستعارة', content: 'تشبيه حذف أحد طرفيه. الاستعارة التصريحية حذف فيها المشبه، والمكنية حذف فيها المشبه به.' },
+        ];
 
-    .replace(
-        /&/g,
-        "&amp;"
-    )
+        function renderLibrary() {
+            const container = $('libraryContent');
+            container.innerHTML = '';
+            LIBRARY_CONTENT.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800/80 border border-white/10 rounded-2xl p-6';
+                div.innerHTML = `
+                    <h3 class="text-xl font-bold mb-2 text-amber-400">${item.title}</h3>
+                    <p class="text-slate-300 leading-relaxed">${item.content}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
 
-    .replace(
-        /</g,
-        "&lt;"
-    )
+        // ==================== الإنجازات ====================
+        function renderAchievements() {
+            const list = $('achievementsList');
+            list.innerHTML = '';
+            ACHIEVEMENTS.forEach(ach => {
+                const unlocked = ach.check();
+                const div = document.createElement('div');
+                div.className = `bg-slate-800/80 border ${unlocked ? 'border-amber-500/50' : 'border-white/10'} rounded-2xl p-6 flex items-center gap-4`;
+                div.innerHTML = `
+                    <div class="w-14 h-14 rounded-2xl ${unlocked ? 'bg-amber-500/20 text-amber-400' : 'bg-white/5 text-slate-500'} flex items-center justify-center text-2xl">
+                        <i class="${ach.icon}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold ${unlocked ? 'text-white' : 'text-slate-400'}">${ach.name}</h3>
+                        <p class="text-sm text-slate-400">${ach.desc}</p>
+                    </div>
+                    <div class="text-2xl">${unlocked ? '✅' : '🔒'}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
 
-    .replace(
-        />/g,
-        "&gt;"
-    )
+        // ==================== وضع الاختبار ====================
+        let examQuestions = [];
+        let examIndex = 0;
+        let examCorrect = 0;
+        let examTimerInterval = null;
+        let examTimeLeft = 0;
+        let examInProgress = false;
 
-    .replace(
-        /"/g,
-        "&quot;"
-    )
+        function startExam() {
+            showScreen('screenExam');
+            $('examContent').innerHTML = '';
+            $('examStartBtn').classList.remove('hidden');
+        }
 
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+        function startExamQuestions() {
+            // اختيار 20 سؤال عشوائي من كل البنك
+            const allQuestions = shuffleArray(QUESTION_BANK);
+            examQuestions = allQuestions.slice(0, 20);
+            examIndex = 0;
+            examCorrect = 0;
+            examInProgress = true;
+            $('examStartBtn').classList.add('hidden');
+            renderExamQuestion();
+        }
 
-}
+        function renderExamQuestion() {
+            if (examIndex >= examQuestions.length) {
+                finishExam();
+                return;
+            }
+            const q = examQuestions[examIndex];
+            const container = $('examContent');
+            container.innerHTML = `
+                <div class="bg-slate-800/80 border border-white/10 rounded-3xl p-6 md:p-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm text-slate-400">السؤال ${examIndex+1} / ${examQuestions.length}</span>
+                        <span class="text-sm text-slate-400"><i class="fa-regular fa-clock ml-1"></i> <span id="examTimer">20</span> ث</span>
+                    </div>
+                    <h4 class="text-xl font-bold mb-6 font-amiri">${q.text}</h4>
+                    <div class="space-y-3">
+                        ${q.options.map((opt, idx) => `
+                            <button class="exam-option w-full text-right p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center gap-3" data-index="${idx}">
+                                <span class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center font-black shrink-0">${String.fromCharCode(65+idx)}</span>
+                                <span class="flex-1">${escapeHtml(opt)}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            // ربط الأزرار
+            document.querySelectorAll('.exam-option').forEach(btn => {
+                btn.addEventListener('click', () => selectExamAnswer(parseInt(btn.dataset.index)));
+            });
+            // بدء المؤقت
+            clearInterval(examTimerInterval);
+            examTimeLeft = 20;
+            $('examTimer').textContent = examTimeLeft;
+            examTimerInterval = setInterval(() => {
+                examTimeLeft--;
+                $('examTimer').textContent = examTimeLeft;
+                if (examTimeLeft <= 0) {
+                    clearInterval(examTimerInterval);
+                    selectExamAnswer(-1);
+                }
+            }, 1000);
+        }
 
+        function selectExamAnswer(idx) {
+            if (!examInProgress) return;
+            clearInterval(examTimerInterval);
+            const q = examQuestions[examIndex];
+            const isCorrect = idx === q.answer;
+            if (isCorrect) examCorrect++;
+            // تمييز
+            document.querySelectorAll('.exam-option').forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === q.answer) btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
+                if (i === idx && !isCorrect) btn.classList.add('bg-red-500/20', 'border-red-500');
+            });
+            // الانتقال بعد فترة
+            setTimeout(() => {
+                examIndex++;
+                if (examIndex < examQuestions.length) {
+                    renderExamQuestion();
+                } else {
+                    finishExam();
+                }
+            }, 1500);
+        }
 
+        function finishExam() {
+            examInProgress = false;
+            clearInterval(examTimerInterval);
+            const scorePercent = Math.round((examCorrect / examQuestions.length) * 100);
+            gameState.examHistory.push(scorePercent);
+            // منح مكافأة حسب الأداء
+            if (scorePercent >= 90) {
+                gameState.gold += 50;
+                gameState.xp += 100;
+            } else if (scorePercent >= 70) {
+                gameState.gold += 25;
+                gameState.xp += 50;
+            } else if (scorePercent >= 50) {
+                gameState.gold += 10;
+                gameState.xp += 20;
+            }
+            saveState();
+            updateTopBar();
+            showScreen('screenExamResult');
+            $('examScoreDisplay').textContent = `${scorePercent}%`;
+            $('examCorrect').textContent = examCorrect;
+            $('examWrong').textContent = examQuestions.length - examCorrect;
+            let msg = '';
+            if (scorePercent >= 90) msg = 'ممتاز! أنت فارس حقيقي للغة العربية.';
+            else if (scorePercent >= 70) msg = 'جيد جداً، واصل التقدم!';
+            else if (scorePercent >= 50) msg = 'لا بأس، تحتاج إلى مزيد من المراجعة.';
+            else msg = 'تحتاج إلى مراجعة القواعد الأساسية.';
+            $('examMessage').textContent = msg;
+        }
 
-/* ============================================================
-   RESTORE PLAYER NAME
-============================================================ */
+        // ==================== التهيئة ====================
+        function init() {
+            loadState();
+            updateTopBar();
+            renderKingdomGrid();
+            renderLibrary();
+            // إخفاء شاشة التحميل
+            setTimeout(() => {
+                $('loadingScreen').style.display = 'none';
+            }, 500);
+            // ربط الأزرار العامة
+            document.querySelectorAll('[onclick="showScreen(\'screenLibrary\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenLibrary'); renderLibrary(); }));
+            document.querySelectorAll('[onclick="showScreen(\'screenAchievements\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenAchievements'); renderAchievements(); }));
+            // زر العودة من المكتبة والإنجازات
+            document.querySelectorAll('[onclick="goBackToMap()"]').forEach(el => el.addEventListener('click', goBackToMap));
+            // زر بدء الاختبار
+            $('examStartBtn').addEventListener('click', startExamQuestions);
+            // إغلاق التحميل
+        }
 
-const savedName=
-    localStorage.getItem(
-        "arabic_knights_player_name"
-    );
-
-
-if(savedName){
-
-    $("playerNameInput").value=
-        savedName;
-
-    state.playerName=
-        savedName;
-
-}
-
-
-
-/* ============================================================
-   INITIAL SCREEN
-============================================================ */
-
-showScreen(
-    "screenLobby"
-);
-
-</script>
-
+        // بدء التطبيق
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
-  </html>
+    </html>
