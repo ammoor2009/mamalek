@@ -156,7 +156,6 @@
     </header>
 
     <main class="pt-16 min-h-screen pb-10">
-        <!-- شاشة البداية -->
         <section id="screenStart" class="screen active">
             <div class="max-w-md mx-auto px-4 py-16 text-center">
                 <div class="mb-8">
@@ -174,7 +173,6 @@
             </div>
         </section>
 
-        <!-- نافذة المعلومات -->
         <div id="infoModal" class="modal-overlay">
             <div class="modal-content">
                 <div class="flex items-center justify-between mb-4">
@@ -222,7 +220,6 @@
             </div>
         </div>
 
-        <!-- شاشة الخريطة -->
         <section id="screenMap" class="screen">
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <div class="text-center mb-12">
@@ -244,7 +241,6 @@
             </div>
         </section>
 
-        <!-- شاشة المرحلة -->
         <section id="screenLevel" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -291,7 +287,6 @@
             </div>
         </section>
 
-        <!-- شاشة نهاية المرحلة -->
         <section id="screenLevelComplete" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6" id="completeIcon">🎉</div>
@@ -317,7 +312,6 @@
             </div>
         </section>
 
-        <!-- شاشة المكتبة -->
         <section id="screenLibrary" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -330,7 +324,6 @@
             </div>
         </section>
 
-        <!-- شاشة الإنجازات -->
         <section id="screenAchievements" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -343,7 +336,6 @@
             </div>
         </section>
 
-        <!-- شاشة الاختبار -->
         <section id="screenExam" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="text-center mb-6">
@@ -362,7 +354,6 @@
             </div>
         </section>
 
-        <!-- شاشة نتيجة الاختبار -->
         <section id="screenExamResult" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6">📊</div>
@@ -746,14 +737,13 @@
             }
         });
 
-        // ==================== التعامل مع زر الرجوع في الهاتف ====================
+        // ==================== التعامل مع زر الرجوع ====================
         window.addEventListener('popstate', (e) => {
             const activeScreen = document.querySelector('.screen.active');
             if (activeScreen && activeScreen.id !== 'screenMap' && activeScreen.id !== 'screenStart') {
                 goBackToMap();
                 history.pushState(null, '', '');
             } else {
-                // إذا كان في الخريطة أو البداية، نسمح بالخروج الطبيعي
                 history.back();
             }
         });
@@ -804,7 +794,7 @@
         let levelTimerInterval = null;
         let levelTimeLeft = 0;
         let answerLocked = false;
-        let timerDuration = 15; // ثانية
+        let timerDuration = 15;
 
         function startLevel(kingdomId, levelNumber) {
             const kingdom = KINGDOMS.find(k => k.id === kingdomId);
@@ -908,7 +898,6 @@
                 soundWrong();
             }
             updateTopBar();
-            // إظهار أزرار التحكم
             if (info.currentIndex < info.questions.length - 1) {
                 $('nextBtn').classList.remove('hidden');
                 $('finishLevelBtn').classList.add('hidden');
@@ -1071,7 +1060,6 @@
                             </button>
                         `).join('')}
                     </div>
-                    <!-- شريط الوقت -->
                     <div class="time-bar-container mt-4">
                         <div id="examTimeBarFill" class="time-bar-fill" style="width: 100%;"></div>
                     </div>
@@ -1093,4 +1081,55 @@
             clearInterval(examTimerInterval);
             const q = examQuestions[examIndex];
             const isCorrect = idx === q.answer;
-            if (isCorrect) { examCorrect++; soundCorrect();
+            if (isCorrect) { examCorrect++; soundCorrect(); } else { soundWrong(); }
+            document.querySelectorAll('.exam-option').forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === q.answer) btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
+                if (i === idx && !isCorrect) btn.classList.add('bg-red-500/20', 'border-red-500');
+            });
+            setTimeout(() => {
+                examIndex++;
+                if (examIndex < examQuestions.length) renderExamQuestion();
+                else finishExam();
+            }, 1500);
+        }
+        function finishExam() {
+            examInProgress = false;
+            clearInterval(examTimerInterval);
+            const scorePercent = Math.round((examCorrect / examQuestions.length) * 100);
+            gameState.examHistory.push(scorePercent);
+            if (scorePercent >= 90) { gameState.gold += 50; gameState.xp += 100; }
+            else if (scorePercent >= 70) { gameState.gold += 25; gameState.xp += 50; }
+            else if (scorePercent >= 50) { gameState.gold += 10; gameState.xp += 20; }
+            saveState();
+            updateTopBar();
+            showScreen('screenExamResult');
+            $('examScoreDisplay').textContent = `${scorePercent}%`;
+            $('examCorrect').textContent = examCorrect;
+            $('examWrong').textContent = examQuestions.length - examCorrect;
+            let msg = '';
+            if (scorePercent >= 90) msg = 'ممتاز! أنت فارس حقيقي للغة العربية.';
+            else if (scorePercent >= 70) msg = 'جيد جداً، واصل التقدم!';
+            else if (scorePercent >= 50) msg = 'لا بأس، تحتاج إلى مزيد من المراجعة.';
+            else msg = 'تحتاج إلى مراجعة القواعد الأساسية.';
+            $('examMessage').textContent = msg;
+            soundFinish();
+        }
+
+        // ==================== تهيئة ====================
+        function init() {
+            loadState();
+            updateTopBar();
+            $('playerNameInput').value = gameState.playerName || '';
+            $('year').textContent = new Date().getFullYear();
+            showScreen('screenStart');
+            setTimeout(() => { $('loadingScreen').style.display = 'none'; }, 500);
+            document.querySelectorAll('[onclick="showScreen(\'screenLibrary\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenLibrary'); renderLibrary(); }));
+            document.querySelectorAll('[onclick="showScreen(\'screenAchievements\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenAchievements'); renderAchievements(); }));
+            document.querySelectorAll('[onclick="goBackToMap()"]').forEach(el => el.addEventListener('click', goBackToMap));
+            $('examStartBtn').addEventListener('click', startExamQuestions);
+        }
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+    </html>
