@@ -59,8 +59,8 @@
             height: 100%;
             background: linear-gradient(90deg, #22c55e, #16a34a);
             border-radius: 999px;
-            transition: width 0.1s linear;
             width: 100%;
+            transition: width 0.1s linear;
         }
         @keyframes pulse-gold {
             0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); }
@@ -156,6 +156,7 @@
     </header>
 
     <main class="pt-16 min-h-screen pb-10">
+        <!-- شاشة البداية -->
         <section id="screenStart" class="screen active">
             <div class="max-w-md mx-auto px-4 py-16 text-center">
                 <div class="mb-8">
@@ -173,6 +174,7 @@
             </div>
         </section>
 
+        <!-- نافذة المعلومات -->
         <div id="infoModal" class="modal-overlay">
             <div class="modal-content">
                 <div class="flex items-center justify-between mb-4">
@@ -220,6 +222,7 @@
             </div>
         </div>
 
+        <!-- شاشة الخريطة -->
         <section id="screenMap" class="screen">
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <div class="text-center mb-12">
@@ -241,6 +244,7 @@
             </div>
         </section>
 
+        <!-- شاشة المرحلة -->
         <section id="screenLevel" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -287,6 +291,7 @@
             </div>
         </section>
 
+        <!-- شاشة نهاية المرحلة -->
         <section id="screenLevelComplete" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6" id="completeIcon">🎉</div>
@@ -312,6 +317,7 @@
             </div>
         </section>
 
+        <!-- شاشة المكتبة -->
         <section id="screenLibrary" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -324,6 +330,7 @@
             </div>
         </section>
 
+        <!-- شاشة الإنجازات -->
         <section id="screenAchievements" class="screen">
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="flex items-center justify-between mb-6">
@@ -336,6 +343,7 @@
             </div>
         </section>
 
+        <!-- شاشة الاختبار -->
         <section id="screenExam" class="screen">
             <div class="max-w-3xl mx-auto px-4 py-8">
                 <div class="text-center mb-6">
@@ -354,6 +362,7 @@
             </div>
         </section>
 
+        <!-- شاشة نتيجة الاختبار -->
         <section id="screenExamResult" class="screen">
             <div class="max-w-md mx-auto px-4 py-12 text-center">
                 <div class="text-6xl mb-6">📊</div>
@@ -794,7 +803,7 @@
         let levelTimerInterval = null;
         let levelTimeLeft = 0;
         let answerLocked = false;
-        let timerDuration = 15;
+        let timerDuration = 15; // بالثواني
 
         function startLevel(kingdomId, levelNumber) {
             const kingdom = KINGDOMS.find(k => k.id === kingdomId);
@@ -855,19 +864,26 @@
             answerLocked = false;
         }
 
+        // ==================== شريط الوقت الجديد (سلس) ====================
         function resetTimerBar() {
             clearInterval(levelTimerInterval);
             levelTimeLeft = timerDuration;
-            $('timeBarFill').style.width = '100%';
+            updateTimerBarWidth();
+            const startTime = Date.now();
             levelTimerInterval = setInterval(() => {
-                levelTimeLeft--;
-                const percent = (levelTimeLeft / timerDuration) * 100;
-                $('timeBarFill').style.width = `${percent}%`;
+                const elapsed = (Date.now() - startTime) / 1000;
+                levelTimeLeft = Math.max(0, timerDuration - elapsed);
+                updateTimerBarWidth();
                 if (levelTimeLeft <= 0) {
                     clearInterval(levelTimerInterval);
                     if (!answerLocked) selectAnswer(-1);
                 }
-            }, 1000);
+            }, 100); // تحديث كل 100ms لحركة سلسة
+        }
+
+        function updateTimerBarWidth() {
+            const percent = (levelTimeLeft / timerDuration) * 100;
+            $('timeBarFill').style.width = percent + '%';
         }
 
         function selectAnswer(selectedIndex) {
@@ -1068,13 +1084,14 @@
             document.querySelectorAll('.exam-option').forEach(btn => btn.addEventListener('click', () => selectExamAnswer(parseInt(btn.dataset.index))));
             clearInterval(examTimerInterval);
             examTimeLeft = 15;
+            const startTime = Date.now();
             examTimerInterval = setInterval(() => {
-                examTimeLeft--;
-                const percent = (examTimeLeft / 15) * 100;
+                const elapsed = (Date.now() - startTime) / 1000;
+                examTimeLeft = Math.max(0, 15 - elapsed);
                 const fill = document.getElementById('examTimeBarFill');
-                if (fill) fill.style.width = `${percent}%`;
+                if (fill) fill.style.width = `${(examTimeLeft / 15) * 100}%`;
                 if (examTimeLeft <= 0) { clearInterval(examTimerInterval); selectExamAnswer(-1); }
-            }, 1000);
+            }, 100);
         }
         function selectExamAnswer(idx) {
             if (!examInProgress) return;
