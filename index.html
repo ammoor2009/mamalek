@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رحلة الفارس اللغوي</title>
-    <!-- خطوط عربية -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         :root {
@@ -49,6 +46,22 @@
             background: linear-gradient(90deg, #fbbf24, #f59e0b);
             transition: width 0.5s ease;
         }
+        .time-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 10px 0;
+            direction: rtl;
+        }
+        .time-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            border-radius: 999px;
+            transition: width 0.1s linear;
+            width: 100%;
+        }
         @keyframes pulse-gold {
             0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); }
             50% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
@@ -74,8 +87,31 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .option-btn { transition: all 0.2s ease; }
         .option-btn:hover:not(:disabled) { transform: translateY(-2px); }
-        /* شاشة البداية */
-        #screenStart .input-name {
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .input-name {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
@@ -83,7 +119,6 @@
     </style>
 </head>
 <body>
-    <!-- شاشة التحميل -->
     <div id="loadingScreen">
         <div class="text-center">
             <div class="spinner mx-auto mb-4"></div>
@@ -91,7 +126,6 @@
         </div>
     </div>
 
-    <!-- الشريط العلوي -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -122,7 +156,7 @@
     </header>
 
     <main class="pt-16 min-h-screen pb-10">
-        <!-- شاشة البداية (اسم اللاعب وزر ابدأ) -->
+        <!-- شاشة البداية -->
         <section id="screenStart" class="screen active">
             <div class="max-w-md mx-auto px-4 py-16 text-center">
                 <div class="mb-8">
@@ -134,8 +168,59 @@
                 <button id="startGameBtn" class="btn-primary w-full py-4 rounded-2xl font-black text-lg">
                     <i class="fa-solid fa-play ml-2"></i> ابدأ اللعبة
                 </button>
+                <button id="infoBtn" class="w-full py-3 rounded-2xl font-bold text-amber-300 mt-4 bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                    <i class="fa-solid fa-circle-info ml-2"></i> معلومات عن اللعبة
+                </button>
             </div>
         </section>
+
+        <!-- نافذة المعلومات -->
+        <div id="infoModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-black">📜 معلومات عن اللعبة</h2>
+                    <button id="closeInfoModal" class="text-slate-400 hover:text-white transition">
+                        <i class="fa-solid fa-xmark text-2xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4 text-slate-300 leading-relaxed">
+                    <div>
+                        <h3 class="font-bold text-amber-400 mb-2">🎯 الهدف من اللعبة</h3>
+                        <p>تعلّم قواعد اللغة العربية ومهاراتها بطريقة ممتعة وتفاعلية، من خلال المغامرة في خمس ممالك لغوية.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-amber-400 mb-2">👥 الفئة المستهدفة</h3>
+                        <p>طلاب الجامعات والمهتمون بتقوية لغتهم العربية.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-amber-400 mb-2">📚 المحتوى</h3>
+                        <ul class="list-disc pr-6 space-y-1">
+                            <li><strong>مملكة النحو</strong> (40 سؤالاً)</li>
+                            <li><strong>مملكة الصرف</strong> (40 سؤالاً)</li>
+                            <li><strong>مملكة الإملاء</strong> (40 سؤالاً)</li>
+                            <li><strong>مملكة البلاغة</strong> (40 سؤالاً)</li>
+                            <li><strong>مملكة الأخطاء الشائعة</strong> (40 سؤالاً)</li>
+                        </ul>
+                        <p class="mt-2">المجموع الكلي: <strong>200 سؤال</strong> مقسمة على 5 ممالك، لكل مملكة 10 مراحل.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-amber-400 mb-2">🏆 الفوائد</h3>
+                        <ul class="list-disc pr-6 space-y-1">
+                            <li>تحسين مهارات الإعراب والتصريف</li>
+                            <li>تقوية الإملاء وعلامات الترقيم</li>
+                            <li>فهم أساليب البلاغة والتشبيه</li>
+                            <li>تصحيح الأخطاء اللغوية الشائعة</li>
+                            <li>تتبع التقدم والإنجازات</li>
+                            <li>اختبارات شاملة للتقييم</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-amber-400 mb-2">📜 الرخصة</h3>
+                        <p>جميع الحقوق محفوظة © د. عمر الرواجفة</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- شاشة الخريطة -->
         <section id="screenMap" class="screen">
@@ -170,9 +255,7 @@
                         <h3 id="levelTitle" class="text-2xl font-black"></h3>
                         <p id="levelSubtitle" class="text-sm text-slate-400"></p>
                     </div>
-                    <button onclick="endLevelEarly()" class="text-red-400 hover:text-red-300 transition text-sm">
-                        <i class="fa-solid fa-stop ml-1"></i> إنهاء اللعب
-                    </button>
+                    <div class="w-10"></div>
                 </div>
                 <div class="flex items-center gap-3 mb-6">
                     <span class="text-sm text-slate-400">السؤال <span id="currentQuestionNum">1</span> / 5</span>
@@ -180,10 +263,13 @@
                         <div id="levelProgress" class="progress-fill h-full" style="width: 0%;"></div>
                     </div>
                 </div>
+                <div class="time-bar-container mb-4">
+                    <div id="timeBarFill" class="time-bar-fill" style="width: 100%;"></div>
+                </div>
                 <div class="bg-slate-800/80 border border-white/10 rounded-3xl p-6 md:p-8 shadow-xl">
                     <div class="flex items-center justify-between mb-4">
                         <span id="questionType" class="text-xs px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300"></span>
-                        <span class="text-slate-400 text-sm"><i class="fa-regular fa-clock ml-1"></i> <span id="timerDisplay">20</span> ث</span>
+                        <span class="text-slate-400 text-sm">15 ثانية</span>
                     </div>
                     <h4 id="questionText" class="text-xl md:text-2xl font-bold leading-relaxed mb-6 font-amiri"></h4>
                     <div id="optionsContainer" class="space-y-3"></div>
@@ -194,8 +280,10 @@
                         <p id="hintText" class="hidden mt-2 text-amber-200 bg-amber-500/10 p-3 rounded-xl text-sm"></p>
                     </div>
                 </div>
-                <!-- زر التالي / إنهاء المرحلة -->
-                <div class="mt-4 text-center">
+                <div class="mt-4 flex items-center gap-3 justify-center">
+                    <button id="endLevelBtn" class="px-5 py-3 rounded-2xl font-bold bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 transition hidden">
+                        <i class="fa-solid fa-stop ml-1"></i> إنهاء اللعب
+                    </button>
                     <button id="nextBtn" class="btn-primary px-8 py-3 rounded-2xl font-bold hidden">السؤال التالي</button>
                     <button id="finishLevelBtn" class="btn-primary px-8 py-3 rounded-2xl font-bold hidden">إنهاء المرحلة</button>
                 </div>
@@ -312,7 +400,7 @@
             { id: 'akhtaa', name: 'مملكة الأخطاء الشائعة', icon: 'fa-solid fa-triangle-exclamation', color: 'from-yellow-500 to-amber-600', description: 'تصحيح الأخطاء اللغوية', levels: 10 }
         ];
 
-        // ==================== بنك الأسئلة (الجديد المقدم) ====================
+        // ==================== بنك الأسئلة (200 سؤال) ====================
         const QUESTION_BANK = [
     // ==========================================
     // 1. مملكة النحو (40 سؤالاً)
@@ -609,6 +697,9 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             $(id).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (id !== 'screenMap' && id !== 'screenStart') {
+                history.pushState({ screen: id }, '');
+            }
         }
         function escapeHtml(str) { const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
         function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
@@ -641,6 +732,31 @@
         }
         $('startGameBtn').addEventListener('click', handleStartGame);
         $('playerNameInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleStartGame(); });
+
+        // نافذة المعلومات
+        $('infoBtn').addEventListener('click', () => {
+            $('infoModal').classList.add('active');
+        });
+        $('closeInfoModal').addEventListener('click', () => {
+            $('infoModal').classList.remove('active');
+        });
+        $('infoModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                $('infoModal').classList.remove('active');
+            }
+        });
+
+        // ==================== التعامل مع زر الرجوع في الهاتف ====================
+        window.addEventListener('popstate', (e) => {
+            const activeScreen = document.querySelector('.screen.active');
+            if (activeScreen && activeScreen.id !== 'screenMap' && activeScreen.id !== 'screenStart') {
+                goBackToMap();
+                history.pushState(null, '', '');
+            } else {
+                // إذا كان في الخريطة أو البداية، نسمح بالخروج الطبيعي
+                history.back();
+            }
+        });
 
         // ==================== الخريطة ====================
         function renderKingdomGrid() {
@@ -688,6 +804,7 @@
         let levelTimerInterval = null;
         let levelTimeLeft = 0;
         let answerLocked = false;
+        let timerDuration = 15; // ثانية
 
         function startLevel(kingdomId, levelNumber) {
             const kingdom = KINGDOMS.find(k => k.id === kingdomId);
@@ -715,6 +832,7 @@
             answerLocked = false;
             $('nextBtn').classList.add('hidden');
             $('finishLevelBtn').classList.add('hidden');
+            $('endLevelBtn').classList.add('hidden');
             soundStart();
             renderQuestion();
         }
@@ -742,9 +860,24 @@
             });
             $('hintText').classList.add('hidden');
             $('hintBtn').classList.remove('hidden');
-            resetTimer();
-            answerLocked = false;
             $('feedbackBox').classList.add('hidden');
+            resetTimerBar();
+            answerLocked = false;
+        }
+
+        function resetTimerBar() {
+            clearInterval(levelTimerInterval);
+            levelTimeLeft = timerDuration;
+            $('timeBarFill').style.width = '100%';
+            levelTimerInterval = setInterval(() => {
+                levelTimeLeft--;
+                const percent = (levelTimeLeft / timerDuration) * 100;
+                $('timeBarFill').style.width = `${percent}%`;
+                if (levelTimeLeft <= 0) {
+                    clearInterval(levelTimerInterval);
+                    if (!answerLocked) selectAnswer(-1);
+                }
+            }, 1000);
         }
 
         function selectAnswer(selectedIndex) {
@@ -775,14 +908,16 @@
                 soundWrong();
             }
             updateTopBar();
-            // إظهار زر التالي أو إنهاء المرحلة حسب الموقف
+            // إظهار أزرار التحكم
             if (info.currentIndex < info.questions.length - 1) {
                 $('nextBtn').classList.remove('hidden');
                 $('finishLevelBtn').classList.add('hidden');
+                $('endLevelBtn').classList.remove('hidden');
                 $('nextBtn').textContent = 'السؤال التالي';
             } else {
                 $('finishLevelBtn').classList.remove('hidden');
                 $('nextBtn').classList.add('hidden');
+                $('endLevelBtn').classList.add('hidden');
                 $('finishLevelBtn').textContent = 'إنهاء المرحلة';
             }
         }
@@ -797,19 +932,13 @@
             finishLevel();
         });
 
-        function resetTimer() {
-            clearInterval(levelTimerInterval);
-            levelTimeLeft = 20;
-            $('timerDisplay').textContent = levelTimeLeft;
-            levelTimerInterval = setInterval(() => {
-                levelTimeLeft--;
-                $('timerDisplay').textContent = levelTimeLeft;
-                if (levelTimeLeft <= 0) {
-                    clearInterval(levelTimerInterval);
-                    if (!answerLocked) selectAnswer(-1);
-                }
-            }, 1000);
-        }
+        $('endLevelBtn').addEventListener('click', () => {
+            if (confirm('هل تريد إنهاء اللعب والعودة إلى الخريطة؟')) {
+                clearInterval(levelTimerInterval);
+                showScreen('screenMap');
+                renderKingdomGrid();
+            }
+        });
 
         function useHint() {
             if (answerLocked) return;
@@ -850,15 +979,6 @@
             $('completeMessage').textContent = `أجبت على ${info.correct} من أصل ${info.questions.length} أسئلة صحيحة.`;
             soundFinish();
             showScreen('screenLevelComplete');
-        }
-
-        function endLevelEarly() {
-            if (!currentLevelInfo) return;
-            if (confirm('هل تريد إنهاء اللعب والعودة إلى الخريطة؟')) {
-                clearInterval(levelTimerInterval);
-                showScreen('screenMap');
-                renderKingdomGrid();
-            }
         }
 
         function goBackToMap() {
@@ -940,7 +1060,7 @@
                 <div class="bg-slate-800/80 border border-white/10 rounded-3xl p-6 md:p-8">
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-sm text-slate-400">السؤال ${examIndex+1} / ${examQuestions.length}</span>
-                        <span class="text-sm text-slate-400"><i class="fa-regular fa-clock ml-1"></i> <span id="examTimer">20</span> ث</span>
+                        <span class="text-sm text-slate-400">15 ثانية</span>
                     </div>
                     <h4 class="text-xl font-bold mb-6 font-amiri">${q.text}</h4>
                     <div class="space-y-3">
@@ -951,15 +1071,20 @@
                             </button>
                         `).join('')}
                     </div>
+                    <!-- شريط الوقت -->
+                    <div class="time-bar-container mt-4">
+                        <div id="examTimeBarFill" class="time-bar-fill" style="width: 100%;"></div>
+                    </div>
                 </div>
             `;
             document.querySelectorAll('.exam-option').forEach(btn => btn.addEventListener('click', () => selectExamAnswer(parseInt(btn.dataset.index))));
             clearInterval(examTimerInterval);
-            examTimeLeft = 20;
-            $('examTimer').textContent = examTimeLeft;
+            examTimeLeft = 15;
             examTimerInterval = setInterval(() => {
                 examTimeLeft--;
-                $('examTimer').textContent = examTimeLeft;
+                const percent = (examTimeLeft / 15) * 100;
+                const fill = document.getElementById('examTimeBarFill');
+                if (fill) fill.style.width = `${percent}%`;
                 if (examTimeLeft <= 0) { clearInterval(examTimerInterval); selectExamAnswer(-1); }
             }, 1000);
         }
@@ -968,60 +1093,4 @@
             clearInterval(examTimerInterval);
             const q = examQuestions[examIndex];
             const isCorrect = idx === q.answer;
-            if (isCorrect) { examCorrect++; soundCorrect(); } else { soundWrong(); }
-            document.querySelectorAll('.exam-option').forEach((btn, i) => {
-                btn.disabled = true;
-                if (i === q.answer) btn.classList.add('bg-emerald-500/20', 'border-emerald-500');
-                if (i === idx && !isCorrect) btn.classList.add('bg-red-500/20', 'border-red-500');
-            });
-            setTimeout(() => {
-                examIndex++;
-                if (examIndex < examQuestions.length) renderExamQuestion();
-                else finishExam();
-            }, 1500);
-        }
-        function finishExam() {
-            examInProgress = false;
-            clearInterval(examTimerInterval);
-            const scorePercent = Math.round((examCorrect / examQuestions.length) * 100);
-            gameState.examHistory.push(scorePercent);
-            if (scorePercent >= 90) { gameState.gold += 50; gameState.xp += 100; }
-            else if (scorePercent >= 70) { gameState.gold += 25; gameState.xp += 50; }
-            else if (scorePercent >= 50) { gameState.gold += 10; gameState.xp += 20; }
-            saveState();
-            updateTopBar();
-            showScreen('screenExamResult');
-            $('examScoreDisplay').textContent = `${scorePercent}%`;
-            $('examCorrect').textContent = examCorrect;
-            $('examWrong').textContent = examQuestions.length - examCorrect;
-            let msg = '';
-            if (scorePercent >= 90) msg = 'ممتاز! أنت فارس حقيقي للغة العربية.';
-            else if (scorePercent >= 70) msg = 'جيد جداً، واصل التقدم!';
-            else if (scorePercent >= 50) msg = 'لا بأس، تحتاج إلى مزيد من المراجعة.';
-            else msg = 'تحتاج إلى مراجعة القواعد الأساسية.';
-            $('examMessage').textContent = msg;
-            soundFinish();
-        }
-
-        // ==================== تهيئة ====================
-        function init() {
-            loadState();
-            updateTopBar();
-            // تعيين اسم اللاعب في حقل الإدخال إن وجد
-            $('playerNameInput').value = gameState.playerName || '';
-            // تعيين سنة الحقوق
-            $('year').textContent = new Date().getFullYear();
-            // عرض شاشة البداية
-            showScreen('screenStart');
-            // إخفاء شاشة التحميل
-            setTimeout(() => { $('loadingScreen').style.display = 'none'; }, 500);
-            // ربط الأزرار العامة
-            document.querySelectorAll('[onclick="showScreen(\'screenLibrary\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenLibrary'); renderLibrary(); }));
-            document.querySelectorAll('[onclick="showScreen(\'screenAchievements\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenAchievements'); renderAchievements(); }));
-            document.querySelectorAll('[onclick="goBackToMap()"]').forEach(el => el.addEventListener('click', goBackToMap));
-            $('examStartBtn').addEventListener('click', startExamQuestions);
-        }
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+            if (isCorrect) { examCorrect++; soundCorrect();
