@@ -536,6 +536,8 @@ async function init() {
     updateTopBar();
     $('playerNameInput').value = gameState.playerName || '';
     $('year').textContent = new Date().getFullYear();
+    const resetCodeEl = $('resetCodeDisplay');
+if (resetCodeEl) resetCodeEl.textContent = RESET_CODE;
     showScreen('screenStart');
     setTimeout(() => { $('loadingScreen').style.display = 'none'; }, 500);
     document.querySelectorAll('[onclick="showScreen(\'screenLibrary\')"]').forEach(el => el.addEventListener('click', () => { showScreen('screenLibrary'); renderLibrary(); }));
