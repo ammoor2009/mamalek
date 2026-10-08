@@ -684,7 +684,7 @@ const _backToStartBtn = $('backToStartBtn');
 if (_backToStartBtn) _backToStartBtn.addEventListener('click', backToStartScreen);
 
 // ==================== تصفير التقدم ====================
-const RESET_CODE = "1234";
+const RESET_CODE = "فيلادلفيا";
 
 function resetAllProgress() {
     const input = $('resetCodeInput');
