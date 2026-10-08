@@ -543,4 +543,131 @@ async function init() {
     document.querySelectorAll('[onclick="goBackToMap()"]').forEach(el => el.addEventListener('click', goBackToMap));
     $('examStartBtn').addEventListener('click', startExamQuestions);
 }
+// ==================== شهادتي ====================
+function generateCertificateNumber() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const rand = Math.floor(Math.random() * 90000) + 10000;
+    return `CERT-${y}-${rand}`;
+}
+
+function calculateProgress() {
+    const total = KINGDOMS.reduce((sum, k) => sum + k.levels, 0);
+    let completed = 0;
+    KINGDOMS.forEach(k => {
+        completed += gameState.completedLevels[k.id]?.length || 0;
+    });
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+    return { completed, total, percent };
+}
+
+function getCertificateRank(percent) {
+    if (percent >= 100) return 'فارس ممالك اللغة العربية 🏆';
+    if (percent >= 80) return 'فارس اللغة المتميز 👑';
+    if (percent >= 60) return 'فارس اللغة ⚔️';
+    if (percent >= 40) return 'متمكن في المسيرة اللغوية 🛡️';
+    if (percent >= 20) return 'متقدم في المسيرة اللغوية ⚔️';
+    return 'بداية المسيرة 🌱';
+}
+
+function getCertificateMessage(percent) {
+    if (percent >= 100) return 'أتممت رحلةً كاملة في ممالك اللغة العربية، وأثبتَّ أن الإصرار على التعلم يصنع الفرق. هذا الإنجاز شاهدٌ على ما بذلته من جهد، ودعوةٌ إلى مواصلة طريق العلم والإتقان.';
+    if (percent >= 80) return 'لقد بلغت مرحلة متقدمة من رحلتك اللغوية، وأثبتَّ قدرةً واضحة على المثابرة والتقدم. واصل المسير؛ فما وصلت إليه اليوم أساسٌ لما يمكنك أن تحققه غدًا.';
+    if (percent >= 60) return 'لقد قطعت شوطًا مهمًا في رحلتك اللغوية، وأثبتَّ أن المعرفة تُبنى خطوةً بعد خطوة، وأن المثابرة طريقٌ إلى التميز. لا تتوقف الآن.';
+    if (percent >= 40) return 'أثبتَّ أن التعلم الحقيقي يقوم على الاستمرار والمثابرة. لقد تجاوزت مرحلة البداية، وأصبحت أقرب إلى الإتقان. واصل رحلتك بثقة.';
+    if (percent >= 20) return 'أثبتَّ أن المعرفة تُبنى خطوةً بعد خطوة، وأن المثابرة هي الطريق إلى التميز. واصل؛ فما أنجزته اليوم أساسٌ لما ستبلغه غدًا.';
+    return 'لقد بدأت الطريق، والبدايات العظيمة لا تحتاج إلا إلى خطوة أولى. واصل المسير؛ فكل مرحلة تنجزها تقرّبك من إتقانك.';
+}
+
+function ensureCertificateNumber() {
+    if (!gameState.certificateNumber) {
+        gameState.certificateNumber = generateCertificateNumber();
+        saveState();
+    }
+    return gameState.certificateNumber;
+}
+
+function renderCertificate() {
+    const { completed, total, percent } = calculateProgress();
+    const rank = getCertificateRank(percent);
+    const message = getCertificateMessage(percent);
+    const certNum = ensureCertificateNumber();
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+    const playerName = gameState.playerName || 'فارس اللغة';
+
+    const html = `
+        <div class="cert-header">
+            <div class="cert-ornament">✦ ❖ ✦</div>
+            <div class="cert-title">شهادة إنجاز</div>
+            <div class="cert-subtitle">ممالك اللغة العربية</div>
+            <div class="cert-ornament">✦ ❖ ✦</div>
+        </div>
+        <div class="cert-body">
+            <p>تشهد هذه الشهادة بأن الفارس</p>
+            <span class="cert-name">${escapeHtml(playerName)}</span>
+            <p>قد أنجز بنجاح جزءًا من رحلته في ممالك اللغة العربية</p>
+            <div class="cert-rank">${rank}</div>
+            <div class="cert-stats">
+                <div class="cert-stat">
+                    <div class="cert-stat-value">${percent}%</div>
+                    <div class="cert-stat-label">نسبة الإنجاز</div>
+                </div>
+                <div class="cert-stat">
+                    <div class="cert-stat-value">${completed}</div>
+                    <div class="cert-stat-label">المراحل المكتملة</div>
+                </div>
+                <div class="cert-stat">
+                    <div class="cert-stat-value">${total}</div>
+                    <div class="cert-stat-label">إجمالي المراحل</div>
+                </div>
+                <div class="cert-stat">
+                    <div class="cert-stat-value">${gameState.xp}</div>
+                    <div class="cert-stat-label">نقاط الخبرة XP</div>
+                </div>
+            </div>
+            <p class="cert-message">${message}</p>
+        </div>
+        <div class="cert-footer">
+            <div class="cert-id">
+                رقم الشهادة
+                <strong>${certNum}</strong>
+            </div>
+            <div class="cert-seal">
+                <i class="fa-solid fa-certificate"></i>
+                <div>شهادة موثقة</div>
+            </div>
+            <div class="cert-date">
+                تاريخ الإصدار
+                <strong>${dateStr}</strong>
+            </div>
+        </div>
+    `;
+    $('certificateContent').innerHTML = html;
+}
+
+function openCertificate() {
+    renderCertificate();
+    $('certificateModal').classList.add('active');
+}
+
+function closeCertificate() {
+    $('certificateModal').classList.remove('active');
+}
+
+function printCertificate() {
+    window.print();
+}
+
+// ربط أحداث الشهادة
+const _certBtn = $('certificateBtn');
+if (_certBtn) _certBtn.addEventListener('click', openCertificate);
+const _closeCertBtn = $('closeCertificateBtn');
+if (_closeCertBtn) _closeCertBtn.addEventListener('click', closeCertificate);
+const _printCertBtn = $('printCertificateBtn');
+if (_printCertBtn) _printCertBtn.addEventListener('click', printCertificate);
+const _certModal = $('certificateModal');
+if (_certModal) _certModal.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeCertificate();
+});
 window.addEventListener('DOMContentLoaded', init);
