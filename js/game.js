@@ -670,4 +670,14 @@ const _certModal = $('certificateModal');
 if (_certModal) _certModal.addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeCertificate();
 });
+// ==================== زر العودة للصفحة الرئيسية ====================
+function backToStartScreen() {
+    if (typeof clearInterval === 'function' && levelTimerInterval) clearInterval(levelTimerInterval);
+    if (typeof clearInterval === 'function' && examTimerInterval) clearInterval(examTimerInterval);
+    showScreen('screenStart');
+    const nameInput = $('playerNameInput');
+    if (nameInput) nameInput.value = gameState.playerName || '';
+}
+const _backToStartBtn = $('backToStartBtn');
+if (_backToStartBtn) _backToStartBtn.addEventListener('click', backToStartScreen);
 window.addEventListener('DOMContentLoaded', init);
