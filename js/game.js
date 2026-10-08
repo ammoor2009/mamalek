@@ -681,12 +681,12 @@ function backToStartScreen() {
 const _backToStartBtn = $('backToStartBtn');
 if (_backToStartBtn) _backToStartBtn.addEventListener('click', backToStartScreen);
 
-win// ==================== تصفير التقدم ====================
-const RESET_CODE = "1234"; // ← غيّر الكود من هنا إلى ما تريد (أرقام أو حروف)
+// ==================== تصفير التقدم ====================
+const RESET_CODE = "1234";
 
 function resetAllProgress() {
     const entered = prompt('🔒 أدخل كود التصفير للتأكيد:\n(سيتم حذف كل تقدمك من المراحل، النقاط، والإنجازات)');
-    if (entered === null) return; // المستخدم ألغى
+    if (entered === null) return;
     if (entered.trim() !== RESET_CODE) {
         alert('❌ الكود غير صحيح. لم يتم حذف أي تقدم.');
         return;
@@ -694,10 +694,7 @@ function resetAllProgress() {
     const confirmReset = confirm('⚠️ هل أنت متأكد من تصفير كل تقدمك؟\nلا يمكن التراجع عن هذه العملية.');
     if (!confirmReset) return;
 
-    // احتفظ بالاسم فقط
     const savedName = gameState.playerName;
-
-    // إعادة تعيين حالة اللعبة
     gameState.xp = 0;
     gameState.gold = 100;
     gameState.completedLevels = {};
@@ -709,12 +706,10 @@ function resetAllProgress() {
     saveState();
     updateTopBar();
 
-    // إن كان المستخدم في شاشة الخريطة، أعد رسمها
     const mapScreen = $('screenMap');
     if (mapScreen && mapScreen.classList.contains('active')) {
         renderKingdomGrid();
     }
-
     alert('✅ تم تصفير التقدم بنجاح. يمكنك البدء من جديد!');
 }
 
@@ -726,4 +721,26 @@ document.addEventListener('click', (e) => {
     }
 });
 
-window.addEventListener('DOMContentLoaded', init);dow.addEventListener('DOMContentLoaded', init);
+// ==================== تشغيل آمن للعبة ====================
+window.addEventListener('error', (event) => {
+    console.error('GLOBAL JS ERROR:', event.error || event.message);
+});
+
+async function safeInit() {
+    try {
+        await init();
+    } catch (err) {
+        console.error('Init error:', err);
+        const ls = document.getElementById('loadingScreen');
+        if (ls) ls.style.display = 'none';
+        alert('حدث خطأ أثناء تحميل اللعبة:\n' + (err && err.message ? err.message : err));
+    }
+}
+
+// إخفاء شاشة التحميل كإجراء احتياطي بعد 3 ثوان
+setTimeout(() => {
+    const ls = document.getElementById('loadingScreen');
+    if (ls) ls.style.display = 'none';
+}, 3000);
+
+window.addEventListener('DOMContentLoaded', safeInit);
