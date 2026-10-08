@@ -680,4 +680,50 @@ function backToStartScreen() {
 }
 const _backToStartBtn = $('backToStartBtn');
 if (_backToStartBtn) _backToStartBtn.addEventListener('click', backToStartScreen);
-window.addEventListener('DOMContentLoaded', init);
+
+win// ==================== تصفير التقدم ====================
+const RESET_CODE = "1234"; // ← غيّر الكود من هنا إلى ما تريد (أرقام أو حروف)
+
+function resetAllProgress() {
+    const entered = prompt('🔒 أدخل كود التصفير للتأكيد:\n(سيتم حذف كل تقدمك من المراحل، النقاط، والإنجازات)');
+    if (entered === null) return; // المستخدم ألغى
+    if (entered.trim() !== RESET_CODE) {
+        alert('❌ الكود غير صحيح. لم يتم حذف أي تقدم.');
+        return;
+    }
+    const confirmReset = confirm('⚠️ هل أنت متأكد من تصفير كل تقدمك؟\nلا يمكن التراجع عن هذه العملية.');
+    if (!confirmReset) return;
+
+    // احتفظ بالاسم فقط
+    const savedName = gameState.playerName;
+
+    // إعادة تعيين حالة اللعبة
+    gameState.xp = 0;
+    gameState.gold = 100;
+    gameState.completedLevels = {};
+    gameState.achievements = [];
+    gameState.examHistory = [];
+    gameState.certificateNumber = null;
+    gameState.playerName = savedName;
+
+    saveState();
+    updateTopBar();
+
+    // إن كان المستخدم في شاشة الخريطة، أعد رسمها
+    const mapScreen = $('screenMap');
+    if (mapScreen && mapScreen.classList.contains('active')) {
+        renderKingdomGrid();
+    }
+
+    alert('✅ تم تصفير التقدم بنجاح. يمكنك البدء من جديد!');
+}
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('#resetProgressBtn');
+    if (btn) {
+        e.preventDefault();
+        resetAllProgress();
+    }
+});
+
+window.addEventListener('DOMContentLoaded', init);dow.addEventListener('DOMContentLoaded', init);
