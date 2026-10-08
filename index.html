@@ -115,6 +115,21 @@
             </div>
         </div>
 
+        <!-- نافذة الشهادة -->
+        <div id="certificateModal" class="modal-overlay certificate-modal-overlay">
+            <div class="certificate-wrapper">
+                <div class="certificate-actions no-print">
+                    <button id="printCertificateBtn" class="btn-primary px-6 py-3 rounded-2xl font-bold">
+                        <i class="fa-solid fa-print ml-2"></i> طباعة الشهادة
+                    </button>
+                    <button id="closeCertificateBtn" class="px-6 py-3 rounded-2xl bg-white/10 border border-white/20 hover:bg-white/20 transition font-bold">
+                        <i class="fa-solid fa-xmark ml-2"></i> إغلاق
+                    </button>
+                </div>
+                <div id="certificateContent" class="certificate-content"></div>
+            </div>
+        </div>
+
         <!-- شاشة الخريطة -->
         <section id="screenMap" class="screen">
             <div class="max-w-7xl mx-auto px-4 py-8">
@@ -132,6 +147,9 @@
                     </button>
                     <button onclick="showScreen('screenAchievements')" class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                         <i class="fa-solid fa-trophy ml-2"></i> الإنجازات
+                    </button>
+                    <button id="certificateBtn" class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                        <i class="fa-solid fa-certificate ml-2"></i> شهادتي
                     </button>
                 </div>
             </div>
