@@ -687,7 +687,6 @@ if (_backToStartBtn) _backToStartBtn.addEventListener('click', backToStartScreen
 const RESET_CODE = "1234";
 
 function resetAllProgress() {
-function resetAllProgress() {
     const input = $('resetCodeInput');
     const entered = input ? input.value.trim() : '';
 
