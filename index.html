@@ -156,10 +156,16 @@
                 <i class="fa-solid fa-certificate ml-2"></i> شهادتي
             </button>
         </div>
-        <div class="text-center mt-10">
-            <button id="resetProgressBtn" class="text-slate-500 hover:text-red-400 text-xs underline underline-offset-4 transition">
-                <i class="fa-solid fa-rotate-left ml-1"></i> تصفير التقدم
-            </button>
+        <div id="resetSection" class="text-center mt-10 space-y-3">
+    <p class="text-slate-400 text-xs">
+        <i class="fa-solid fa-key ml-1 text-amber-400"></i>
+        كود التصفير:
+        <span id="resetCodeDisplay" class="font-mono font-black text-amber-400 bg-white/5 border border-amber-500/30 px-3 py-1 rounded-lg select-all">----</span>
+    </p>
+    <input type="text" id="resetCodeInput" placeholder="انسخ الكود هنا" maxlength="20" class="input-name px-4 py-2 rounded-xl text-sm w-48 mx-auto block text-center outline-none" autocomplete="off">
+    <button id="resetProgressBtn" class="text-slate-500 hover:text-red-400 text-xs underline underline-offset-4 transition block mx-auto">
+        <i class="fa-solid fa-rotate-left ml-1"></i> تصفير التقدم
+    </button>
         </div>
     </div>
         </section>
