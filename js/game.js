@@ -685,12 +685,21 @@ if (_backToStartBtn) _backToStartBtn.addEventListener('click', backToStartScreen
 const RESET_CODE = "1234";
 
 function resetAllProgress() {
-    const entered = prompt('🔒 أدخل كود التصفير للتأكيد:\n(سيتم حذف كل تقدمك من المراحل، النقاط، والإنجازات)');
-    if (entered === null) return;
-    if (entered.trim() !== RESET_CODE) {
-        alert('❌ الكود غير صحيح. لم يتم حذف أي تقدم.');
+function resetAllProgress() {
+    const input = $('resetCodeInput');
+    const entered = input ? input.value.trim() : '';
+
+    if (!entered) {
+        alert('⚠️ من فضلك انسخ الكود الظاهر بالأعلى وضعه في الحقل.');
+        if (input) input.focus();
         return;
     }
+    if (entered !== RESET_CODE) {
+        alert('❌ الكود غير صحيح. لم يتم حذف أي تقدم.');
+        if (input) input.value = '';
+        return;
+    }
+
     const confirmReset = confirm('⚠️ هل أنت متأكد من تصفير كل تقدمك؟\nلا يمكن التراجع عن هذه العملية.');
     if (!confirmReset) return;
 
@@ -710,6 +719,7 @@ function resetAllProgress() {
     if (mapScreen && mapScreen.classList.contains('active')) {
         renderKingdomGrid();
     }
+    if (input) input.value = '';
     alert('✅ تم تصفير التقدم بنجاح. يمكنك البدء من جديد!');
 }
 
