@@ -104,3 +104,213 @@ body {
     border: 1px solid rgba(255,255,255,0.2);
     color: #fff;
 }
+
+/* ==================== شهادة الإنجاز ==================== */
+.certificate-modal-overlay {
+    z-index: 2000;
+    padding: 20px;
+}
+.certificate-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1100px;
+    width: 100%;
+    max-height: 95vh;
+    overflow-y: auto;
+}
+.certificate-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.certificate-content {
+    background: #fdfaf1;
+    color: #1f2937;
+    padding: 50px 60px;
+    border: 12px double #b8860b;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    position: relative;
+    font-family: 'Amiri', serif;
+}
+.certificate-content::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border: 2px solid #d4af37;
+    border-radius: 6px;
+    pointer-events: none;
+}
+.cert-header {
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+}
+.cert-title {
+    font-size: 42px;
+    font-weight: 900;
+    color: #92400e;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+.cert-subtitle {
+    font-size: 22px;
+    color: #b45309;
+    font-weight: 700;
+}
+.cert-ornament {
+    font-size: 26px;
+    color: #d4af37;
+    letter-spacing: 8px;
+    margin: 12px 0;
+}
+.cert-body {
+    text-align: center;
+    font-size: 20px;
+    line-height: 2;
+    color: #374151;
+    margin: 24px 0;
+    position: relative;
+    z-index: 1;
+}
+.cert-name {
+    font-size: 38px;
+    font-weight: 900;
+    color: #7c2d12;
+    display: block;
+    margin: 16px auto;
+    border-bottom: 2px dashed #d4af37;
+    padding-bottom: 8px;
+    max-width: 600px;
+    font-family: 'Tajawal', sans-serif;
+}
+.cert-rank {
+    font-size: 26px;
+    font-weight: 900;
+    color: #b45309;
+    margin: 16px 0;
+}
+.cert-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+    position: relative;
+    z-index: 1;
+}
+.cert-stat {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid #d4af37;
+    border-radius: 12px;
+    padding: 12px 8px;
+}
+.cert-stat-value {
+    font-size: 24px;
+    font-weight: 900;
+    color: #92400e;
+    font-family: 'Tajawal', sans-serif;
+}
+.cert-stat-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
+    margin-top: 4px;
+}
+.cert-message {
+    font-size: 18px;
+    color: #4b5563;
+    font-style: italic;
+    line-height: 1.9;
+    margin: 24px auto;
+    max-width: 800px;
+    padding: 16px 24px;
+    background: rgba(212, 175, 55, 0.08);
+    border-right: 4px solid #d4af37;
+    border-left: 4px solid #d4af37;
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+}
+.cert-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 2px solid #d4af37;
+    font-size: 15px;
+    color: #6b7280;
+    position: relative;
+    z-index: 1;
+    font-family: 'Tajawal', sans-serif;
+}
+.cert-id, .cert-date {
+    text-align: center;
+}
+.cert-id strong, .cert-date strong {
+    display: block;
+    color: #92400e;
+    font-size: 16px;
+    margin-top: 4px;
+}
+.cert-seal {
+    text-align: center;
+    color: #b45309;
+    font-size: 13px;
+}
+.cert-seal i {
+    font-size: 32px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* ==================== طباعة الشهادة A4 أفقي ==================== */
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 8mm;
+    }
+    html, body {
+        background: #fff !important;
+        overflow: visible !important;
+    }
+    header, footer, #loadingScreen {
+        display: none !important;
+    }
+    main > *:not(#certificateModal) {
+        display: none !important;
+    }
+    main {
+        padding: 0 !important;
+        min-height: auto !important;
+    }
+    #certificateModal {
+        position: static !important;
+        display: block !important;
+        background: #fff !important;
+        padding: 0 !important;
+        inset: auto !important;
+    }
+    .certificate-actions {
+        display: none !important;
+    }
+    .certificate-wrapper {
+        max-width: 100%;
+        max-height: none;
+        overflow: visible;
+        gap: 0;
+        display: block;
+    }
+    .certificate-content {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+        min-height: auto;
+        padding: 30px 50px;
+        page-break-inside: avoid;
+    }
+}
